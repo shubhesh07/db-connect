@@ -90,10 +90,16 @@ Free alternative to DataGrip, DBeaver, and TablePlus — built for backend engin
 | [DBConnect-macOS.dmg](https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg) | macOS installer (DMG) |
 | [DBConnect-mac.zip](https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-mac.zip) | macOS portable (ZIP) |
 
-**Note:** On first launch, macOS may block the app. Run:
-```bash
-xattr -cr /Applications/DBConnect.app
-```
+> **⚠️ Important — macOS Gatekeeper Fix**
+>
+> macOS blocks unsigned apps by default. After installing, you **must** run this command in Terminal before launching:
+>
+> ```bash
+> xattr -cr /Applications/DBConnect.app
+> ```
+>
+> Without this, macOS will show **"DBConnect is damaged and can't be opened"** or silently refuse to launch.
+> This is a one-time fix — the app will open normally after.
 
 ### Windows
 

@@ -1,10 +1,20 @@
-# DB Connect
+# DB Connect — Free Database GUI Client
 
-A fast, lightweight desktop database IDE for **MySQL**, **Amazon Redshift**, and **DynamoDB**.
+A fast, lightweight desktop **database IDE** and **SQL client** for **MySQL**, **Amazon Redshift**, and **AWS DynamoDB (DDB)**.
 
-Built for backend engineers who want a clean, native query tool without the bloat of DataGrip or DBeaver.
+Free alternative to DataGrip, DBeaver, and TablePlus — built for backend engineers who want a clean, native database tool without bloat.
 
-![macOS](https://img.shields.io/badge/macOS-supported-blue) ![Windows](https://img.shields.io/badge/Windows-supported-blue) ![License](https://img.shields.io/badge/license-free-green)
+**DB Connect** is a database management tool with a Monaco-powered SQL editor, schema browser, query history, SSH tunnel support, and DynamoDB visual query builder. Works on macOS and Windows.
+
+![macOS](https://img.shields.io/badge/macOS-supported-blue) ![Windows](https://img.shields.io/badge/Windows-supported-blue) ![License](https://img.shields.io/badge/license-free-green) ![Downloads](https://img.shields.io/github/downloads/shubhesh07/db-connect/total)
+
+### Why DB Connect?
+
+- **Free forever** — No subscription, no trial limits
+- **Fast startup** — Opens in <2 seconds (unlike DataGrip/DBeaver)
+- **Native app** — Not Electron. Truly lightweight (~18MB)
+- **DynamoDB first-class** — Visual scan/query builder, not just SQL
+- **Secure** — AES-256 encryption, OS keychain, no cloud sync
 
 ---
 
@@ -144,3 +154,24 @@ No telemetry. No cloud sync. Everything stays on your machine.
 ## License
 
 Free for personal and commercial use. Source code is not open source.
+
+---
+
+## Comparison
+
+| Feature | DB Connect | DataGrip | DBeaver | TablePlus |
+|---------|:----------:|:--------:|:-------:|:---------:|
+| Price | Free | $25/mo | Free (Community) | $89 |
+| DynamoDB Support | Yes | No | No | Yes |
+| Redshift Support | Yes | Yes | Yes | Yes |
+| Startup Time | <2s | 10-30s | 5-15s | <3s |
+| App Size | ~18MB | ~800MB | ~400MB | ~80MB |
+| SSH Tunnels | Yes | Yes | Yes | Yes |
+| Encrypted Credentials | Yes (AES-256) | Yes | Yes | Yes |
+| Offline / No Telemetry | Yes | No | No | No |
+
+---
+
+## Keywords
+
+`mysql client` `mysql gui` `mysql ide` `database tool` `sql editor` `dynamodb gui` `dynamodb client` `ddb client` `aws dynamodb tool` `redshift client` `redshift gui` `redshift query tool` `free database client` `database ide` `sql client mac` `sql client windows` `datagrip alternative` `dbeaver alternative` `tableplus alternative` `database management tool` `query editor` `schema browser`

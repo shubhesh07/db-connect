@@ -254,6 +254,44 @@
         .download-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
         .download-card .btn { width: 100%; justify-content: center; }
 
+        /* macOS warning */
+        .macos-warning {
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: rgba(249, 115, 22, 0.08);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            border-radius: 10px;
+            text-align: left;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .macos-warning strong {
+            color: var(--orange);
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+        .macos-warning code {
+            display: inline-block;
+            margin: 8px 0;
+            padding: 8px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.85rem;
+            color: var(--green);
+            user-select: all;
+            cursor: pointer;
+            word-break: break-all;
+        }
+        .macos-warning .hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
         /* Footer */
         footer {
             padding: 40px 0;
@@ -458,6 +496,11 @@
                 <h3>macOS</h3>
                 <p>macOS 11.0 (Big Sur) or later<br>Intel & Apple Silicon</p>
                 <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg" class="btn btn-primary">Download .dmg</a>
+                <div class="macos-warning">
+                    <strong>After installing, run this in Terminal:</strong>
+                    <code>xattr -cr /Applications/DBConnect.app</code>
+                    <br>macOS blocks unsigned apps — without this command, you'll see <em>"DBConnect is damaged and can't be opened"</em>. One-time fix.
+                </div>
             </div>
             <div class="download-card">
                 <h3>Windows</h3>

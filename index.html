@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DB Connect — Free Database IDE for MySQL, Redshift & DynamoDB</title>
+    <meta name="description" content="DB Connect is a free, fast desktop database client for MySQL, Amazon Redshift, and DynamoDB. SQL editor with autocomplete, schema browser, SSH tunnels. Alternative to DataGrip, DBeaver, TablePlus.">
+    <meta name="keywords" content="database client, mysql gui, dynamodb client, redshift client, sql editor, free database tool, database ide, mysql client, ddb client, aws database tool, datagrip alternative, dbeaver alternative, tableplus alternative">
+    <meta name="author" content="Shubhesh Shukla">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="DB Connect — Free Database IDE">
+    <meta property="og:description" content="Fast, lightweight desktop database client for MySQL, Redshift & DynamoDB. Free for macOS and Windows.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://shubhesh07.github.io/db-connect">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="DB Connect — Free Database IDE">
+    <meta name="twitter:description" content="Fast, lightweight desktop database client for MySQL, Redshift & DynamoDB. Free for macOS and Windows.">
+
+    <link rel="canonical" href="https://shubhesh07.github.io/db-connect">
+
+    <style>
+        :root {
+            --bg: #0a0a0b;
+            --surface: #141416;
+            --surface-2: #1c1c20;
+            --border: #2a2a2f;
+            --text: #f0f0f2;
+            --text-muted: #8b8b96;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --green: #22c55e;
+            --orange: #f97316;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Nav */
+        nav {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+        }
+        .logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); }
+
+        /* Hero */
+        .hero {
+            padding: 100px 0 80px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+        .hero h1 .highlight { color: var(--accent); }
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        .btn-secondary {
+            background: var(--surface-2);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover { border-color: var(--accent); }
+        .badge {
+            display: inline-block;
+            margin-top: 24px;
+            padding: 6px 14px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--green);
+        }
+
+        /* Databases */
+        .databases {
+            padding: 60px 0;
+            text-align: center;
+        }
+        .db-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        .db-item {
+            padding: 24px 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            min-width: 180px;
+        }
+        .db-item h3 { font-size: 1.1rem; margin-bottom: 4px; }
+        .db-item p { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* Features */
+        .features {
+            padding: 80px 0;
+        }
+        .features h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 50px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        .feature-card {
+            padding: 28px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: border-color 0.2s;
+        }
+        .feature-card:hover { border-color: var(--accent); }
+        .feature-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .feature-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        /* Comparison */
+        .comparison {
+            padding: 80px 0;
+        }
+        .comparison h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 14px 16px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .comparison-table th {
+            background: var(--surface);
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .comparison-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+        }
+        .comparison-table tr:hover td { background: var(--surface); }
+        .check { color: var(--green); }
+        .cross { color: var(--text-muted); }
+        .highlight-col { background: rgba(59, 130, 246, 0.05); }
+
+        /* Download */
+        .download {
+            padding: 80px 0;
+            text-align: center;
+        }
+        .download h2 {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+        .download p {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .download-card {
+            padding: 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+        }
+        .download-card h3 { margin-bottom: 8px; }
+        .download-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
+        .download-card .btn { width: 100%; justify-content: center; }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero { padding: 60px 0 50px; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .comparison-table { font-size: 0.8rem; }
+            .comparison-table th, .comparison-table td { padding: 10px 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="container">
+        <a href="/" class="logo">DB<span>Connect</span></a>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#comparison">Compare</a>
+            <a href="#download">Download</a>
+            <a href="https://github.com/shubhesh07/db-connect">GitHub</a>
+        </div>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="container">
+        <h1>One tool for <span class="highlight">all your databases</span></h1>
+        <p>Fast, free desktop IDE for MySQL, Redshift, and DynamoDB. Built for engineers who value speed over bloat.</p>
+        <div class="hero-buttons">
+            <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg" class="btn btn-primary">Download for macOS</a>
+            <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-Windows-Setup.exe" class="btn btn-secondary">Download for Windows</a>
+        </div>
+        <div class="badge">v1.0.0 — Free forever. No telemetry.</div>
+    </div>
+</section>
+
+<section class="databases">
+    <div class="container">
+        <div class="db-grid">
+            <div class="db-item">
+                <h3>MySQL</h3>
+                <p>Full SQL, transactions, SSH tunnels, table designer</p>
+            </div>
+            <div class="db-item">
+                <h3>Amazon Redshift</h3>
+                <p>SQL queries, schema browser, EXPLAIN plans</p>
+            </div>
+            <div class="db-item">
+                <h3>DynamoDB</h3>
+                <p>Visual scan/query builder, item editor, GSI support</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features" id="features">
+    <div class="container">
+        <h2>Built for backend engineers</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#9889;</div>
+                <h3>Fast Startup</h3>
+                <p>Opens in under 2 seconds. Native app, not Electron. Only 18MB installed.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128221;</div>
+                <h3>Monaco SQL Editor</h3>
+                <p>VS Code-quality editing with autocomplete, syntax highlighting, multi-cursor, and SQL formatting.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128274;</div>
+                <h3>Encrypted Credentials</h3>
+                <p>AES-256-GCM encryption. Keys stored in OS keychain. No plaintext passwords on disk.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128202;</div>
+                <h3>EXPLAIN Visualization</h3>
+                <p>Color-coded query plans for MySQL and Redshift. Spot slow queries at a glance.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128196;</div>
+                <h3>Multi-Tab & Multi-Connection</h3>
+                <p>Work across multiple databases simultaneously. Each tab can connect to a different server.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128269;</div>
+                <h3>Command Palette</h3>
+                <p>Cmd+K to access any action instantly. Run queries, format SQL, switch connections.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128190;</div>
+                <h3>Query History & Saved Queries</h3>
+                <p>Auto-saved history with search and favorites. Named queries with parameter support.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128295;</div>
+                <h3>Table Designer</h3>
+                <p>Visual CREATE and ALTER TABLE. Index manager. No need to write DDL by hand.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#127760;</div>
+                <h3>SSH Tunnels</h3>
+                <p>Connect to databases behind firewalls. Built-in SSH tunnel with key auth support.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="comparison" id="comparison">
+    <div class="container">
+        <h2>How it compares</h2>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th class="highlight-col">DB Connect</th>
+                    <th>DataGrip</th>
+                    <th>DBeaver</th>
+                    <th>TablePlus</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Price</td>
+                    <td class="highlight-col"><strong>Free</strong></td>
+                    <td>$25/mo</td>
+                    <td>Free*</td>
+                    <td>$89</td>
+                </tr>
+                <tr>
+                    <td>DynamoDB Support</td>
+                    <td class="highlight-col"><span class="check">Yes</span></td>
+                    <td><span class="cross">No</span></td>
+                    <td><span class="cross">No</span></td>
+                    <td><span class="check">Yes</span></td>
+                </tr>
+                <tr>
+                    <td>Redshift Support</td>
+                    <td class="highlight-col"><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                </tr>
+                <tr>
+                    <td>Startup Time</td>
+                    <td class="highlight-col"><strong>&lt;2s</strong></td>
+                    <td>10-30s</td>
+                    <td>5-15s</td>
+                    <td>&lt;3s</td>
+                </tr>
+                <tr>
+                    <td>App Size</td>
+                    <td class="highlight-col"><strong>~18MB</strong></td>
+                    <td>~800MB</td>
+                    <td>~400MB</td>
+                    <td>~80MB</td>
+                </tr>
+                <tr>
+                    <td>SSH Tunnels</td>
+                    <td class="highlight-col"><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                </tr>
+                <tr>
+                    <td>No Telemetry</td>
+                    <td class="highlight-col"><span class="check">Yes</span></td>
+                    <td><span class="cross">No</span></td>
+                    <td><span class="cross">No</span></td>
+                    <td><span class="cross">No</span></td>
+                </tr>
+                <tr>
+                    <td>Encrypted Credentials</td>
+                    <td class="highlight-col"><span class="check">AES-256</span></td>
+                    <td><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="download" id="download">
+    <div class="container">
+        <h2>Download DB Connect</h2>
+        <p>Free for personal and commercial use. No account required.</p>
+        <div class="download-grid">
+            <div class="download-card">
+                <h3>macOS</h3>
+                <p>macOS 11.0 (Big Sur) or later<br>Intel & Apple Silicon</p>
+                <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg" class="btn btn-primary">Download .dmg</a>
+            </div>
+            <div class="download-card">
+                <h3>Windows</h3>
+                <p>Windows 10 or later<br>64-bit</p>
+                <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-Windows-Setup.exe" class="btn btn-primary">Download .exe</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>Built by <a href="https://linkedin.com/in/shubheshshukla7">Shubhesh Shukla</a> &middot; <a href="https://github.com/shubhesh07/db-connect">GitHub</a> &middot; Free for personal and commercial use</p>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -18,6 +18,22 @@ Free alternative to DataGrip, DBeaver, and TablePlus — built for backend engin
 
 ---
 
+## Screenshots
+
+### SQL Editor with Results Grid
+![Query Results](screenshots/query-results.png)
+
+### EXPLAIN Plan Visualization
+![Explain Plan](screenshots/explain-plan.png)
+
+### Query History
+![Query History](screenshots/query-history.png)
+
+### Built-in SQL Snippets
+![Snippets](screenshots/snippets.png)
+
+---
+
 ## Features
 
 ### Multi-Database Support

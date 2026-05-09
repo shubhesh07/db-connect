@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://shubhesh07.github.io/db-connect/sitemap.xml

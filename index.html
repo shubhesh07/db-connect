@@ -48,7 +48,7 @@
       },
       "downloadUrl": "https://github.com/shubhesh07/db-connect/releases/latest",
       "screenshot": "https://shubhesh07.github.io/db-connect/screenshots/hero.png",
-      "softwareVersion": "1.0.0",
+      "softwareVersion": "2.0.0",
       "url": "https://shubhesh07.github.io/db-connect"
     }
     </script>
@@ -368,7 +368,7 @@
             <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg" class="btn btn-primary">Download for macOS</a>
             <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-Windows-Setup.exe" class="btn btn-secondary">Download for Windows</a>
         </div>
-        <div class="badge">v1.0.0 — Free forever. No telemetry.</div>
+        <div class="badge">v2.0.0 — Performance monitoring · smarter autocomplete · production safety. Free forever. No telemetry.</div>
         <div style="margin-top: 50px; max-width: 1000px; margin-left: auto; margin-right: auto;">
             <img src="screenshots/hero.png" alt="DB Connect - SQL Editor with Query Results" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
         </div>
@@ -398,6 +398,26 @@
     <div class="container">
         <h2>Built for backend engineers</h2>
         <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#128202;</div>
+                <h3>Performance Monitoring <span style="color: var(--green); font-size: 0.7rem; vertical-align: middle;">NEW in 2.0</span></h3>
+                <p>Slow Queries, Live Activity (with one-click Kill), Locks (blocking tree, wait time), Index Health (unused, redundant, scan hot-spots). MySQL, Redshift, and DynamoDB — without CloudWatch.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128269;</div>
+                <h3>Where the query is fired from <span style="color: var(--green); font-size: 0.7rem; vertical-align: middle;">NEW in 2.0</span></h3>
+                <p>Drill into any slow-query digest to see the top user@host firing it plus recent raw samples with full SQL_TEXT — answers "which service is hammering this query" in one click.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#9889;</div>
+                <h3>Step-aware Autocomplete <span style="color: var(--green); font-size: 0.7rem; vertical-align: middle;">NEW in 2.0</span></h3>
+                <p>Different completions for SELECT, FROM, WHERE, and after-column positions. `WHERE order_` now suggests columns from `order_details`, not random tables. MySQL keywords, functions, operators, cross-DB.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128737;</div>
+                <h3>Production Safety <span style="color: var(--green); font-size: 0.7rem; vertical-align: middle;">NEW in 2.0</span></h3>
+                <p>Tiered confirmation modal: DROP/TRUNCATE require typing the connection name; DELETE/UPDATE/ALTER show a statement preview. Server-side query cancel via KILL QUERY. Local audit trail.</p>
+            </div>
             <div class="feature-card">
                 <div class="feature-icon">&#9889;</div>
                 <h3>Fast Startup</h3>
@@ -504,6 +524,13 @@
                     <td><span class="check">Yes</span></td>
                 </tr>
                 <tr>
+                    <td>Built-in Performance Monitoring</td>
+                    <td class="highlight-col"><span class="check">Slow queries, locks, index health, "where fired from"</span></td>
+                    <td><span class="cross">No</span></td>
+                    <td><span class="cross">Partial</span></td>
+                    <td><span class="cross">No</span></td>
+                </tr>
+                <tr>
                     <td>No Telemetry</td>
                     <td class="highlight-col"><span class="check">Yes</span></td>
                     <td><span class="cross">No</span></td>
@@ -529,13 +556,14 @@
         <div class="download-grid">
             <div class="download-card">
                 <h3>macOS</h3>
-                <p>macOS 11.0 (Big Sur) or later<br>Intel & Apple Silicon</p>
-                <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg" class="btn btn-primary">Download .dmg</a>
-                <div class="macos-warning">
-                    <strong>After installing, run this in Terminal:</strong>
-                    <code>xattr -cr /Applications/DBConnect.app</code>
-                    <br>macOS blocks unsigned apps — without this command, you'll see <em>"DBConnect is damaged and can't be opened"</em>. One-time fix.
+                <p>macOS 11.0 (Big Sur) or later<br>Intel &amp; Apple Silicon</p>
+                <div class="macos-warning" style="margin-bottom: 14px;">
+                    <strong>One-line install (recommended) — no Gatekeeper prompt:</strong>
+                    <code>curl -fsSL https://github.com/shubhesh07/db-connect/releases/latest/download/install.sh | bash</code>
+                    <br>Why this works: <code>curl</code> downloads don't get the macOS quarantine flag, so the app launches normally. No <code>xattr</code> step needed.
                 </div>
+                <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg" class="btn btn-primary">Download .dmg</a>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px;">Prefer a DMG? Open it and double-click <code>install-mac.sh</code> — the bundled script copies the app to /Applications and clears the quarantine flag automatically.</p>
             </div>
             <div class="download-card">
                 <h3>Windows</h3>

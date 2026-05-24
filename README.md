@@ -51,6 +51,8 @@ Free alternative to DataGrip, DBeaver, and TablePlus — built for backend engin
 | SSH Tunnel | Yes | — | — |
 | Scan / Query / GetItem | — | — | Yes |
 | Filter Expression Builder | — | — | Yes |
+| Cross-Schema Queries (JOINs across schemas) | Yes | Yes | — |
+| Backup &amp; Restore (local) | Yes | Yes | Yes |
 | Export (CSV, JSON, Excel) | Yes | Yes | Yes |
 
 ### Core Features
@@ -63,6 +65,8 @@ Free alternative to DataGrip, DBeaver, and TablePlus — built for backend engin
 - **Virtual Scrolling** — Handle millions of rows without UI lag
 - **Dark Theme** — Easy on the eyes for long sessions
 - **Keyboard-First** — Cmd+Enter to run, Cmd+D to select statement, full shortcut coverage
+- **Cross-Schema Queries** — JOIN and query across multiple schemas in a single connection. Autocomplete resolves tables across schemas automatically.
+- **Backup &amp; Restore** — One-click logical backups of tables, schemas, or full databases, saved locally to your laptop. Restore into any connection without leaving the app.
 
 ### Security
 
@@ -83,23 +87,30 @@ Free alternative to DataGrip, DBeaver, and TablePlus — built for backend engin
 
 ## Download
 
-### macOS
+### macOS — One-Line Install (Recommended)
+
+Paste this into Terminal. It downloads, installs, and launches without any Gatekeeper prompt:
+
+```bash
+curl -fsSL https://github.com/shubhesh07/db-connect/releases/latest/download/install.sh | bash
+```
+
+**Why this works:** files fetched with `curl` don't get the macOS quarantine flag, so the app opens normally — no `xattr` step, no "damaged" warning.
+
+### macOS — Manual Download
 
 | File | Description |
 |------|-------------|
 | [DBConnect-macOS.dmg](https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg) | macOS installer (DMG) |
 | [DBConnect-mac.zip](https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-mac.zip) | macOS portable (ZIP) |
 
-> **⚠️ Important — macOS Gatekeeper Fix**
->
-> macOS blocks unsigned apps by default. After installing, you **must** run this command in Terminal before launching:
+> If you downloaded the DMG manually and see **"DBConnect is damaged and can't be opened"**, run this once in Terminal:
 >
 > ```bash
 > xattr -cr /Applications/DBConnect.app
 > ```
 >
-> Without this, macOS will show **"DBConnect is damaged and can't be opened"** or silently refuse to launch.
-> This is a one-time fix — the app will open normally after.
+> Or open the DMG and double-click the bundled `install-mac.sh` — it does the same thing for you.
 
 ### Windows
 

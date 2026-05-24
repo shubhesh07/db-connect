@@ -419,11 +419,18 @@
         <div class="badge">v2.0.0 — Performance monitoring · smarter autocomplete · production safety. Free forever. No telemetry.</div>
         <div class="quick-install">
             <div class="qi-label">
-                <span>Install on macOS in one line</span>
+                <span>Install on macOS with Homebrew</span>
                 <span class="pill">Recommended</span>
             </div>
+            <code>brew install --cask shubhesh07/db-connect/db-connect</code>
+            <div class="qi-hint">Click to select &middot; paste into Terminal &middot; Homebrew handles the macOS Gatekeeper unblock automatically. Upgrade later with <code style="display:inline; padding:1px 6px; font-size:0.78rem;">brew upgrade --cask db-connect</code>.</div>
+        </div>
+        <div class="quick-install" style="margin-top: 16px;">
+            <div class="qi-label">
+                <span>Don't use Homebrew? One-line installer</span>
+            </div>
             <code>curl -fsSL https://github.com/shubhesh07/db-connect/releases/latest/download/install.sh | bash</code>
-            <div class="qi-hint">Click to select &middot; paste into Terminal &middot; handles download, install, and the macOS Gatekeeper unblock for you.</div>
+            <div class="qi-hint">Downloads, installs, and unblocks Gatekeeper for you &mdash; no <code style="display:inline; padding:1px 6px; font-size:0.78rem;">xattr</code> step needed.</div>
         </div>
         <div style="margin-top: 50px; max-width: 1000px; margin-left: auto; margin-right: auto;">
             <img src="screenshots/hero.png" alt="DB Connect - SQL Editor with Query Results" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
@@ -624,9 +631,14 @@
                 <h3>macOS</h3>
                 <p>macOS 11.0 (Big Sur) or later<br>Intel &amp; Apple Silicon</p>
                 <div class="macos-warning" style="margin-bottom: 14px;">
-                    <strong>One-line install (recommended) — no Gatekeeper prompt:</strong>
+                    <strong>Homebrew (recommended):</strong>
+                    <code>brew install --cask shubhesh07/db-connect/db-connect</code>
+                    <br>Upgrade later with <code>brew upgrade --cask db-connect</code>. Homebrew unblocks Gatekeeper for you.
+                </div>
+                <div class="macos-warning" style="margin-bottom: 14px;">
+                    <strong>No Homebrew? One-line installer:</strong>
                     <code>curl -fsSL https://github.com/shubhesh07/db-connect/releases/latest/download/install.sh | bash</code>
-                    <br>Why this works: <code>curl</code> downloads don't get the macOS quarantine flag, so the app launches normally. No <code>xattr</code> step needed.
+                    <br><code>curl</code> downloads don't get the macOS quarantine flag, so the app launches normally.
                 </div>
                 <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg" class="btn btn-primary">Download .dmg</a>
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px;">Prefer a DMG? Open it and double-click <code>install-mac.sh</code> — the bundled script copies the app to /Applications and clears the quarantine flag automatically.</p>

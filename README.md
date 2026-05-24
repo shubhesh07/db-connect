@@ -87,7 +87,15 @@ Free alternative to DataGrip, DBeaver, and TablePlus — built for backend engin
 
 ## Download
 
-### macOS — One-Line Install (Recommended)
+### macOS — Homebrew (Recommended)
+
+```bash
+brew install --cask shubhesh07/db-connect/db-connect
+```
+
+Homebrew handles the macOS Gatekeeper unblock automatically. Upgrade later with `brew upgrade --cask db-connect`.
+
+### macOS — One-Line Install (No Homebrew)
 
 Paste this into Terminal. It downloads, installs, and launches without any Gatekeeper prompt:
 

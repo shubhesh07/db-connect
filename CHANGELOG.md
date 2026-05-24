@@ -43,6 +43,7 @@ All notable changes to DB Connect will be documented in this file.
 - Connection-layer security hardening for credential handling and DB clients
 
 ### Install
+- **Homebrew Cask** (recommended): `brew install --cask shubhesh07/db-connect/db-connect` — Homebrew unblocks Gatekeeper automatically; upgrade with `brew upgrade --cask db-connect`. Tap: [shubhesh07/homebrew-db-connect](https://github.com/shubhesh07/homebrew-db-connect)
 - macOS one-line installer: `curl -fsSL https://github.com/shubhesh07/db-connect/releases/latest/download/install.sh | bash` (no Gatekeeper prompt — curl downloads don't get quarantined)
 - DMG still bundles `install-mac.sh` for users who prefer the GUI path
 

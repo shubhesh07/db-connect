@@ -286,6 +286,54 @@
         .download-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
         .download-card .btn { width: 100%; justify-content: center; }
 
+        /* Quick install (hero) */
+        .quick-install {
+            margin: 36px auto 0;
+            max-width: 720px;
+            padding: 18px 22px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(59, 130, 246, 0.06));
+            border: 1px solid rgba(34, 197, 94, 0.35);
+            border-radius: 12px;
+            text-align: left;
+        }
+        .quick-install .qi-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--green);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 10px;
+        }
+        .quick-install .qi-label .pill {
+            padding: 2px 8px;
+            background: rgba(34, 197, 94, 0.15);
+            border-radius: 999px;
+            font-size: 0.7rem;
+            color: var(--green);
+        }
+        .quick-install code {
+            display: block;
+            padding: 12px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.9rem;
+            color: var(--green);
+            user-select: all;
+            cursor: pointer;
+            word-break: break-all;
+            line-height: 1.5;
+        }
+        .quick-install .qi-hint {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
         /* macOS warning */
         .macos-warning {
             margin-top: 20px;
@@ -369,6 +417,14 @@
             <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-Windows-Setup.exe" class="btn btn-secondary">Download for Windows</a>
         </div>
         <div class="badge">v2.0.0 — Performance monitoring · smarter autocomplete · production safety. Free forever. No telemetry.</div>
+        <div class="quick-install">
+            <div class="qi-label">
+                <span>Install on macOS in one line</span>
+                <span class="pill">Recommended</span>
+            </div>
+            <code>curl -fsSL https://github.com/shubhesh07/db-connect/releases/latest/download/install.sh | bash</code>
+            <div class="qi-hint">Click to select &middot; paste into Terminal &middot; handles download, install, and the macOS Gatekeeper unblock for you.</div>
+        </div>
         <div style="margin-top: 50px; max-width: 1000px; margin-left: auto; margin-right: auto;">
             <img src="screenshots/hero.png" alt="DB Connect - SQL Editor with Query Results" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
         </div>
@@ -462,6 +518,16 @@
                 <div class="feature-icon">&#127760;</div>
                 <h3>SSH Tunnels</h3>
                 <p>Connect to databases behind firewalls. Built-in SSH tunnel with key auth support.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128279;</div>
+                <h3>Cross-Schema Queries</h3>
+                <p>Run JOINs and queries across multiple schemas in a single connection. Autocomplete resolves tables across schemas automatically.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128190;</div>
+                <h3>Backup &amp; Restore</h3>
+                <p>One-click logical backups of tables, schemas, or full databases &mdash; saved locally to your laptop. Restore into any connection without leaving the app.</p>
             </div>
         </div>
     </div>

@@ -2,18 +2,6 @@
 
 All notable changes to DB Connect will be documented in this file.
 
-## [Unreleased]
-
-### Documentation
-- README and landing page (`shubhesh07.github.io/db-connect`) now lead with the one-line curl install for macOS:
-  ```bash
-  curl -fsSL https://github.com/shubhesh07/db-connect/releases/latest/download/install.sh | bash
-  ```
-- `xattr -cr /Applications/DBConnect.app` demoted to a fallback for users who downloaded the DMG manually
-- Surfaced two existing features that were previously undocumented:
-  - **Cross-Schema Queries** — JOIN and query across multiple schemas in a single connection; autocomplete resolves tables across schemas
-  - **Backup &amp; Restore** — one-click logical backups of tables, schemas, or full databases saved locally to your laptop; restore into any connection without leaving the app
-
 ## [2.0.0] - 2026-05-23
 
 ### Added — Performance Monitoring
@@ -37,6 +25,10 @@ All notable changes to DB Connect will be documented in this file.
 - Server-side query cancel — Stop now issues `KILL QUERY <thread_id>` on MySQL and `PG_CANCEL_BACKEND($1)` on Redshift
 - Local audit trail (SQLite-backed) for destructive actions and kill events
 - Configurable persistent query timeout with clear error messages
+
+### Added — Cross-Schema Queries & Backup
+- **Cross-Schema Queries** — JOIN and query across multiple schemas in a single connection. Autocomplete resolves tables across schemas automatically (MySQL and Redshift)
+- **Backup &amp; Restore** — One-click logical backups of tables, schemas, or full databases, saved locally to your laptop. Restore into any connection without leaving the app (MySQL, Redshift, DynamoDB)
 
 ### Added — Editor & UI
 - Monaco editor theme follows the app theme (light/dark/system) with runtime switching

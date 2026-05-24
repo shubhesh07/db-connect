@@ -2,6 +2,18 @@
 
 All notable changes to DB Connect will be documented in this file.
 
+## [Unreleased]
+
+### Documentation
+- README and landing page (`shubhesh07.github.io/db-connect`) now lead with the one-line curl install for macOS:
+  ```bash
+  curl -fsSL https://github.com/shubhesh07/db-connect/releases/latest/download/install.sh | bash
+  ```
+- `xattr -cr /Applications/DBConnect.app` demoted to a fallback for users who downloaded the DMG manually
+- Surfaced two existing features that were previously undocumented:
+  - **Cross-Schema Queries** — JOIN and query across multiple schemas in a single connection; autocomplete resolves tables across schemas
+  - **Backup &amp; Restore** — one-click logical backups of tables, schemas, or full databases saved locally to your laptop; restore into any connection without leaving the app
+
 ## [2.0.0] - 2026-05-23
 
 ### Added — Performance Monitoring

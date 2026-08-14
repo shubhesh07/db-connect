@@ -2,6 +2,35 @@
 
 All notable changes to DB Connect will be documented in this file.
 
+## [2.1.0] - 2026-08-14
+
+macOS only — Windows artifacts to follow in a separate update.
+
+### Added — MySQL Productivity
+- Stored procedure/function/trigger/event visibility (list + view `SHOW CREATE` definitions)
+- Real database backup/restore via `mysqldump`/`mysql` CLI (distinct from app-config backup)
+- Full MySQL user management: create/alter/drop user, grant/revoke privileges
+- `SHOW VARIABLES` viewer in the Performance pane
+- Connection-string paste-to-parse (`mysql://user:pass@host:port/db`)
+- Auto-update check against GitHub releases
+- Table Relations view (outgoing + incoming foreign keys)
+- Saved/reusable result-grid filters
+- CSV import field-mapper (remap/skip columns, insert-vs-upsert)
+
+### Added — Local MCP Server
+- Lets local MCP clients (Claude Code, Cursor, etc.) query your open connections through DB Connect
+- Off by default, localhost-only, read-only by default — toggle under Sidebar → "MCP Server"
+
+### Changed — Connection UI
+- Permanent connection rail replaces the connection dropdown; `⌘P` fuzzy switcher
+- Brand-stripe engine picker and redesigned three-section connection form
+
+### Fixed
+- Query-timeout setting no longer gets silently overridden by a hardcoded socket timeout, which previously surfaced as "invalid connection" well before the configured timeout
+- Several error toasts that showed "undefined" now show the real error message
+- Smoother results-grid scrolling and paste handling for heavy queries
+- Closed an identifier-injection gap in the Create Table flow
+
 ## [2.0.0] - 2026-05-23
 
 ### Added — Performance Monitoring

@@ -184,6 +184,12 @@ No telemetry. No cloud sync. Everything stays on your machine.
 
 ---
 
+## Writing
+
+- [DB Connect: a database IDE that lets your AI assistant actually query your database](https://dev.to/shubhesh07/-db-connect-a-database-ide-that-lets-your-ai-assistant-actually-query-your-database-4ea5) — the v2.2.0 launch post, on the MCP integration and why it's built with Go + Wails instead of Electron.
+
+---
+
 ## Author
 
 **Shubhesh Shukla**

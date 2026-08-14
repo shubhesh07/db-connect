@@ -2,9 +2,30 @@
 
 All notable changes to DB Connect will be documented in this file.
 
-## [2.1.0] - 2026-08-14
+## [2.2.0] - 2026-08-14
 
-macOS only — Windows artifacts to follow in a separate update.
+### Fixed — DynamoDB
+- Results grid no longer guesses which table produced a scan/query by scanning every table in the account — was slow and could lock onto the wrong table when key names collided. It now reads which table was actually queried directly from the backend response.
+- "Get Item" mode now actually gets the item instead of silently running a scan/query
+- Table-info load failures now show an error instead of failing silently
+
+### Changed — Smarter SQL Autocomplete
+- `WHERE col=val ` now suggests `AND`/`OR` + the next column instead of re-offering comparison operators on an already-complete condition
+
+### Added — Explorer & Editor
+- Tables/views grouped into collapsible Tables (N) / Views (N) folders with counts shown up front
+- Drop Table.../Drop View... in the table context menu — still goes through the existing production/read-only safety confirmation on Run
+- In-toolbar data-source switcher — rebind a query tab to a different connection without the sidebar
+
+### Fixed — Performance
+- The sidebar's expanded table tree was fully re-rendering on every keystroke while typing a query — this was the main cause of reported typing lag
+- Dropping/creating/altering a table or view now refreshes the sidebar automatically; disconnecting a connection clears its cached schema so reconnecting shows current state
+
+### Added — Local MCP Server
+- Now works with Redshift connections too (previously MySQL-only)
+- New DynamoDB tools: list tables, describe table, scan, query, get item, plus write tools when "Allow writes" is enabled
+
+## [2.1.0] - 2026-08-14
 
 ### Added — MySQL Productivity
 - Stored procedure/function/trigger/event visibility (list + view `SHOW CREATE` definitions)

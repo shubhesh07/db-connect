@@ -6,7 +6,7 @@ MySQL + Amazon Redshift + DynamoDB — one fast, free, native desktop IDE instea
 
 ![macOS](https://img.shields.io/badge/macOS-supported-blue) ![Windows](https://img.shields.io/badge/Windows-supported-blue) ![License](https://img.shields.io/badge/license-free-green) ![Downloads](https://img.shields.io/github/downloads/shubhesh07/db-connect/total)
 
-![DB Connect — SQL editor with query results](screenshots/hero.png)
+![DB Connect — SQL editor with query results](screenshots/query-results.png)
 
 ## Download
 
@@ -111,9 +111,14 @@ brew install --cask shubhesh07/db-connect/db-connect
 
 ## Screenshots
 
-![Query Results](screenshots/query-results.png)
+### EXPLAIN Plan Visualization
+![Explain Plan](screenshots/explain-plan.png)
 
-*More screenshots (EXPLAIN plan, query history, DynamoDB PartiQL editor) coming soon.*
+### Query History
+![Query History](screenshots/query-history.png)
+
+### Built-in SQL Snippets
+![Snippets](screenshots/snippets.png)
 
 ## Roadmap
 

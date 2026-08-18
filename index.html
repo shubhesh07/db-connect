@@ -618,6 +618,7 @@
 <section class="comparison" id="comparison">
     <div class="container">
         <h2>How it compares</h2>
+        <div style="overflow-x: auto;">
         <table class="comparison-table">
             <thead>
                 <tr>
@@ -626,6 +627,7 @@
                     <th>DataGrip</th>
                     <th>DBeaver</th>
                     <th>TablePlus</th>
+                    <th>Beekeeper Studio</th>
                 </tr>
             </thead>
             <tbody>
@@ -635,6 +637,7 @@
                     <td>Free (non-commercial)¹</td>
                     <td>Free (Community)</td>
                     <td>$99+</td>
+                    <td>Free (Community)</td>
                 </tr>
                 <tr>
                     <td>DynamoDB Support</td>
@@ -642,10 +645,12 @@
                     <td><span class="cross">No</span></td>
                     <td><span class="cross">No²</span></td>
                     <td><span class="cross">No</span></td>
+                    <td><span class="cross">No³</span></td>
                 </tr>
                 <tr>
                     <td>Redshift Support</td>
                     <td class="highlight-col"><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
                     <td><span class="check">Yes</span></td>
                     <td><span class="check">Yes</span></td>
                     <td><span class="check">Yes</span></td>
@@ -656,6 +661,7 @@
                     <td>10-30s</td>
                     <td>5-15s</td>
                     <td>&lt;3s</td>
+                    <td>Electron</td>
                 </tr>
                 <tr>
                     <td>App Size</td>
@@ -663,10 +669,12 @@
                     <td>~800MB</td>
                     <td>~400MB</td>
                     <td>~80MB</td>
+                    <td>~500MB</td>
                 </tr>
                 <tr>
                     <td>SSH Tunnels</td>
                     <td class="highlight-col"><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
                     <td><span class="check">Yes</span></td>
                     <td><span class="check">Yes</span></td>
                     <td><span class="check">Yes</span></td>
@@ -677,6 +685,7 @@
                     <td><span class="cross">No</span></td>
                     <td><span class="cross">Partial</span></td>
                     <td><span class="cross">No</span></td>
+                    <td><span class="cross">No</span></td>
                 </tr>
                 <tr>
                     <td>Real backup/restore</td>
@@ -684,10 +693,12 @@
                     <td><span class="cross">No</span></td>
                     <td><span class="cross">No</span></td>
                     <td><span class="cross">No</span></td>
+                    <td><span class="check">Yes</span></td>
                 </tr>
                 <tr>
                     <td>Local MCP server (AI tool integration)</td>
                     <td class="highlight-col"><span class="check">Yes</span></td>
+                    <td><span class="cross">No</span></td>
                     <td><span class="cross">No</span></td>
                     <td><span class="cross">No</span></td>
                     <td><span class="cross">No</span></td>
@@ -698,10 +709,65 @@
                     <td><span class="check">Yes</span></td>
                     <td><span class="check">Yes</span></td>
                     <td><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
                 </tr>
             </tbody>
         </table>
-        <p style="margin-top: 16px; font-size: 0.8rem; color: var(--text-muted);">¹ DataGrip is free for non-commercial use (learning, hobby, open-source) since Oct 2025; commercial use requires a paid license. ² DynamoDB support in DBeaver is gated to paid tiers (Lite and above) — not included in the free Community edition. Verified against each vendor's own docs; open an issue if something's out of date.</p>
+        </div>
+        <p style="margin-top: 16px; font-size: 0.8rem; color: var(--text-muted);">¹ DataGrip is free for non-commercial use (learning, hobby, open-source) since Oct 2025; commercial use requires a paid license. ² DynamoDB support in DBeaver is gated to paid tiers (Lite and above) — not included in the free Community edition. ³ Beekeeper Studio's Community edition includes Redshift but gates DynamoDB to its paid Indie/Professional/Business tiers. Verified against each vendor's own docs; open an issue if something's out of date.</p>
+
+        <h2 style="margin-top: 60px;">vs. popular MySQL-only tools</h2>
+        <p style="text-align: center; color: var(--text-muted); max-width: 640px; margin: 0 auto 30px; font-size: 0.9rem;">MySQL Workbench and Sequel Ace are two of the most popular MySQL-only clients — worth a direct look if MySQL is the only engine in your stack.</p>
+        <div style="overflow-x: auto;">
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th class="highlight-col">DB Connect</th>
+                    <th>MySQL Workbench</th>
+                    <th>Sequel Ace</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Price</td>
+                    <td class="highlight-col"><strong>Free</strong></td>
+                    <td>Free (Community)</td>
+                    <td>Free (open source)</td>
+                </tr>
+                <tr>
+                    <td>Redshift / DynamoDB</td>
+                    <td class="highlight-col"><span class="check">Both</span></td>
+                    <td><span class="cross">Neither</span></td>
+                    <td><span class="cross">Neither</span></td>
+                </tr>
+                <tr>
+                    <td>Platforms</td>
+                    <td class="highlight-col">macOS, Windows</td>
+                    <td>macOS, Windows, Linux</td>
+                    <td>macOS only</td>
+                </tr>
+                <tr>
+                    <td>Native app</td>
+                    <td class="highlight-col"><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                </tr>
+                <tr>
+                    <td>EXPLAIN</td>
+                    <td class="highlight-col"><span class="check">Visual</span></td>
+                    <td><span class="check">Visual</span></td>
+                    <td><span class="check">Text output</span></td>
+                </tr>
+                <tr>
+                    <td>Backup/restore</td>
+                    <td class="highlight-col"><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                    <td><span class="check">Yes (SQL dump)</span></td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
     </div>
 </section>
 

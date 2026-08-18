@@ -334,6 +334,60 @@
             color: var(--text-muted);
         }
 
+        /* Stat bar */
+        .stat-bar {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+            margin-top: 32px;
+        }
+        .stat-item { text-align: center; }
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1.2;
+        }
+        .stat-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-top: 2px;
+        }
+
+        /* Workflow */
+        .workflow-section {
+            padding: 50px 0 20px;
+            text-align: center;
+        }
+        .workflow-section h2 {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+        .workflow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .workflow-step {
+            padding: 14px 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        .workflow-arrow {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
         /* macOS warning */
         .macos-warning {
             margin-top: 20px;
@@ -410,11 +464,17 @@
 
 <section class="hero">
     <div class="container">
-        <h1>One tool for <span class="highlight">all your databases</span></h1>
-        <p>Fast, free desktop IDE for MySQL, Redshift, and DynamoDB. Built for engineers who value speed over bloat.</p>
+        <h1>The lightweight database client<br>for backend engineers.</h1>
+        <p><strong style="color: var(--text);">MySQL · Amazon Redshift · DynamoDB</strong> — one fast, native app instead of three separate tools.</p>
         <div class="hero-buttons">
             <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg" class="btn btn-primary">Download for macOS</a>
             <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-Windows-Setup.exe" class="btn btn-secondary">Download for Windows</a>
+        </div>
+        <div class="stat-bar">
+            <div class="stat-item"><div class="stat-value">18 MB</div><div class="stat-label">Install size</div></div>
+            <div class="stat-item"><div class="stat-value">&lt;2 sec</div><div class="stat-label">Startup</div></div>
+            <div class="stat-item"><div class="stat-value">$0</div><div class="stat-label">No subscription</div></div>
+            <div class="stat-item"><div class="stat-value">0</div><div class="stat-label">Cloud sync</div></div>
         </div>
         <div class="badge">v2.3.0 — MCP server security hardening · DynamoDB PartiQL query mode. Free forever. No telemetry.</div>
         <div class="quick-install">
@@ -434,6 +494,21 @@
         </div>
         <div style="margin-top: 50px; max-width: 1000px; margin-left: auto; margin-right: auto;">
             <img src="screenshots/hero.png" alt="DB Connect - SQL Editor with Query Results" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
+        </div>
+    </div>
+</section>
+
+<section class="workflow-section">
+    <div class="container">
+        <h2>Connect once. Query anything.</h2>
+        <div class="workflow">
+            <div class="workflow-step">Connect a database</div>
+            <span class="workflow-arrow">&rarr;</span>
+            <div class="workflow-step">Write SQL / PartiQL</div>
+            <span class="workflow-arrow">&rarr;</span>
+            <div class="workflow-step">Run (&#8984;&crarr;)</div>
+            <span class="workflow-arrow">&rarr;</span>
+            <div class="workflow-step">Results, instantly</div>
         </div>
     </div>
 </section>
@@ -557,16 +632,16 @@
                 <tr>
                     <td>Price</td>
                     <td class="highlight-col"><strong>Free</strong></td>
-                    <td>$25/mo</td>
-                    <td>Free*</td>
-                    <td>$89</td>
+                    <td>Free (non-commercial)¹</td>
+                    <td>Free (Community)</td>
+                    <td>$99+</td>
                 </tr>
                 <tr>
                     <td>DynamoDB Support</td>
                     <td class="highlight-col"><span class="check">Yes</span></td>
                     <td><span class="cross">No</span></td>
+                    <td><span class="cross">No²</span></td>
                     <td><span class="cross">No</span></td>
-                    <td><span class="check">Yes</span></td>
                 </tr>
                 <tr>
                     <td>Redshift Support</td>
@@ -604,7 +679,14 @@
                     <td><span class="cross">No</span></td>
                 </tr>
                 <tr>
-                    <td>No Telemetry</td>
+                    <td>Real backup/restore</td>
+                    <td class="highlight-col"><span class="check">Yes</span></td>
+                    <td><span class="cross">No</span></td>
+                    <td><span class="cross">No</span></td>
+                    <td><span class="cross">No</span></td>
+                </tr>
+                <tr>
+                    <td>Local MCP server (AI tool integration)</td>
                     <td class="highlight-col"><span class="check">Yes</span></td>
                     <td><span class="cross">No</span></td>
                     <td><span class="cross">No</span></td>
@@ -619,6 +701,7 @@
                 </tr>
             </tbody>
         </table>
+        <p style="margin-top: 16px; font-size: 0.8rem; color: var(--text-muted);">¹ DataGrip is free for non-commercial use (learning, hobby, open-source) since Oct 2025; commercial use requires a paid license. ² DynamoDB support in DBeaver is gated to paid tiers (Lite and above) — not included in the free Community edition. Verified against each vendor's own docs; open an issue if something's out of date.</p>
     </div>
 </section>
 

@@ -2,6 +2,19 @@
 
 All notable changes to DB Connect will be documented in this file.
 
+## [2.3.0] - 2026-08-18
+
+### Security — MCP server hardening
+- Per-install bearer token + Host/Origin request validation, closing a DNS-rebinding / malicious-webpage localhost-probing gap in the local MCP server.
+- Connection allow-list replaces "every open connection is reachable via MCP" — MCP tools now only ever see connections you've explicitly allowed.
+- Per-connection, time-bounded write grants replace the global write-enable toggle; grant/revoke are desktop-app-only, never exposed as MCP tools.
+- Fixed a SQL-injection-style bypass in `run_query`'s Redshift schema parameter, a read-only classifier gap around `SELECT ... INTO` disguised writes, and MCP tool responses that returned a bare JSON array (rejected by strict MCP clients).
+
+### Added — DynamoDB PartiQL query mode
+- New PartiQL tab in the DynamoDB explorer — write real SQL-like statements (`SELECT * FROM "table" WHERE ...`) instead of building filters through the GUI.
+- Context-aware autocomplete: keywords, table names (only right after FROM/INTO), and attribute names learned per-table from key schema and prior query results.
+- `Cmd/Ctrl+Enter` runs the statement; destructive PartiQL on production connections goes through the same confirmation dialog as SQL writes; truncated results now show a warning instead of silently looking complete.
+
 ## [2.2.0] - 2026-08-14
 
 ### Fixed — DynamoDB

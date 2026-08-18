@@ -50,27 +50,47 @@ Full manual-download links (DMG, portable ZIPs) are in [Manual downloads](#manua
 
 ## How it compares
 
-| Feature | DB Connect | DBeaver (Community) | DataGrip | TablePlus |
-|---|:---:|:---:|:---:|:---:|
-| Price | Free | Free | Free (non-commercial) / ~$99 yr¹ (commercial) | $99+ one-time² |
-| MySQL | ✅ | ✅ | ✅ | ✅ |
-| Redshift | ✅ | ✅ | ✅ | ✅ |
-| DynamoDB | ✅ (PartiQL + visual builder) | — (Enterprise-only) | — | — |
-| Native app (not JVM/Electron) | ✅ | — | — | ✅ |
-| Install size | ~18MB | ~400MB | ~800MB | ~80MB |
-| Startup time | <2s | 5–15s | 10–30s | <3s |
-| SSH tunnel | ✅ | ✅ | ✅ | ✅ |
-| Query history (persists across restarts) | ✅ | — (session-only in Community) | ✅ | ✅ |
-| Real backup/restore | ✅ | — | — | — |
-| Native performance monitoring | ✅ | — | — | — |
-| Local MCP server (AI tool integration) | ✅ | — | — | — |
-| macOS | ✅ | ✅ | ✅ | ✅ |
-| Windows | ✅ | ✅ | ✅ | ✅ |
+| Feature | DB Connect | DBeaver (Community) | DataGrip | TablePlus | Beekeeper Studio (Community) |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Price | Free | Free | Free (non-commercial) / ~$99 yr¹ (commercial) | $99+ one-time² | Free |
+| MySQL | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Redshift | ✅ | ✅ | ✅ | ✅ | ✅ |
+| DynamoDB | ✅ (PartiQL + visual builder) | — (paid tiers only) | — | — | — (paid tiers only)³ |
+| Native app (not JVM/Electron) | ✅ | — | — | ✅ | — |
+| Install size | ~18MB | ~400MB | ~800MB | ~80MB | ~500MB |
+| Startup time | <2s | 5–15s | 10–30s | <3s | — (Electron) |
+| SSH tunnel | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Query history (persists across restarts) | ✅ | — (session-only in Community) | ✅ | ✅ | ✅ |
+| Real backup/restore | ✅ | — | — | — | ✅ |
+| Native performance monitoring | ✅ | — | — | — | — |
+| Local MCP server (AI tool integration) | ✅ | — | — | — | — |
+| macOS | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Windows | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 ¹ DataGrip has been free for non-commercial use (learning, hobby, open-source) since October 2025; commercial use still requires a paid license.
 ² TablePlus's free tier caps open tabs/windows/filters; the one-time license runs $99–$129 depending on device count.
+³ Beekeeper Studio's Community edition includes Redshift but gates DynamoDB to its paid Indie/Professional/Business tiers.
 
 *Comparison reflects each product's free/community tier where one exists, verified against each vendor's own docs as of this writing. Corrections welcome — open an issue if something's out of date.*
+
+### vs. popular MySQL-only tools
+
+DB Connect, DBeaver, DataGrip, TablePlus, and Beekeeper Studio above all support multiple database engines. MySQL Workbench and Sequel Ace are two of the most popular *MySQL-only* clients, so they get their own table instead of a row full of dashes above:
+
+| Feature | DB Connect | MySQL Workbench | Sequel Ace |
+|---|:---:|:---:|:---:|
+| Price | Free | Free (Community) | Free (open source, MIT) |
+| MySQL | ✅ | ✅ | ✅ |
+| Redshift | ✅ | — | — |
+| DynamoDB | ✅ | — | — |
+| Native app | ✅ | ✅ | ✅ |
+| Platforms | macOS, Windows | macOS, Windows, Linux | macOS only |
+| SSH tunnel | ✅ | ✅ | ✅ |
+| Query history | ✅ | ✅ (persists across restarts) | ✅ |
+| EXPLAIN | ✅ Visual | ✅ Visual | ✅ (text output) |
+| Backup/restore | ✅ | ✅ | ✅ (SQL dump-based) |
+
+MySQL Workbench is Oracle's official free tool and a genuinely solid choice if MySQL is the *only* engine you touch — its Visual Explain is long-standing and well-regarded. Sequel Ace (the free, open-source successor to Sequel Pro) is excellent if you're macOS-only and MySQL-only. Neither reaches beyond MySQL/MariaDB, which is the gap DB Connect fills if Redshift or DynamoDB are also in your stack.
 
 ## 30-second quick start
 

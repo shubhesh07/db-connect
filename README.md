@@ -144,7 +144,7 @@ brew install --cask shubhesh07/db-connect/db-connect
 
 Reordered toward the broadest database-client market first:
 
-1. [ ] **PostgreSQL support** — MySQL + PostgreSQL + Redshift + DynamoDB covers most backend stacks people actually run
+1. [x] **PostgreSQL support** — shipped in v2.4.0. MySQL + PostgreSQL + Redshift + DynamoDB covers most backend stacks people actually run
 2. [ ] **Linux build** — Wails already supports it; needs a packaging/CI pipeline
 3. [ ] ER diagram visualization (auto-generated from foreign keys)
 4. [ ] Query result diffing (compare EXPLAIN output before/after an index change)

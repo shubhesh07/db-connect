@@ -2,6 +2,16 @@
 
 All notable changes to DB Connect will be documented in this file.
 
+## [2.4.0] - 2026-08-22
+
+### Added — Full PostgreSQL support
+- PostgreSQL joins MySQL, Amazon Redshift, and DynamoDB as a fully-supported engine: transactions (BEGIN/COMMIT/ROLLBACK + auto-commit), an index manager, table relations (outgoing + incoming foreign keys), a full Alter Table designer, CSV/SQL file import, connection-string paste-to-parse, and EXPLAIN ANALYZE.
+- PostgreSQL-native features with no MySQL equivalent: an extensions viewer/installer, custom ENUM types (creatable and selectable directly in the table designer), materialized views (create/refresh/drop), array column types (`TYPE[]`), sequences (list/create/restart/drop, with SERIAL-owned sequence detection), table bloat stats (dead-tuple % and last-vacuum time) with one-click VACUUM/ANALYZE, and read-only visibility into Row-Level Security policies and declarative table partitioning.
+
+### Fixed
+- The query editor's autocomplete only ever called MySQL's schema-loading functions regardless of a tab's actual engine, so PostgreSQL and Redshift tabs never fetched column/table suggestions through that path — and no engine reopened the suggestion list once a lazy load finished, so the first reference to any not-yet-loaded table showed an empty dropdown. Suggestions now load per-engine and reappear automatically.
+- PostgreSQL and Redshift query plans were run through MySQL's severity heuristics and always flagged as a false "full table scan," regardless of the actual plan. Text-based plans now render correctly.
+
 ## [2.3.0] - 2026-08-18
 
 ### Security — MCP server hardening

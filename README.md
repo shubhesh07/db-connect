@@ -2,7 +2,7 @@
 
 **One database client for your entire backend stack.**
 
-MySQL + Amazon Redshift + DynamoDB — one fast, free, native desktop IDE instead of three separate tools and three separate sets of saved credentials.
+MySQL + PostgreSQL + Amazon Redshift + DynamoDB + Redis — one fast, free, native desktop IDE instead of five separate tools and five separate sets of saved credentials.
 
 ![macOS](https://img.shields.io/badge/macOS-supported-blue) ![Windows](https://img.shields.io/badge/Windows-supported-blue) ![License](https://img.shields.io/badge/license-free-green) ![Downloads](https://img.shields.io/github/downloads/shubhesh07/db-connect/total)
 
@@ -99,7 +99,7 @@ brew install --cask shubhesh07/db-connect/db-connect
 ```
 
 1. Launch DB Connect
-2. **Add Connection** → choose MySQL, Redshift, or DynamoDB
+2. **Add Connection** → choose MySQL, PostgreSQL, Redshift, DynamoDB, or Redis
 3. Enter credentials → **Test Connection** → **Save**
 4. Write a query (or, for DynamoDB, use the visual builder or the PartiQL editor) → `Cmd+Enter` to run
 
@@ -144,7 +144,8 @@ brew install --cask shubhesh07/db-connect/db-connect
 
 Reordered toward the broadest database-client market first:
 
-1. [x] **PostgreSQL support** — shipped in v2.4.0. MySQL + PostgreSQL + Redshift + DynamoDB covers most backend stacks people actually run
+1. [x] **PostgreSQL support** — shipped in v2.4.0
+1. [x] **Redis support** — shipped in v3.0.0: auto-detected cluster, RedisInsight-style key browser, Analyze pane, MCP tools. MySQL + PostgreSQL + Redshift + DynamoDB + Redis covers most backend stacks people actually run
 2. [ ] **Linux build** — Wails already supports it; needs a packaging/CI pipeline
 3. [ ] ER diagram visualization (auto-generated from foreign keys)
 4. [ ] Query result diffing (compare EXPLAIN output before/after an index change)

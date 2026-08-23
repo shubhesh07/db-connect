@@ -2,6 +2,39 @@
 
 All notable changes to DB Connect will be documented in this file.
 
+## [3.0.0] - 2026-08-23
+
+### Added — Redis (new engine)
+- Connect with just host:port — standalone vs. cluster is detected automatically and the remaining cluster nodes are discovered; Sentinel profiles supported. TLS, ACL user/password, DB index, SSH tunnel (standalone).
+- RedisInsight-style key browser: glob/prefix filter, type filter, keys grouped into a collapsible `:` tree with per-folder counts, `Results · Scanned X / Total` progress, Load more and Scan all across every cluster master, and a main-pane results table for prefix/glob lookups.
+- Type-aware key editor — string (Format JSON), hash, list, set, sorted set, stream (read-only); rename (works across cluster slots via DUMP/RESTORE), TTL edit, delete with confirm; read-only connections block edits.
+- Analyze pane: Overview (version, uptime, clients, memory, keys, ops/s, hit rate, per-primary-node table, memory/keys share per node), Database Analysis (sampled memory-by-TTL histogram with extrapolate / no-expiry toggles, top namespaces by memory or keys with data types), Slow Log across all masters.
+- Raw command console with history recall; Redis MCP tools (`redis_scan_keys`, `redis_get_key`, `redis_server_info`, `redis_run_command` — read-only unless a write grant is active).
+
+### Added — Redshift
+- SSH tunnel and IAM authentication (provisioned `GetClusterCredentials` or serverless `GetCredentials` via the AWS profile/SSO/default chain).
+- Dialect-aware autocomplete: Redshift/PostgreSQL get `DISTKEY`/`SORTKEY`/`ENCODE`, `UNLOAD`/`COPY`/`VACUUM`, `LISTAGG`, `APPROXIMATE COUNT(DISTINCT)`, `DATE_TRUNC`/`DATEADD`, `NVL`, `DECODE`, `CONVERT_TIMEZONE`, `JSON_EXTRACT_PATH_TEXT`, `REGEXP_*`; MySQL-only suggestions no longer appear.
+- Structured EXPLAIN — rows, cost and distribution strategy parsed; `DS_BCAST_INNER`, `DS_DIST_BOTH`, nested loops and ≥1M-row sequential scans flagged as expensive.
+- Queue vs execution time (WLM) in slow queries; Generate UNLOAD… / COPY… statement builders on any table; table-health badges (unsorted % / skew) in the tree; Spectrum external schemas browsable.
+
+### Added — DynamoDB
+- Per-query cost visibility: every Scan/Query/PartiQL shows `Items returned · Items scanned · Efficiency · RCUs consumed`, with a warning when DynamoDB stopped at its 1 MB page.
+- Load more pagination, strongly-consistent read toggle, and IAM Role / default credential chain auth in the connection form.
+
+### Added — App
+- Connections grouped by database engine in the sidebar (MySQL / PostgreSQL / DynamoDB / Redshift / Redis), with a one-click switch back to custom groups.
+- Design refresh: surface/semantic tokens, native macOS title strip, new Modal/ContextMenu/ConfirmDialog primitives, regrouped editor toolbar, running overlay with elapsed time and Cancel.
+- Typing no longer re-renders the whole app; memoized grid rows; async history recording; concurrent schema loads; Monaco bundled locally (no CDN).
+
+### Fixed
+- **Data safety:** inline edit/delete in the results grid is blocked when no primary key is known — the previous all-columns fallback combined with MySQL's `LIMIT 1` could silently modify the wrong of two look-alike rows.
+- Credential encryption at rest now covers PostgreSQL and Redis passwords and all SSH secrets; the table editor runs inside the open transaction and batch apply is all-or-nothing; the server-side production guard is enforced on every execute path including MCP.
+- Redshift: schema selection pins `search_path` and the query to the same connection (previously they could run on different pooled connections and unqualified names silently resolved against `public`); Export-as-INSERT used MySQL syntax for Redshift/PostgreSQL; `TIMESTAMPTZ` lost its offset; `BEGIN/COMMIT/ROLLBACK` silently auto-committed — now reported.
+- DynamoDB: Query and Get Item failed on every table with a numeric partition/sort key; removing an attribute in the item editor reported success but left it in place.
+- Connecting to a slow or unreachable server no longer freezes queries and health checks on every other open connection.
+- The health check skipped Redis, so auto-reconnect recycled the client mid-scan.
+- MCP server: enabling it could show "Not running" forever with no explanation — bind/token failures (e.g. port 47823 already in use) are now surfaced; Redis connections appear in `list_connections`.
+
 ## [2.4.0] - 2026-08-22
 
 ### Added — Full PostgreSQL support

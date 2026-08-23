@@ -6,7 +6,7 @@ All notable changes to DB Connect will be documented in this file.
 
 ### Added — Redis (new engine)
 - Connect with just host:port — standalone vs. cluster is detected automatically and the remaining cluster nodes are discovered; Sentinel profiles supported. TLS, ACL user/password, DB index, SSH tunnel (standalone).
-- RedisInsight-style key browser: glob/prefix filter, type filter, keys grouped into a collapsible `:` tree with per-folder counts, `Results · Scanned X / Total` progress, Load more and Scan all across every cluster master, and a main-pane results table for prefix/glob lookups.
+- Visual key browser: glob/prefix filter, type filter, keys grouped into a collapsible `:` tree with per-folder counts, `Results · Scanned X / Total` progress, Load more and Scan all across every cluster master, and a main-pane results table for prefix/glob lookups.
 - Type-aware key editor — string (Format JSON), hash, list, set, sorted set, stream (read-only); rename (works across cluster slots via DUMP/RESTORE), TTL edit, delete with confirm; read-only connections block edits.
 - Analyze pane: Overview (version, uptime, clients, memory, keys, ops/s, hit rate, per-primary-node table, memory/keys share per node), Database Analysis (sampled memory-by-TTL histogram with extrapolate / no-expiry toggles, top namespaces by memory or keys with data types), Slow Log across all masters.
 - Raw command console with history recall; Redis MCP tools (`redis_scan_keys`, `redis_get_key`, `redis_server_info`, `redis_run_command` — read-only unless a write grant is active).

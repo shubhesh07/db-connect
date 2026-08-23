@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DB Connect Changelog — release notes for every version</title>
+    <meta name="description" content="What changed in each DB Connect release: new engines, features and fixes for MySQL, PostgreSQL, Redshift, DynamoDB and Redis.">
+    <link rel="canonical" href="https://shubhesh07.github.io/db-connect/changelog.html">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta property="og:title" content="DB Connect Changelog"><meta property="og:url" content="https://shubhesh07.github.io/db-connect/changelog.html"><meta property="og:image" content="https://shubhesh07.github.io/db-connect/og-image.png">
+<style>
+        :root {
+            --bg: #0a0a0b;
+            --surface: #141416;
+            --surface-2: #1c1c20;
+            --border: #2a2a2f;
+            --text: #f0f0f2;
+            --text-muted: #8b8b96;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --green: #22c55e;
+            --orange: #f97316;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Nav */
+        nav {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+        }
+        .logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); }
+
+        /* Hero */
+        .hero {
+            padding: 100px 0 80px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+        .hero h1 .highlight { color: var(--accent); }
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        .btn-secondary {
+            background: var(--surface-2);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover { border-color: var(--accent); }
+        .badge {
+            display: inline-block;
+            margin-top: 24px;
+            padding: 6px 14px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--green);
+        }
+
+        /* Databases */
+        .databases {
+            padding: 60px 0;
+            text-align: center;
+        }
+        .db-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        .db-item {
+            padding: 24px 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            min-width: 180px;
+        }
+        .db-item h3 { font-size: 1.1rem; margin-bottom: 4px; }
+        .db-item p { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* Features */
+        .features {
+            padding: 80px 0;
+        }
+        .features h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 50px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        .feature-card {
+            padding: 28px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: border-color 0.2s;
+        }
+        .feature-card:hover { border-color: var(--accent); }
+        .feature-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .feature-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        /* Comparison */
+        .comparison {
+            padding: 80px 0;
+        }
+        .comparison h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 14px 16px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .comparison-table th {
+            background: var(--surface);
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .comparison-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+        }
+        .comparison-table tr:hover td { background: var(--surface); }
+        .check { color: var(--green); }
+        .cross { color: var(--text-muted); }
+        .highlight-col { background: rgba(59, 130, 246, 0.05); }
+
+        /* Download */
+        .download {
+            padding: 80px 0;
+            text-align: center;
+        }
+        .download h2 {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+        .download p {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .download-card {
+            padding: 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+        }
+        .download-card h3 { margin-bottom: 8px; }
+        .download-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
+        .download-card .btn { width: 100%; justify-content: center; }
+
+        /* Quick install (hero) */
+        .quick-install {
+            margin: 36px auto 0;
+            max-width: 720px;
+            padding: 18px 22px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(59, 130, 246, 0.06));
+            border: 1px solid rgba(34, 197, 94, 0.35);
+            border-radius: 12px;
+            text-align: left;
+        }
+        .quick-install .qi-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--green);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 10px;
+        }
+        .quick-install .qi-label .pill {
+            padding: 2px 8px;
+            background: rgba(34, 197, 94, 0.15);
+            border-radius: 999px;
+            font-size: 0.7rem;
+            color: var(--green);
+        }
+        .quick-install code {
+            display: block;
+            padding: 12px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.9rem;
+            color: var(--green);
+            user-select: all;
+            cursor: pointer;
+            word-break: break-all;
+            line-height: 1.5;
+        }
+        .quick-install .qi-hint {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Stat bar */
+        .stat-bar {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+            margin-top: 32px;
+        }
+        .stat-item { text-align: center; }
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1.2;
+        }
+        .stat-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-top: 2px;
+        }
+
+        /* Workflow */
+        .workflow-section {
+            padding: 50px 0 20px;
+            text-align: center;
+        }
+        .workflow-section h2 {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+        .workflow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .workflow-step {
+            padding: 14px 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        .workflow-arrow {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        /* macOS warning */
+        .macos-warning {
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: rgba(249, 115, 22, 0.08);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            border-radius: 10px;
+            text-align: left;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .macos-warning strong {
+            color: var(--orange);
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+        .macos-warning code {
+            display: inline-block;
+            margin: 8px 0;
+            padding: 8px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.85rem;
+            color: var(--green);
+            user-select: all;
+            cursor: pointer;
+            word-break: break-all;
+        }
+        .macos-warning .hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero { padding: 60px 0 50px; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .comparison-table { font-size: 0.8rem; }
+            .comparison-table th, .comparison-table td { padding: 10px 8px; }
+        }
+
+        /* v3 additions */
+        .hero { padding: 72px 0 40px; }
+        .hero .sub { font-size: 1.15rem; max-width: 720px; }
+        .hero .meta { margin-top: 18px; font-size: 0.85rem; color: var(--text-muted); display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+        .hero .meta span::before { content: "·"; margin-right: 14px; color: var(--border); }
+        .hero .meta span:first-child::before { content: none; }
+        .release-pill { display:inline-flex; align-items:center; gap:8px; margin-bottom: 22px; padding: 6px 12px 6px 8px; border:1px solid var(--border); background: var(--surface); border-radius: 999px; font-size: 0.8rem; color: var(--text-muted); text-decoration:none; }
+        .release-pill b { color: var(--green); font-weight: 600; }
+        .release-pill:hover { border-color: var(--accent); color: var(--text); }
+        .hero-shot { margin: 44px auto 0; max-width: 1100px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--surface); box-shadow: 0 30px 80px rgba(0,0,0,0.55); }
+        .hero-shot img { display:block; width:100%; height:auto; }
+        .section-title { text-align:center; font-size: 2rem; letter-spacing: -0.01em; margin-bottom: 10px; }
+        .section-lead { text-align:center; color: var(--text-muted); max-width: 640px; margin: 0 auto 48px; }
+        .showcase { padding: 80px 0 20px; }
+        .show-row { display:grid; grid-template-columns: 1fr 1.4fr; gap: 40px; align-items:center; margin-bottom: 72px; }
+        .show-row.flip .show-text { order: 2; }
+        .show-text h3 { font-size: 1.5rem; margin-bottom: 10px; letter-spacing: -0.01em; }
+        .show-text p { color: var(--text-muted); font-size: 1rem; margin-bottom: 14px; }
+        .show-text ul { list-style:none; color: var(--text-muted); font-size: 0.92rem; display:grid; gap: 6px; }
+        .show-text li::before { content: "\2713"; color: var(--green); margin-right: 8px; font-weight: 700; }
+        .show-tag { display:inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+        .show-img { border: 1px solid var(--border); border-radius: 10px; overflow:hidden; background: var(--surface); box-shadow: 0 20px 50px rgba(0,0,0,0.45); }
+        .show-img img { display:block; width:100%; height:auto; }
+        .engine-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin-top: 32px; }
+        .engine { padding: 20px; background: var(--surface); border:1px solid var(--border); border-radius: 12px; text-align:left; }
+        .engine .stripe { height: 3px; border-radius: 2px; margin-bottom: 14px; }
+        .engine h3 { font-size: 1.05rem; margin-bottom: 6px; }
+        .engine p { font-size: 0.85rem; color: var(--text-muted); }
+        .feature-grid.compact { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+        .feature-grid.compact .feature-card { padding: 18px 20px; display:flex; gap: 14px; align-items:flex-start; }
+        .feature-grid.compact .feature-icon { font-size: 1.2rem; margin: 0; line-height: 1.4; }
+        .feature-grid.compact h3 { font-size: 0.98rem; margin-bottom: 3px; }
+        .feature-grid.compact p { font-size: 0.85rem; }
+        @media (max-width: 860px) { .show-row, .show-row.flip { grid-template-columns: 1fr; } .show-row.flip .show-text { order: 0; } .hero { padding: 48px 0 24px; } }
+
+        .page { padding: 64px 0 40px; }
+        .page h1 { font-size: clamp(2rem, 4vw, 2.8rem); letter-spacing:-0.02em; line-height:1.15; margin-bottom: 14px; }
+        .page .lead { color: var(--text-muted); font-size: 1.1rem; max-width: 720px; margin-bottom: 28px; }
+        .shot { border:1px solid var(--border); border-radius: 12px; overflow:hidden; background: var(--surface); box-shadow: 0 24px 60px rgba(0,0,0,.5); margin: 28px 0 40px; }
+        .shot img { display:block; width:100%; height:auto; }
+        .cols { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 16px; margin: 24px 0 40px; }
+        .col { padding: 18px 20px; background: var(--surface); border:1px solid var(--border); border-radius: 12px; }
+        .col h3 { font-size: 1rem; margin-bottom: 6px; }
+        .col p { font-size: .9rem; color: var(--text-muted); }
+        .faq { max-width: 820px; margin: 0 auto 48px; }
+        .faq h2 { font-size: 1.6rem; margin-bottom: 18px; }
+        .faq details { border-bottom: 1px solid var(--border); padding: 14px 0; }
+        .faq summary { cursor:pointer; font-weight: 600; }
+        .faq p { color: var(--text-muted); margin-top: 8px; font-size: .95rem; }
+        .cta { text-align:center; padding: 40px 0 60px; }
+        .cta .hero-buttons { margin-top: 16px; }
+        .cl h2 { font-size: 1.5rem; margin: 40px 0 6px; }
+        .cl h3 { font-size: 1.05rem; margin: 18px 0 8px; color: var(--text); }
+        .cl ul { padding-left: 20px; color: var(--text-muted); display:grid; gap: 6px; font-size: .95rem; }
+        .cl code { background: var(--surface-2); padding: 1px 5px; border-radius: 4px; font-size: .85em; }
+        .cl .date { color: var(--text-muted); font-size: .85rem; font-weight: 400; margin-left: 8px; }
+    </style>
+</head>
+<body>
+<nav>
+    <div class="container">
+        <a href="#" class="logo">DB<span>Connect</span></a>
+        <div class="nav-links">
+            <a href="index.html#whats-new">What's new</a>
+            <a href="index.html#features">Features</a>
+            <a href="index.html#comparison">Compare</a>
+            <a href="index.html#download">Download</a>
+            <a href="vs-datagrip.html">vs DataGrip</a>
+            <a href="vs-dbeaver.html">vs DBeaver</a>
+            <a href="vs-tableplus.html">vs TablePlus</a>
+            <a href="changelog.html">Changelog</a>
+            <a href="https://github.com/shubhesh07/db-connect" target="_blank" rel="noopener">GitHub</a>
+        </div>
+    </div>
+</nav>
+<section class="page cl">
+    <div class="container" style="max-width:860px">
+        <h1>Changelog</h1>
+        <p class="lead">Every release, newest first. Downloads for each version are on <a href="https://github.com/shubhesh07/db-connect/releases" style="color:var(--accent)">GitHub Releases</a>.</p>
+<h2 id="v3.0.0">v3.0.0<span class="date">2026-08-23</span></h2>
+<h3>Added — Redis (new engine)</h3>
+<ul>
+<li>Connect with just host:port — standalone vs. cluster is detected automatically and the remaining cluster nodes are discovered; Sentinel profiles supported. TLS, ACL user/password, DB index, SSH tunnel (standalone).</li>
+<li>Visual key browser: glob/prefix filter, type filter, keys grouped into a collapsible <code>:</code> tree with per-folder counts, <code>Results · Scanned X / Total</code> progress, Load more and Scan all across every cluster master, and a main-pane results table for prefix/glob lookups.</li>
+<li>Type-aware key editor — string (Format JSON), hash, list, set, sorted set, stream (read-only); rename (works across cluster slots via DUMP/RESTORE), TTL edit, delete with confirm; read-only connections block edits.</li>
+<li>Analyze pane: Overview (version, uptime, clients, memory, keys, ops/s, hit rate, per-primary-node table, memory/keys share per node), Database Analysis (sampled memory-by-TTL histogram with extrapolate / no-expiry toggles, top namespaces by memory or keys with data types), Slow Log across all masters.</li>
+<li>Raw command console with history recall; Redis MCP tools (<code>redis_scan_keys</code>, <code>redis_get_key</code>, <code>redis_server_info</code>, <code>redis_run_command</code> — read-only unless a write grant is active).</li>
+</ul>
+<h3>Added — Redshift</h3>
+<ul>
+<li>SSH tunnel and IAM authentication (provisioned <code>GetClusterCredentials</code> or serverless <code>GetCredentials</code> via the AWS profile/SSO/default chain).</li>
+<li>Dialect-aware autocomplete: Redshift/PostgreSQL get <code>DISTKEY</code>/<code>SORTKEY</code>/<code>ENCODE</code>, <code>UNLOAD</code>/<code>COPY</code>/<code>VACUUM</code>, <code>LISTAGG</code>, <code>APPROXIMATE COUNT(DISTINCT)</code>, <code>DATE_TRUNC</code>/<code>DATEADD</code>, <code>NVL</code>, <code>DECODE</code>, <code>CONVERT_TIMEZONE</code>, <code>JSON_EXTRACT_PATH_TEXT</code>, <code>REGEXP_*</code>; MySQL-only suggestions no longer appear.</li>
+<li>Structured EXPLAIN — rows, cost and distribution strategy parsed; <code>DS_BCAST_INNER</code>, <code>DS_DIST_BOTH</code>, nested loops and ≥1M-row sequential scans flagged as expensive.</li>
+<li>Queue vs execution time (WLM) in slow queries; Generate UNLOAD… / COPY… statement builders on any table; table-health badges (unsorted % / skew) in the tree; Spectrum external schemas browsable.</li>
+</ul>
+<h3>Added — DynamoDB</h3>
+<ul>
+<li>Per-query cost visibility: every Scan/Query/PartiQL shows <code>Items returned · Items scanned · Efficiency · RCUs consumed</code>, with a warning when DynamoDB stopped at its 1 MB page.</li>
+<li>Load more pagination, strongly-consistent read toggle, and IAM Role / default credential chain auth in the connection form.</li>
+</ul>
+<h3>Added — App</h3>
+<ul>
+<li>Connections grouped by database engine in the sidebar (MySQL / PostgreSQL / DynamoDB / Redshift / Redis), with a one-click switch back to custom groups.</li>
+<li>Design refresh: surface/semantic tokens, native macOS title strip, new Modal/ContextMenu/ConfirmDialog primitives, regrouped editor toolbar, running overlay with elapsed time and Cancel.</li>
+<li>Typing no longer re-renders the whole app; memoized grid rows; async history recording; concurrent schema loads; Monaco bundled locally (no CDN).</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li><strong>Data safety:</strong> inline edit/delete in the results grid is blocked when no primary key is known — the previous all-columns fallback combined with MySQL&#x27;s <code>LIMIT 1</code> could silently modify the wrong of two look-alike rows.</li>
+<li>Credential encryption at rest now covers PostgreSQL and Redis passwords and all SSH secrets; the table editor runs inside the open transaction and batch apply is all-or-nothing; the server-side production guard is enforced on every execute path including MCP.</li>
+<li>Redshift: schema selection pins <code>search_path</code> and the query to the same connection (previously they could run on different pooled connections and unqualified names silently resolved against <code>public</code>); Export-as-INSERT used MySQL syntax for Redshift/PostgreSQL; <code>TIMESTAMPTZ</code> lost its offset; <code>BEGIN/COMMIT/ROLLBACK</code> silently auto-committed — now reported.</li>
+<li>DynamoDB: Query and Get Item failed on every table with a numeric partition/sort key; removing an attribute in the item editor reported success but left it in place.</li>
+<li>Connecting to a slow or unreachable server no longer freezes queries and health checks on every other open connection.</li>
+<li>The health check skipped Redis, so auto-reconnect recycled the client mid-scan.</li>
+<li>MCP server: enabling it could show &quot;Not running&quot; forever with no explanation — bind/token failures (e.g. port 47823 already in use) are now surfaced; Redis connections appear in <code>list_connections</code>.</li>
+</ul>
+<h2 id="v2.4.0">v2.4.0<span class="date">2026-08-22</span></h2>
+<h3>Added — Full PostgreSQL support</h3>
+<ul>
+<li>PostgreSQL joins MySQL, Amazon Redshift, and DynamoDB as a fully-supported engine: transactions (BEGIN/COMMIT/ROLLBACK + auto-commit), an index manager, table relations (outgoing + incoming foreign keys), a full Alter Table designer, CSV/SQL file import, connection-string paste-to-parse, and EXPLAIN ANALYZE.</li>
+<li>PostgreSQL-native features with no MySQL equivalent: an extensions viewer/installer, custom ENUM types (creatable and selectable directly in the table designer), materialized views (create/refresh/drop), array column types (<code>TYPE[]</code>), sequences (list/create/restart/drop, with SERIAL-owned sequence detection), table bloat stats (dead-tuple % and last-vacuum time) with one-click VACUUM/ANALYZE, and read-only visibility into Row-Level Security policies and declarative table partitioning.</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>The query editor&#x27;s autocomplete only ever called MySQL&#x27;s schema-loading functions regardless of a tab&#x27;s actual engine, so PostgreSQL and Redshift tabs never fetched column/table suggestions through that path — and no engine reopened the suggestion list once a lazy load finished, so the first reference to any not-yet-loaded table showed an empty dropdown. Suggestions now load per-engine and reappear automatically.</li>
+<li>PostgreSQL and Redshift query plans were run through MySQL&#x27;s severity heuristics and always flagged as a false &quot;full table scan,&quot; regardless of the actual plan. Text-based plans now render correctly.</li>
+</ul>
+<h2 id="v2.3.0">v2.3.0<span class="date">2026-08-18</span></h2>
+<h3>Security — MCP server hardening</h3>
+<ul>
+<li>Per-install bearer token + Host/Origin request validation, closing a DNS-rebinding / malicious-webpage localhost-probing gap in the local MCP server.</li>
+<li>Connection allow-list replaces &quot;every open connection is reachable via MCP&quot; — MCP tools now only ever see connections you&#x27;ve explicitly allowed.</li>
+<li>Per-connection, time-bounded write grants replace the global write-enable toggle; grant/revoke are desktop-app-only, never exposed as MCP tools.</li>
+<li>Fixed a SQL-injection-style bypass in <code>run_query</code>&#x27;s Redshift schema parameter, a read-only classifier gap around <code>SELECT ... INTO</code> disguised writes, and MCP tool responses that returned a bare JSON array (rejected by strict MCP clients).</li>
+</ul>
+<h3>Added — DynamoDB PartiQL query mode</h3>
+<ul>
+<li>New PartiQL tab in the DynamoDB explorer — write real SQL-like statements (<code>SELECT * FROM &quot;table&quot; WHERE ...</code>) instead of building filters through the GUI.</li>
+<li>Context-aware autocomplete: keywords, table names (only right after FROM/INTO), and attribute names learned per-table from key schema and prior query results.</li>
+<li><code>Cmd/Ctrl+Enter</code> runs the statement; destructive PartiQL on production connections goes through the same confirmation dialog as SQL writes; truncated results now show a warning instead of silently looking complete.</li>
+</ul>
+<h2 id="v2.2.0">v2.2.0<span class="date">2026-08-14</span></h2>
+<h3>Fixed — DynamoDB</h3>
+<ul>
+<li>Results grid no longer guesses which table produced a scan/query by scanning every table in the account — was slow and could lock onto the wrong table when key names collided. It now reads which table was actually queried directly from the backend response.</li>
+<li>&quot;Get Item&quot; mode now actually gets the item instead of silently running a scan/query</li>
+<li>Table-info load failures now show an error instead of failing silently</li>
+</ul>
+<h3>Changed — Smarter SQL Autocomplete</h3>
+<ul>
+<li><code>WHERE col=val </code> now suggests <code>AND</code>/<code>OR</code> + the next column instead of re-offering comparison operators on an already-complete condition</li>
+</ul>
+<h3>Added — Explorer &amp; Editor</h3>
+<ul>
+<li>Tables/views grouped into collapsible Tables (N) / Views (N) folders with counts shown up front</li>
+<li>Drop Table.../Drop View... in the table context menu — still goes through the existing production/read-only safety confirmation on Run</li>
+<li>In-toolbar data-source switcher — rebind a query tab to a different connection without the sidebar</li>
+</ul>
+<h3>Fixed — Performance</h3>
+<ul>
+<li>The sidebar&#x27;s expanded table tree was fully re-rendering on every keystroke while typing a query — this was the main cause of reported typing lag</li>
+<li>Dropping/creating/altering a table or view now refreshes the sidebar automatically; disconnecting a connection clears its cached schema so reconnecting shows current state</li>
+</ul>
+<h3>Added — Local MCP Server</h3>
+<ul>
+<li>Now works with Redshift connections too (previously MySQL-only)</li>
+<li>New DynamoDB tools: list tables, describe table, scan, query, get item, plus write tools when &quot;Allow writes&quot; is enabled</li>
+</ul>
+<h2 id="v2.1.0">v2.1.0<span class="date">2026-08-14</span></h2>
+<h3>Added — MySQL Productivity</h3>
+<ul>
+<li>Stored procedure/function/trigger/event visibility (list + view <code>SHOW CREATE</code> definitions)</li>
+<li>Real database backup/restore via <code>mysqldump</code>/<code>mysql</code> CLI (distinct from app-config backup)</li>
+<li>Full MySQL user management: create/alter/drop user, grant/revoke privileges</li>
+<li><code>SHOW VARIABLES</code> viewer in the Performance pane</li>
+<li>Connection-string paste-to-parse (<code>mysql://user:pass@host:port/db</code>)</li>
+<li>Auto-update check against GitHub releases</li>
+<li>Table Relations view (outgoing + incoming foreign keys)</li>
+<li>Saved/reusable result-grid filters</li>
+<li>CSV import field-mapper (remap/skip columns, insert-vs-upsert)</li>
+</ul>
+<h3>Added — Local MCP Server</h3>
+<ul>
+<li>Lets local MCP clients (Claude Code, Cursor, etc.) query your open connections through DB Connect</li>
+<li>Off by default, localhost-only, read-only by default — toggle under Sidebar → &quot;MCP Server&quot;</li>
+</ul>
+<h3>Changed — Connection UI</h3>
+<ul>
+<li>Permanent connection rail replaces the connection dropdown; <code>⌘P</code> fuzzy switcher</li>
+<li>Brand-stripe engine picker and redesigned three-section connection form</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Query-timeout setting no longer gets silently overridden by a hardcoded socket timeout, which previously surfaced as &quot;invalid connection&quot; well before the configured timeout</li>
+<li>Several error toasts that showed &quot;undefined&quot; now show the real error message</li>
+<li>Smoother results-grid scrolling and paste handling for heavy queries</li>
+<li>Closed an identifier-injection gap in the Create Table flow</li>
+</ul>
+<h2 id="v2.0.0">v2.0.0<span class="date">2026-05-23</span></h2>
+<h3>Added — Performance Monitoring</h3>
+<ul>
+<li><strong>MySQL Performance pane</strong> with four tabs: Slow Queries, Live Activity, Locks (Blocking Tree / Locks / Wait Time), Index Health (Unused / Redundant / Table-Scan Hot Spots)</li>
+<li><strong>One-click Kill Query</strong> for live sessions (uses <code>KILL QUERY</code> via <code>CONNECTION_ADMIN</code>)</li>
+<li><strong>&quot;Where this query is fired from&quot;</strong> drill-down — per slow-query digest, expand to see top <code>user@host</code> aggregations and recent raw samples with full <code>SQL_TEXT</code></li>
+<li><strong>Suggestion-to-draft</strong> — copy <code>DROP INDEX</code> statements straight from Index Health into a new tab</li>
+<li><strong>Redshift Performance pane</strong> — slow queries, live activity, lock waits via <code>STV_*</code> / <code>STL_*</code> system views</li>
+<li><strong>DynamoDB Performance pane (native)</strong> — read/write capacity, throttle counts, hot-partition signals, GSI status. No CloudWatch dependency.</li>
+</ul>
+<h3>Added — Smarter SQL Autocomplete</h3>
+<ul>
+<li>Step-aware suggestions for statement-start, after <code>SELECT</code>, after <code>FROM</code>/<code>JOIN</code>, in <code>WHERE</code>, after a column reference (operators), and in <code>GROUP BY</code>/<code>ORDER BY</code></li>
+<li>FROM-clause scoping — <code>WHERE order_</code> now suggests columns of <code>order_details</code> (the table in scope) instead of unrelated tables containing &quot;order_&quot;</li>
+<li>Cross-database completions — <code>db.</code> lists tables; <code>db.table.</code> lists columns</li>
+<li>MySQL keyword and function catalogues with prefix-match boost (<code>SELECT</code>, <code>UPDATE</code>, <code>COUNT(...)</code>, <code>NOW()</code>, etc.)</li>
+<li>After-column operator snippets — <code>WHERE col </code> suggests <code>= != &gt; &lt; LIKE NOT LIKE IN BETWEEN IS NULL ...</code></li>
+<li>Same-server cross-database querying — pick a target DB per tab without losing autocomplete</li>
+</ul>
+<h3>Added — Production Safety</h3>
+<ul>
+<li>Tiered destructive-op confirmation modal (<code>DROP</code>/<code>TRUNCATE</code> require typing the connection name; <code>DELETE</code>/<code>UPDATE</code>/<code>ALTER</code> show a one-click confirm with statement preview) replacing the easy-to-dismiss <code>confirm()</code> prompt</li>
+<li>Server-side query cancel — Stop now issues <code>KILL QUERY &lt;thread_id&gt;</code> on MySQL and <code>PG_CANCEL_BACKEND($1)</code> on Redshift</li>
+<li>Local audit trail (SQLite-backed) for destructive actions and kill events</li>
+<li>Configurable persistent query timeout with clear error messages</li>
+</ul>
+<h3>Added — Cross-Schema Queries &amp; Backup</h3>
+<ul>
+<li><strong>Cross-Schema Queries</strong> — JOIN and query across multiple schemas in a single connection. Autocomplete resolves tables across schemas automatically (MySQL and Redshift)</li>
+<li><strong>Backup &amp;amp; Restore</strong> — One-click logical backups of tables, schemas, or full databases, saved locally to your laptop. Restore into any connection without leaving the app (MySQL, Redshift, DynamoDB)</li>
+</ul>
+<h3>Added — Editor &amp; UI</h3>
+<ul>
+<li>Monaco editor theme follows the app theme (light/dark/system) with runtime switching</li>
+<li>Sortable columns in every Performance pane</li>
+<li>Expandable cells for long SQL / lock data</li>
+<li>Row-count footer plus per-panel client-side filter</li>
+<li>SQL <code>VIEW</code> create and inspect for MySQL and Redshift</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Results-grid filter now works correctly for queries with no derivable source table</li>
+<li>Performance-pane filter matches rendered cell values, not just raw row data</li>
+<li>Connection-layer security hardening for credential handling and DB clients</li>
+</ul>
+<h3>Install</h3>
+<ul>
+<li><strong>Homebrew Cask</strong> (recommended): <code>brew install --cask shubhesh07/db-connect/db-connect</code> — Homebrew unblocks Gatekeeper automatically; upgrade with <code>brew upgrade --cask db-connect</code>. Tap: [shubhesh07/homebrew-db-connect](https://github.com/shubhesh07/homebrew-db-connect)</li>
+<li>macOS one-line installer: <code>curl -fsSL https://github.com/shubhesh07/db-connect/releases/latest/download/install.sh | bash</code> (no Gatekeeper prompt — curl downloads don&#x27;t get quarantined)</li>
+<li>DMG still bundles <code>install-mac.sh</code> for users who prefer the GUI path</li>
+</ul>
+<h2 id="v1.0.0">v1.0.0<span class="date">2026-05-03</span></h2>
+<h3>Added</h3>
+<ul>
+<li><strong>MySQL Support</strong> — Full SQL execution, transactions (BEGIN/COMMIT/ROLLBACK), auto-commit toggle, SSH tunnels, SSL modes</li>
+<li><strong>Amazon Redshift Support</strong> — SQL queries via PostgreSQL wire protocol, schema browser, EXPLAIN plans (text format)</li>
+<li><strong>DynamoDB Support</strong> — Visual Scan/Query/GetItem builder, filter expression builder, item create/edit/delete, GSI-aware querying, multiple auth modes (Access Key, SSO Profile, IAM Role)</li>
+<li><strong>Monaco SQL Editor</strong> — Syntax highlighting, autocomplete (tables, columns, keywords), multi-cursor, statement selection (Cmd+D), SQL formatting</li>
+<li><strong>Multi-Tab / Multi-Connection</strong> — Work across multiple databases simultaneously with connection badges per tab</li>
+<li><strong>Schema Browser</strong> — MySQL (Databases &gt; Tables &gt; Columns/Indexes/FKs), Redshift (Schemas &gt; Tables &gt; Columns), DynamoDB (Tables &gt; Items)</li>
+<li><strong>EXPLAIN Visualization</strong> — Color-coded query plans with severity indicators (Efficient/Moderate/Slow), warning badges for full table scans and missing indexes</li>
+<li><strong>Query History</strong> — Auto-saved with search, favorites, date grouping (Today/Yesterday)</li>
+<li><strong>Saved Queries</strong> — Named queries with <code>{{param}}</code> parameter support and tags</li>
+<li><strong>Table Designer</strong> — Visual CREATE TABLE (columns, types, PK, engine, charset), ALTER TABLE (change tracking, DDL preview), Index Manager (create/drop with type badges)</li>
+<li><strong>Inline Row Editing</strong> — Batch Apply/Revert with PK-based WHERE clauses, Insert/Delete rows from results grid</li>
+<li><strong>Command Palette</strong> — Cmd+K for quick access to all actions</li>
+<li><strong>Export</strong> — CSV, JSON, Excel (XLSX) via native save dialog</li>
+<li><strong>Built-in SQL Snippets</strong> — Admin (Processlist, Table Status, Variables), Info (Table Size, Index Usage, Database Size), Performance (Long Running Queries, Table Locks, InnoDB Status)</li>
+<li><strong>Security</strong> — AES-256-GCM encrypted credentials, OS keychain integration (macOS Keychain / Windows Credential Manager), production safety warnings before destructive queries</li>
+<li><strong>Virtual Scrolling</strong> — Handle large result sets without UI lag</li>
+<li><strong>Dark Theme</strong> — Default dark UI</li>
+<li><strong>Keyboard Shortcuts</strong> — Cmd+Enter (run), Cmd+D (select statement), Cmd+K (palette), Cmd+T (new tab), Cmd+W (close tab), Cmd+S (save), Cmd+Shift+F (format), Cmd+E (explain)</li>
+</ul>
+    </div>
+</section>
+<footer>
+    <div class="container">
+        <p>Built by <a href="https://github.com/shubhesh07" target="_blank" rel="noopener">Shubhesh Shukla</a> · <a href="https://github.com/shubhesh07/db-connect" target="_blank" rel="noopener">GitHub</a> · <a href="https://github.com/shubhesh07/db-connect/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a> · <a href="https://github.com/shubhesh07/db-connect/releases" target="_blank" rel="noopener">Releases</a> · Free for personal and commercial use</p>
+        <p style="margin-top: 8px;"><a href="vs-datagrip.html">DB Connect vs DataGrip</a> · <a href="vs-dbeaver.html">DB Connect vs DBeaver</a> · <a href="vs-tableplus.html">DB Connect vs TablePlus</a></p>
+    </div>
+</footer>
+</body>
+</html>

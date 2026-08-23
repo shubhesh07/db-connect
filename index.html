@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DB Connect — Free Database IDE for MySQL, PostgreSQL, Redshift & DynamoDB</title>
-    <meta name="description" content="DB Connect is a free, fast desktop database client for MySQL, PostgreSQL, Amazon Redshift, and DynamoDB. SQL editor with autocomplete, schema browser, SSH tunnels. Alternative to DataGrip, DBeaver, TablePlus.">
+    <title>DB Connect — Free Database IDE for MySQL, PostgreSQL, Redshift, DynamoDB & Redis</title>
+    <meta name="description" content="DB Connect is a free, fast desktop database client for MySQL, PostgreSQL, Amazon Redshift, DynamoDB, and Redis. SQL editor with autocomplete, schema browser, SSH tunnels. Alternative to DataGrip, DBeaver, TablePlus.">
     <meta name="keywords" content="database client, mysql gui, postgresql gui, postgres client, dynamodb client, redshift client, sql editor, free database tool, database ide, mysql client, ddb client, aws database tool, datagrip alternative, dbeaver alternative, tableplus alternative">
     <meta name="author" content="Shubhesh Shukla">
     <meta name="google-site-verification" content="_PESYTJNW-CfStYVJBKhisxCNNc4m8ze4ZcXOz6YB4g" />
 
     <!-- Open Graph -->
     <meta property="og:title" content="DB Connect — Free Database IDE">
-    <meta property="og:description" content="Fast, lightweight desktop database client for MySQL, PostgreSQL, Redshift & DynamoDB. Free for macOS and Windows.">
+    <meta property="og:description" content="Fast, lightweight desktop database client for MySQL, PostgreSQL, Redshift, DynamoDB & Redis. Free for macOS and Windows.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://shubhesh07.github.io/db-connect">
     <meta property="og:image" content="https://shubhesh07.github.io/db-connect/screenshots/hero.png">
@@ -22,7 +22,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="DB Connect — Free Database IDE">
-    <meta name="twitter:description" content="Fast, lightweight desktop database client for MySQL, PostgreSQL, Redshift & DynamoDB. Free for macOS and Windows.">
+    <meta name="twitter:description" content="Fast, lightweight desktop database client for MySQL, PostgreSQL, Redshift, DynamoDB & Redis. Free for macOS and Windows.">
     <meta name="twitter:image" content="https://shubhesh07.github.io/db-connect/screenshots/hero.png">
 
     <link rel="canonical" href="https://shubhesh07.github.io/db-connect">
@@ -33,7 +33,7 @@
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "DB Connect",
-      "description": "Free, fast desktop database IDE for MySQL, PostgreSQL, Amazon Redshift, and DynamoDB. SQL editor with autocomplete, schema browser, SSH tunnels.",
+      "description": "Free, fast desktop database IDE for MySQL, PostgreSQL, Amazon Redshift, DynamoDB, and Redis. SQL editor with autocomplete, schema browser, SSH tunnels.",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "macOS, Windows",
       "offers": {
@@ -48,7 +48,7 @@
       },
       "downloadUrl": "https://github.com/shubhesh07/db-connect/releases/latest",
       "screenshot": "https://shubhesh07.github.io/db-connect/screenshots/hero.png",
-      "softwareVersion": "2.4.0",
+      "softwareVersion": "3.0.0",
       "url": "https://shubhesh07.github.io/db-connect"
     }
     </script>
@@ -465,7 +465,7 @@
 <section class="hero">
     <div class="container">
         <h1>The lightweight database client<br>for backend engineers.</h1>
-        <p><strong style="color: var(--text);">MySQL · PostgreSQL · Amazon Redshift · DynamoDB</strong> — one fast, native app instead of four separate tools.</p>
+        <p><strong style="color: var(--text);">MySQL · PostgreSQL · Amazon Redshift · DynamoDB · Redis</strong> — one fast, native app instead of five separate tools.</p>
         <div class="hero-buttons">
             <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg" class="btn btn-primary">Download for macOS</a>
             <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-Windows-Setup.exe" class="btn btn-secondary">Download for Windows</a>
@@ -476,7 +476,7 @@
             <div class="stat-item"><div class="stat-value">$0</div><div class="stat-label">No subscription</div></div>
             <div class="stat-item"><div class="stat-value">0</div><div class="stat-label">Cloud sync</div></div>
         </div>
-        <div class="badge">v2.4.0 — Full PostgreSQL support: extensions, ENUM types, materialized views, sequences, RLS & partition visibility. Free forever. No telemetry.</div>
+        <div class="badge">v3.0.0 — Redis support: auto-detected clusters, RedisInsight-style key browser, Analyze pane. Plus Redshift IAM/SSH & smarter EXPLAIN, DynamoDB cost visibility. Free forever. No telemetry.</div>
         <div class="quick-install">
             <div class="qi-label">
                 <span>Install on macOS with Homebrew</span>
@@ -531,6 +531,10 @@
             <div class="db-item">
                 <h3>DynamoDB</h3>
                 <p>Visual scan/query builder, item editor, GSI support</p>
+            </div>
+            <div class="db-item">
+                <h3>Redis</h3>
+                <p>Standalone & cluster (auto-detected), key browser with tree grouping, type-aware editors, Analyze pane, command console</p>
             </div>
         </div>
     </div>

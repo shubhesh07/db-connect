@@ -443,187 +443,170 @@
             .comparison-table { font-size: 0.8rem; }
             .comparison-table th, .comparison-table td { padding: 10px 8px; }
         }
+
+        /* v3 additions */
+        .hero { padding: 72px 0 40px; }
+        .hero .sub { font-size: 1.15rem; max-width: 720px; }
+        .hero .meta { margin-top: 18px; font-size: 0.85rem; color: var(--text-muted); display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+        .hero .meta span::before { content: "·"; margin-right: 14px; color: var(--border); }
+        .hero .meta span:first-child::before { content: none; }
+        .release-pill { display:inline-flex; align-items:center; gap:8px; margin-bottom: 22px; padding: 6px 12px 6px 8px; border:1px solid var(--border); background: var(--surface); border-radius: 999px; font-size: 0.8rem; color: var(--text-muted); text-decoration:none; }
+        .release-pill b { color: var(--green); font-weight: 600; }
+        .release-pill:hover { border-color: var(--accent); color: var(--text); }
+        .hero-shot { margin: 44px auto 0; max-width: 1100px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--surface); box-shadow: 0 30px 80px rgba(0,0,0,0.55); }
+        .hero-shot img { display:block; width:100%; height:auto; }
+        .section-title { text-align:center; font-size: 2rem; letter-spacing: -0.01em; margin-bottom: 10px; }
+        .section-lead { text-align:center; color: var(--text-muted); max-width: 640px; margin: 0 auto 48px; }
+        .showcase { padding: 80px 0 20px; }
+        .show-row { display:grid; grid-template-columns: 1fr 1.4fr; gap: 40px; align-items:center; margin-bottom: 72px; }
+        .show-row.flip .show-text { order: 2; }
+        .show-text h3 { font-size: 1.5rem; margin-bottom: 10px; letter-spacing: -0.01em; }
+        .show-text p { color: var(--text-muted); font-size: 1rem; margin-bottom: 14px; }
+        .show-text ul { list-style:none; color: var(--text-muted); font-size: 0.92rem; display:grid; gap: 6px; }
+        .show-text li::before { content: "\2713"; color: var(--green); margin-right: 8px; font-weight: 700; }
+        .show-tag { display:inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+        .show-img { border: 1px solid var(--border); border-radius: 10px; overflow:hidden; background: var(--surface); box-shadow: 0 20px 50px rgba(0,0,0,0.45); }
+        .show-img img { display:block; width:100%; height:auto; }
+        .engine-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin-top: 32px; }
+        .engine { padding: 20px; background: var(--surface); border:1px solid var(--border); border-radius: 12px; text-align:left; }
+        .engine .stripe { height: 3px; border-radius: 2px; margin-bottom: 14px; }
+        .engine h3 { font-size: 1.05rem; margin-bottom: 6px; }
+        .engine p { font-size: 0.85rem; color: var(--text-muted); }
+        .feature-grid.compact { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+        .feature-grid.compact .feature-card { padding: 18px 20px; display:flex; gap: 14px; align-items:flex-start; }
+        .feature-grid.compact .feature-icon { font-size: 1.2rem; margin: 0; line-height: 1.4; }
+        .feature-grid.compact h3 { font-size: 0.98rem; margin-bottom: 3px; }
+        .feature-grid.compact p { font-size: 0.85rem; }
+        @media (max-width: 860px) { .show-row, .show-row.flip { grid-template-columns: 1fr; } .show-row.flip .show-text { order: 0; } .hero { padding: 48px 0 24px; } }
     </style>
 </head>
 <body>
 
 <nav>
     <div class="container">
-        <a href="/db-connect/" class="logo">DB<span>Connect</span></a>
+        <a href="#" class="logo">DB<span>Connect</span></a>
         <div class="nav-links">
+            <a href="#whats-new">What's new</a>
             <a href="#features">Features</a>
             <a href="#comparison">Compare</a>
             <a href="#download">Download</a>
             <a href="vs-datagrip.html">vs DataGrip</a>
             <a href="vs-dbeaver.html">vs DBeaver</a>
             <a href="vs-tableplus.html">vs TablePlus</a>
-            <a href="https://github.com/shubhesh07/db-connect">GitHub</a>
+            <a href="https://github.com/shubhesh07/db-connect" target="_blank" rel="noopener">GitHub</a>
         </div>
     </div>
 </nav>
 
 <section class="hero">
     <div class="container">
-        <h1>The lightweight database client<br>for backend engineers.</h1>
-        <p><strong style="color: var(--text);">MySQL · PostgreSQL · Amazon Redshift · DynamoDB · Redis</strong> — one fast, native app instead of five separate tools.</p>
+        <a class="release-pill" href="https://github.com/shubhesh07/db-connect/releases/tag/v3.0.0" target="_blank" rel="noopener"><b>v3.0.0</b> Redis support, Redshift IAM &amp; SSH, DynamoDB cost visibility &rarr;</a>
+        <h1>One database client.<br>Five engines. Zero subscriptions.</h1>
+        <p class="sub"><strong style="color: var(--text);">MySQL · PostgreSQL · Amazon Redshift · DynamoDB · Redis</strong> — a fast, native desktop app for backend engineers who are tired of running five tools and five credential stores.</p>
         <div class="hero-buttons">
             <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg" class="btn btn-primary">Download for macOS</a>
             <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-Windows-Setup.exe" class="btn btn-secondary">Download for Windows</a>
         </div>
-        <div class="stat-bar">
-            <div class="stat-item"><div class="stat-value">18 MB</div><div class="stat-label">Install size</div></div>
-            <div class="stat-item"><div class="stat-value">&lt;2 sec</div><div class="stat-label">Startup</div></div>
-            <div class="stat-item"><div class="stat-value">$0</div><div class="stat-label">No subscription</div></div>
-            <div class="stat-item"><div class="stat-value">0</div><div class="stat-label">Cloud sync</div></div>
-        </div>
-        <div class="badge">v3.0.0 — Redis support: auto-detected clusters, RedisInsight-style key browser, Analyze pane. Plus Redshift IAM/SSH & smarter EXPLAIN, DynamoDB cost visibility. Free forever. No telemetry.</div>
-        <div class="quick-install">
-            <div class="qi-label">
-                <span>Install on macOS with Homebrew</span>
-                <span class="pill">Recommended</span>
-            </div>
-            <code>brew install --cask shubhesh07/db-connect/db-connect</code>
-            <div class="qi-hint">Click to select &middot; paste into Terminal &middot; Homebrew handles the macOS Gatekeeper unblock automatically. Upgrade later with <code style="display:inline; padding:1px 6px; font-size:0.78rem;">brew upgrade --cask db-connect</code>.</div>
-        </div>
-        <div class="quick-install" style="margin-top: 16px;">
-            <div class="qi-label">
-                <span>Don't use Homebrew? One-line installer</span>
-            </div>
-            <code>curl -fsSL https://github.com/shubhesh07/db-connect/releases/latest/download/install.sh | bash</code>
-            <div class="qi-hint">Downloads, installs, and unblocks Gatekeeper for you &mdash; no <code style="display:inline; padding:1px 6px; font-size:0.78rem;">xattr</code> step needed.</div>
-        </div>
-        <div style="margin-top: 50px; max-width: 1000px; margin-left: auto; margin-right: auto;">
-            <img src="screenshots/hero.png" alt="DB Connect - SQL Editor with Query Results" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
+        <div class="meta"><span>Free for personal &amp; commercial use</span><span>~32 MB, opens in under 2 s</span><span>Credentials encrypted in your OS keychain</span><span>No account, no telemetry</span></div>
+        <div class="hero-shot">
+            <img src="screenshots/hero-sql.png" alt="DB Connect running a PostgreSQL query: sidebar grouped by engine, SQL editor with autocomplete, results grid" width="2000" height="906">
         </div>
     </div>
 </section>
 
-<section class="workflow-section">
+<section class="showcase" id="whats-new">
     <div class="container">
-        <h2>Connect once. Query anything.</h2>
-        <div class="workflow">
-            <div class="workflow-step">Connect a database</div>
-            <span class="workflow-arrow">&rarr;</span>
-            <div class="workflow-step">Write SQL / PartiQL</div>
-            <span class="workflow-arrow">&rarr;</span>
-            <div class="workflow-step">Run (&#8984;&crarr;)</div>
-            <span class="workflow-arrow">&rarr;</span>
-            <div class="workflow-step">Results, instantly</div>
+        <h2 class="section-title">New in 3.0: Redis, done properly</h2>
+        <p class="section-lead">Everything you use RedisInsight for — key browsing, per-type editing, memory analysis, a console — in the same app as your SQL.</p>
+
+        <div class="show-row">
+            <div class="show-text">
+                <span class="show-tag">Key browser</span>
+                <h3>Keys grouped the way you name them</h3>
+                <p>Point it at any node — standalone or cluster is detected automatically. Keys fold into a <code>:</code> tree with per-folder counts, and scanning walks every cluster master.</p>
+                <ul>
+                    <li>Glob / prefix filter, type filter, Load more &amp; Scan all</li>
+                    <li>String, hash, list, set, sorted set and stream editors</li>
+                    <li>Rename (even across cluster slots), TTL, delete with confirm</li>
+                </ul>
+            </div>
+            <div class="show-img"><img src="screenshots/redis-key-browser.png" alt="Redis key browser with keys grouped into folders and a hash key open for editing" loading="lazy" width="2000" height="906"></div>
+        </div>
+
+        <div class="show-row flip">
+            <div class="show-text">
+                <span class="show-tag">Analyze</span>
+                <h3>Know where your memory goes</h3>
+                <p>Sample the keyspace and see memory by TTL bucket, the namespaces that cost the most, and keys by type — plus per-node stats and the slow log across all masters.</p>
+                <ul>
+                    <li>Memory likely to be freed over time</li>
+                    <li>Top namespaces by memory or key count</li>
+                    <li>Overview, Database Analysis and Slow Log tabs</li>
+                </ul>
+            </div>
+            <div class="show-img"><img src="screenshots/redis-analysis.png" alt="Redis database analysis: memory by TTL histogram and top namespaces table" loading="lazy" width="2000" height="906"></div>
+        </div>
+
+        <div class="show-row">
+            <div class="show-text">
+                <span class="show-tag">Console</span>
+                <h3>And a real console when you need one</h3>
+                <p>Type any command. Replies are rendered by type — hashes, sorted sets with scores, JSON pretty-printed, nested arrays for streams — with history recall.</p>
+                <ul>
+                    <li>Read-only connections block writes</li>
+                    <li>Same commands exposed to AI agents through the local MCP server</li>
+                </ul>
+            </div>
+            <div class="show-img"><img src="screenshots/redis-console.png" alt="Redis command console showing HGETALL and ZREVRANGE results" loading="lazy" width="2000" height="906"></div>
+        </div>
+
+        <div class="show-row flip">
+            <div class="show-text">
+                <span class="show-tag">SQL engines</span>
+                <h3>Plans you can actually read</h3>
+                <p>EXPLAIN and EXPLAIN ANALYZE on MySQL, PostgreSQL and Redshift, with sequential scans, nested loops and Redshift redistribution (<code>DS_BCAST_INNER</code>, <code>DS_DIST_BOTH</code>) called out.</p>
+                <ul>
+                    <li>Dialect-aware autocomplete per engine</li>
+                    <li>Redshift: IAM auth, SSH tunnel, WLM queue time, UNLOAD/COPY builders</li>
+                    <li>DynamoDB: items returned vs scanned, efficiency and RCUs on every query</li>
+                </ul>
+            </div>
+            <div class="show-img"><img src="screenshots/explain-analyze.png" alt="EXPLAIN ANALYZE output with sequential scans highlighted" loading="lazy" width="2000" height="906"></div>
         </div>
     </div>
 </section>
 
 <section class="databases">
     <div class="container">
-        <div class="db-grid">
-            <div class="db-item">
-                <h3>MySQL</h3>
-                <p>Full SQL, transactions, SSH tunnels, table designer</p>
-            </div>
-            <div class="db-item">
-                <h3>PostgreSQL <span style="color: var(--green); font-size: 0.65rem; vertical-align: middle;">NEW in 2.4</span></h3>
-                <p>Transactions, index manager, table designer, extensions, ENUM types, materialized views, sequences, RLS &amp; partition visibility</p>
-            </div>
-            <div class="db-item">
-                <h3>Amazon Redshift</h3>
-                <p>SQL queries, schema browser, EXPLAIN plans</p>
-            </div>
-            <div class="db-item">
-                <h3>DynamoDB</h3>
-                <p>Visual scan/query builder, item editor, GSI support</p>
-            </div>
-            <div class="db-item">
-                <h3>Redis</h3>
-                <p>Standalone & cluster (auto-detected), key browser with tree grouping, type-aware editors, Analyze pane, command console</p>
-            </div>
+        <h2 class="section-title">Connect once. Query anything.</h2>
+        <p class="section-lead">Each engine gets its own tooling — not a generic SQL box with the logo swapped.</p>
+        <div class="engine-grid">
+            <div class="engine"><div class="stripe" style="background:#4479A1"></div><h3>MySQL</h3><p>Transactions, table &amp; index designers, routines, users &amp; privileges, backup/restore, performance pane.</p></div>
+            <div class="engine"><div class="stripe" style="background:#336791"></div><h3>PostgreSQL</h3><p>Extensions, ENUM types, materialized views, sequences, RLS &amp; partition visibility, EXPLAIN ANALYZE.</p></div>
+            <div class="engine"><div class="stripe" style="background:#8C4FFF"></div><h3>Amazon Redshift</h3><p>IAM or password auth, SSH tunnel, structured EXPLAIN, WLM queue time, UNLOAD/COPY, Spectrum schemas.</p></div>
+            <div class="engine"><div class="stripe" style="background:#FF9900"></div><h3>DynamoDB</h3><p>Scan/Query/PartiQL with cost stats, item editor, GSI queries, Load more, consistent reads, native capacity monitoring.</p></div>
+            <div class="engine"><div class="stripe" style="background:#DC382D"></div><h3>Redis</h3><p>Auto-detected cluster, key browser with tree grouping, type-aware editors, Analyze pane, console.</p></div>
         </div>
     </div>
 </section>
 
 <section class="features" id="features">
     <div class="container">
-        <h2>Built for backend engineers</h2>
-        <div class="feature-grid">
-            <div class="feature-card">
-                <div class="feature-icon">&#128021;</div>
-                <h3>PostgreSQL-native tooling <span style="color: var(--green); font-size: 0.7rem; vertical-align: middle;">NEW in 2.4</span></h3>
-                <p>Extensions viewer/installer, custom ENUM types wired into the table designer, materialized views, array columns, sequences (with SERIAL-owned detection), table bloat stats with one-click VACUUM/ANALYZE, and read-only RLS policy &amp; partition visibility — the parts of Postgres a generic SQL client leaves invisible.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#128202;</div>
-                <h3>Performance Monitoring <span style="color: var(--green); font-size: 0.7rem; vertical-align: middle;">NEW in 2.0</span></h3>
-                <p>Slow Queries, Live Activity (with one-click Kill), Locks (blocking tree, wait time), Index Health (unused, redundant, scan hot-spots). MySQL, Redshift, and DynamoDB — without CloudWatch.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#128269;</div>
-                <h3>Where the query is fired from <span style="color: var(--green); font-size: 0.7rem; vertical-align: middle;">NEW in 2.0</span></h3>
-                <p>Drill into any slow-query digest to see the top user@host firing it plus recent raw samples with full SQL_TEXT — answers "which service is hammering this query" in one click.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#9889;</div>
-                <h3>Step-aware Autocomplete <span style="color: var(--green); font-size: 0.7rem; vertical-align: middle;">NEW in 2.0</span></h3>
-                <p>Different completions for SELECT, FROM, WHERE, and after-column positions. `WHERE order_` now suggests columns from `order_details`, not random tables. MySQL keywords, functions, operators, cross-DB.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#128737;</div>
-                <h3>Production Safety <span style="color: var(--green); font-size: 0.7rem; vertical-align: middle;">NEW in 2.0</span></h3>
-                <p>Tiered confirmation modal: DROP/TRUNCATE require typing the connection name; DELETE/UPDATE/ALTER show a statement preview. Server-side query cancel via KILL QUERY. Local audit trail.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#9889;</div>
-                <h3>Fast Startup</h3>
-                <p>Opens in under 2 seconds. Native app, not Electron. Only 18MB installed.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#128221;</div>
-                <h3>Monaco SQL Editor</h3>
-                <p>VS Code-quality editing with autocomplete, syntax highlighting, multi-cursor, and SQL formatting.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#128274;</div>
-                <h3>Encrypted Credentials</h3>
-                <p>AES-256-GCM encryption. Keys stored in OS keychain. No plaintext passwords on disk.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#128202;</div>
-                <h3>EXPLAIN Visualization</h3>
-                <p>Color-coded query plans for MySQL and Redshift. Spot slow queries at a glance.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#128196;</div>
-                <h3>Multi-Tab & Multi-Connection</h3>
-                <p>Work across multiple databases simultaneously. Each tab can connect to a different server.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#128269;</div>
-                <h3>Command Palette</h3>
-                <p>Cmd+K to access any action instantly. Run queries, format SQL, switch connections.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#128190;</div>
-                <h3>Query History & Saved Queries</h3>
-                <p>Auto-saved history with search and favorites. Named queries with parameter support.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#128295;</div>
-                <h3>Table Designer</h3>
-                <p>Visual CREATE and ALTER TABLE. Index manager. No need to write DDL by hand.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#127760;</div>
-                <h3>SSH Tunnels</h3>
-                <p>Connect to databases behind firewalls. Built-in SSH tunnel with key auth support.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#128279;</div>
-                <h3>Cross-Schema Queries</h3>
-                <p>Run JOINs and queries across multiple schemas in a single connection. Autocomplete resolves tables across schemas automatically.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">&#128190;</div>
-                <h3>Backup &amp; Restore</h3>
-                <p>One-click logical backups of tables, schemas, or full databases &mdash; saved locally to your laptop. Restore into any connection without leaving the app.</p>
-            </div>
+        <h2 class="section-title">Built for backend engineers</h2>
+        <p class="section-lead">The parts of the job a generic client leaves you to do by hand.</p>
+        <div class="feature-grid compact">
+            <div class="feature-card"><div class="feature-icon">&#9889;</div><div><h3>Native and fast</h3><p>Go + native webview, not Electron. Opens in under two seconds.</p></div></div>
+            <div class="feature-card"><div class="feature-icon">&#128274;</div><div><h3>Encrypted credentials</h3><p>AES-256-GCM at rest, key in the OS keychain. Passwords never touch disk in plaintext.</p></div></div>
+            <div class="feature-card"><div class="feature-icon">&#128737;</div><div><h3>Production safety</h3><p>Tiered confirmations for DELETE/UPDATE/DROP on production connections; read-only mode; server-side guard on every path, including MCP.</p></div></div>
+            <div class="feature-card"><div class="feature-icon">&#128269;</div><div><h3>Performance monitoring</h3><p>Slow queries, live activity with one-click kill, locks and index health — MySQL, Postgres, Redshift, DynamoDB and Redis.</p></div></div>
+            <div class="feature-card"><div class="feature-icon">&#129302;</div><div><h3>Local MCP server</h3><p>Let Claude Code or Cursor query the connections you allow — token-authenticated, read-only by default, time-boxed write grants.</p></div></div>
+            <div class="feature-card"><div class="feature-icon">&#9998;</div><div><h3>Step-aware autocomplete</h3><p>Tables after FROM, columns in scope after WHERE, engine-specific keywords and functions.</p></div></div>
+            <div class="feature-card"><div class="feature-icon">&#128203;</div><div><h3>Inline editing that can't miss</h3><p>Edit, insert and delete in the grid with primary-key-based updates — and disabled when no key is known.</p></div></div>
+            <div class="feature-card"><div class="feature-icon">&#128196;</div><div><h3>Import &amp; export</h3><p>CSV import with a field mapper; export CSV, JSON, Excel or engine-correct INSERT statements.</p></div></div>
+            <div class="feature-card"><div class="feature-icon">&#128279;</div><div><h3>SSH tunnels</h3><p>MySQL, PostgreSQL, Redshift and Redis through a bastion, with tunnel secrets encrypted like everything else.</p></div></div>
+            <div class="feature-card"><div class="feature-icon">&#128218;</div><div><h3>History &amp; saved queries</h3><p>Searchable history, favourites, saved queries with <code>{{parameters}}</code>, saved grid filters.</p></div></div>
+            <div class="feature-card"><div class="feature-icon">&#127912;</div><div><h3>Multi-tab, multi-connection</h3><p>Tabs bound to connections, sidebar grouped by engine, Cmd+K command palette, Cmd+P connection switcher.</p></div></div>
+            <div class="feature-card"><div class="feature-icon">&#128190;</div><div><h3>Backup &amp; restore</h3><p>mysqldump-backed backups for MySQL; UNLOAD/COPY generators for Redshift.</p></div></div>
         </div>
     </div>
 </section>
@@ -686,7 +669,7 @@
                 </tr>
                 <tr>
                     <td>App Size</td>
-                    <td class="highlight-col"><strong>~18MB</strong></td>
+                    <td class="highlight-col"><strong>~32MB</strong></td>
                     <td>~800MB</td>
                     <td>~400MB</td>
                     <td>~80MB</td>
@@ -824,13 +807,8 @@
 
 <footer>
     <div class="container">
-        <p>Built by <a href="https://linkedin.com/in/shubheshshukla7">Shubhesh Shukla</a> &middot; <a href="https://github.com/shubhesh07/db-connect">GitHub</a> &middot; Free for personal and commercial use</p>
-        <p style="margin-top: 12px; font-size: 0.8rem;">
-            <a href="vs-datagrip.html">DB Connect vs DataGrip</a> &middot;
-            <a href="vs-dbeaver.html">DB Connect vs DBeaver</a> &middot;
-            <a href="vs-tableplus.html">DB Connect vs TablePlus</a> &middot;
-            <a href="https://dev.to/shubhesh07/-db-connect-a-database-ide-that-lets-your-ai-assistant-actually-query-your-database-4ea5">v2.2.0 launch post</a>
-        </p>
+        <p>Built by <a href="https://github.com/shubhesh07" target="_blank" rel="noopener">Shubhesh Shukla</a> · <a href="https://github.com/shubhesh07/db-connect" target="_blank" rel="noopener">GitHub</a> · <a href="https://github.com/shubhesh07/db-connect/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a> · <a href="https://github.com/shubhesh07/db-connect/releases" target="_blank" rel="noopener">Releases</a> · Free for personal and commercial use</p>
+        <p style="margin-top: 8px;"><a href="vs-datagrip.html">DB Connect vs DataGrip</a> · <a href="vs-dbeaver.html">DB Connect vs DBeaver</a> · <a href="vs-tableplus.html">DB Connect vs TablePlus</a></p>
     </div>
 </footer>
 

@@ -479,6 +479,11 @@
     <div class="container" style="max-width:860px">
         <h1>Changelog</h1>
         <p class="lead">Every release, newest first. Downloads for each version are on <a href="https://github.com/shubhesh07/db-connect/releases" style="color:var(--accent)">GitHub Releases</a>.</p>
+<h2 id="v3.0.1">v3.0.1<span class="date">2026-08-25</span></h2>
+<h3>Fixed</h3>
+<ul>
+<li>The MCP Server settings dialog failed to open on a fresh install — the allowed-connections list was sent as <code>null</code> instead of an empty list. It now opens correctly on first run and on upgrades from older settings files.</li>
+</ul>
 <h2 id="v3.0.0">v3.0.0<span class="date">2026-08-23</span></h2>
 <h3>Added — Redis (new engine)</h3>
 <ul>

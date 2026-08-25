@@ -525,6 +525,20 @@
 
         <div class="show-row">
             <div class="show-text">
+                <span class="show-tag">MySQL monitoring</span>
+                <h3>Is the server healthy? One screen answers it</h3>
+                <p>Live rates, not raw counters — queries per second split by kind, threads against <code>max_connections</code>, buffer-pool hit rate, scans, lock waits and replication lag, each with a trend line. A health strip states the verdict and points at the tab to check next.</p>
+                <ul>
+                    <li>Click a metric for the statements behind it, and who runs them</li>
+                    <li>Connections grouped by user, host or database — with idle-in-transaction sessions flagged</li>
+                    <li>Reads server status only; nothing is written to your database</li>
+                </ul>
+            </div>
+            <div class="show-img"><img src="screenshots/mysql-overview.png" alt="MySQL Performance Overview: health findings for row locks and full table scans, with tiles for queries per second, threads running, buffer pool hit rate, slow queries, table scans, rows read, temp tables on disk, row lock waits, network and uptime" loading="lazy" width="2000" height="1166"></div>
+        </div>
+
+        <div class="show-row flip">
+            <div class="show-text">
                 <span class="show-tag">Key browser</span>
                 <h3>Keys grouped the way you name them</h3>
                 <p>Point it at any node — standalone or cluster is detected automatically. Keys fold into a <code>:</code> tree with per-folder counts, and scanning walks every cluster master.</p>
@@ -537,7 +551,7 @@
             <div class="show-img"><img src="screenshots/redis-key-browser.png" alt="Redis key browser with keys grouped into folders and a hash key open for editing" loading="lazy" width="2000" height="906"></div>
         </div>
 
-        <div class="show-row flip">
+        <div class="show-row">
             <div class="show-text">
                 <span class="show-tag">Analyze</span>
                 <h3>Know where your memory goes</h3>
@@ -551,7 +565,7 @@
             <div class="show-img"><img src="screenshots/redis-analysis.png" alt="Redis database analysis: memory by TTL histogram and top namespaces table" loading="lazy" width="2000" height="906"></div>
         </div>
 
-        <div class="show-row">
+        <div class="show-row flip">
             <div class="show-text">
                 <span class="show-tag">Console</span>
                 <h3>And a real console when you need one</h3>
@@ -564,7 +578,7 @@
             <div class="show-img"><img src="screenshots/redis-console.png" alt="Redis command console showing HGETALL and ZREVRANGE results" loading="lazy" width="2000" height="906"></div>
         </div>
 
-        <div class="show-row flip">
+        <div class="show-row">
             <div class="show-text">
                 <span class="show-tag">SQL engines</span>
                 <h3>Plans you can actually read</h3>

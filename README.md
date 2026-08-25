@@ -153,8 +153,8 @@ Reordered toward the broadest database-client market first:
 1. [x] **PostgreSQL support** — shipped in v2.4.0
 1. [x] **Redis support** — shipped in v3.0.0: auto-detected cluster, Visual key browser, Analyze pane, MCP tools. MySQL + PostgreSQL + Redshift + DynamoDB + Redis covers most backend stacks people actually run
 2. [ ] **Linux build** — Wails already supports it; needs a packaging/CI pipeline
-3. [ ] ER diagram visualization (auto-generated from foreign keys)
-4. [ ] Query result diffing (compare EXPLAIN output before/after an index change)
+3. [x] **ER diagram visualization (auto-generated from foreign keys)** — shipped in v3.1.0: right-click a MySQL database or PostgreSQL schema, laid out by foreign-key depth, pan/zoom, click a table to open it
+4. [x] **Query result diffing (compare EXPLAIN output before/after an index change)** — shipped in v3.1.0: baseline a plan, change an index, re-run, and compare access type, key and rows examined with a per-table verdict
 5. [ ] MongoDB support
 6. [ ] Import/export connection profiles
 

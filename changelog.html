@@ -479,6 +479,18 @@
     <div class="container" style="max-width:860px">
         <h1>Changelog</h1>
         <p class="lead">Every release, newest first. Downloads for each version are on <a href="https://github.com/shubhesh07/db-connect/releases" style="color:var(--accent)">GitHub Releases</a>.</p>
+<h2 id="v3.0.2">v3.0.2<span class="date">2026-08-25</span></h2>
+<h3>Fixed</h3>
+<ul>
+<li>Enabling the MCP server did nothing on a fresh install — it stayed <em>Not running</em> because starting it deadlocked while creating the per-install auth token.</li>
+<li>MySQL table and column suggestions stayed empty until a database was expanded in the tree. Connecting now loads the active database's tables, and switching databases (toolbar, tree, or <code>USE db</code>) loads that one too.</li>
+<li>PostgreSQL, Redshift and DynamoDB kept showing a stale schema tree after disconnecting and reconnecting.</li>
+</ul>
+<h3>Performance</h3>
+<ul>
+<li>Loading schema on one connection no longer invalidates every other connection's autocomplete cache.</li>
+<li>Searching the schema tree queries a few databases at a time instead of every database at once.</li>
+</ul>
 <h2 id="v3.0.1">v3.0.1<span class="date">2026-08-25</span></h2>
 <h3>Fixed</h3>
 <ul>

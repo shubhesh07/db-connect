@@ -2,6 +2,11 @@
 
 All notable changes to DB Connect will be documented in this file.
 
+## [3.0.1] - 2026-08-25
+
+### Fixed
+- MCP Server settings dialog failed to open on a fresh install (`Failed to load MCP server settings: null is not an object`) — the allowed-connections list was serialized as `null` instead of an empty list. It now opens on first run and on upgrades from older settings files.
+
 ## [3.0.0] - 2026-08-23
 
 ### Added — Redis (new engine)

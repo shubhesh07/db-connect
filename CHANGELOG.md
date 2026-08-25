@@ -2,6 +2,17 @@
 
 All notable changes to DB Connect will be documented in this file.
 
+## [3.0.2] - 2026-08-25
+
+### Fixed
+- Enabling the MCP server did nothing on a fresh install — the toggle saved but the server stayed "Not running". Starting it deadlocked while minting the per-install auth token on machines that had none yet.
+- MySQL autocomplete had no tables or columns until a database was expanded in the tree. Connecting now loads the active database's tables (matching PostgreSQL/Redshift), and switching a tab's database — toolbar picker, tree, or an in-query `USE db` / `SET search_path` — loads that database too.
+- PostgreSQL, Redshift and DynamoDB showed a stale schema tree after disconnect → reconnect; the engine-specific caches were never cleared, and the sidebar only refetches when a connection's cache is missing.
+
+### Performance
+- Schema loads on one connection no longer invalidate every other connection's completion index, which made each keystroke re-walk every cached schema.
+- Searching the schema tree runs 4 `information_schema` queries at a time instead of one per database simultaneously.
+
 ## [3.0.1] - 2026-08-25
 
 ### Fixed

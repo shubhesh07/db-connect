@@ -2,6 +2,23 @@
 
 All notable changes to DB Connect will be documented in this file.
 
+## [3.1.0] - 2026-08-25
+
+### Added — MySQL server monitoring
+- **Performance > Overview** — live rates derived from consecutive `SHOW GLOBAL STATUS` samples rather than raw counters: queries/s split into reads, writes, prepared statements (`Com_stmt_execute`, which never touches `Com_select`) and other; threads running against `max_connections`; InnoDB buffer-pool hit rate and dirty pages; slow queries/s; full table scans and unindexed joins/s; temp-table disk spill; row lock waits; network; new vs aborted connections; uptime; replication lag. Sparklines cover the last ~5 minutes, and a health strip states the verdict with the tab to check next. Server restarts, zero intervals and idle servers are handled explicitly instead of rendering nonsense rates.
+- **Performance > Connections** — `PROCESSLIST` aggregated by user@host / user / host / database (total, active, sleeping, in-transaction, longest), plus sessions past a chosen age. The threshold also applies to open-transaction age, so a session asleep for seconds while holding a ten-minute transaction is caught and flagged **idle in transaction**. Kill routes through the existing production-gated dialog.
+- **Metric drill-downs** — the full-table-scan tile opens the statement digests that ran without a usable index, each expandable into who runs it (user@host), a sample statement, copy, and EXPLAIN-in-editor. Other tiles jump to Slow Queries, Locks, Index Health or Connections.
+
+### Added — schema and query tools
+- **ER diagrams generated from foreign keys** for MySQL databases and PostgreSQL schemas — one whole-schema constraint query, layered so referenced tables sit left of the tables referencing them, with pan/zoom, neighbour spotlighting and click-to-open. PostgreSQL reads `pg_constraint` so composite foreign keys pair correctly.
+- **EXPLAIN before/after comparison** — capture a baseline plan, change an index, re-run, and compare access type, chosen key and rows examined with an improved/regressed verdict per table. A better access path outranks small row-estimate movement in both directions.
+- **`EXPLAIN ANALYZE` for MySQL 8.0.18+** — measured per-operator time, actual rows and loops. Version-gated (MariaDB and older MySQL excluded) instead of failing at run time.
+- **ANALYZE / CHECK / OPTIMIZE TABLE** from the table context menu, surfacing MySQL's own `Msg_type: Msg_text`. OPTIMIZE confirms first; ANALYZE and OPTIMIZE are blocked on read-only connections.
+
+### Fixed
+- Right-click context menus did nothing in every v3.0.x build. The menu subscribed to document-level close events on mount, and React flushes a discrete event's update and effects inside the dispatch — so the same right-click that opened the menu closed it again.
+- Performance > Variables could not scroll: the panel's height chain never resolved, so the table was clipped rather than scrollable.
+
 ## [3.0.2] - 2026-08-25
 
 ### Fixed

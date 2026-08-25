@@ -131,6 +131,9 @@ brew install --cask shubhesh07/db-connect/db-connect
 
 ## Screenshots
 
+### MySQL Performance Overview — live rates, health findings, click a metric for the queries behind it
+![MySQL Performance Overview showing health findings for row locks and full table scans alongside tiles for queries per second, threads running, buffer pool hit rate, slow queries, table scans, rows read, temp tables on disk, row lock waits, network and uptime](screenshots/mysql-overview.png)
+
 ### Redis key browser — keys grouped by `:` prefix, type-aware editors
 ![Redis key browser](screenshots/redis-key-browser.png)
 

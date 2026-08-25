@@ -479,6 +479,25 @@
     <div class="container" style="max-width:860px">
         <h1>Changelog</h1>
         <p class="lead">Every release, newest first. Downloads for each version are on <a href="https://github.com/shubhesh07/db-connect/releases" style="color:var(--accent)">GitHub Releases</a>.</p>
+<h2 id="v3.1.0">v3.1.0<span class="date">2026-08-25</span></h2>
+<h3>Added — MySQL server monitoring</h3>
+<ul>
+<li><b>Performance &rarr; Overview</b>: live rates rather than raw counters — queries/s split into reads, writes, prepared statements and other; threads running against <code>max_connections</code>; InnoDB buffer-pool hit rate and dirty pages; slow queries; full table scans and unindexed joins; temp tables spilling to disk; row lock waits; network throughput; new vs aborted connections; uptime; replication lag. Each tile carries a sparkline over the last few minutes, and a health strip states the verdict in plain language with the tab to check next.</li>
+<li><b>Performance &rarr; Connections</b>: the process list aggregated by user@host, user, host or database (active, sleeping, in-transaction, longest), plus every session past a chosen age. The threshold covers open-transaction age too, so a sleeping session holding a long transaction is caught and flagged <em>idle in transaction</em> — the case that pins locks and undo while looking idle. Sessions can be killed through the existing production-gated dialog.</li>
+<li><b>Metric drill-downs</b>: the full-table-scan tile opens the statements that ran without a usable index, each expandable into who runs it, a sample statement, copy and EXPLAIN-in-editor. Other tiles jump to Slow Queries, Locks, Index Health or Connections.</li>
+</ul>
+<h3>Added — schema and query tools</h3>
+<ul>
+<li><b>ER diagrams generated from foreign keys</b> — right-click a database (MySQL) or schema (PostgreSQL). Referenced tables sit left of the tables that reference them; hover to spotlight a table and its relations, click to open one. Nothing to configure or draw.</li>
+<li><b>EXPLAIN before/after comparison</b> — capture a plan as a baseline, add an index, run EXPLAIN again and see what moved: access type, chosen key, rows examined, with an improved/regressed verdict per table.</li>
+<li><b><code>EXPLAIN ANALYZE</code> for MySQL 8.0.18+</b> — measured per-operator time, actual rows and loops instead of the optimiser's estimate.</li>
+<li><b>ANALYZE / CHECK / OPTIMIZE TABLE</b> from the table context menu, reporting MySQL's own result message. OPTIMIZE confirms first, since it rewrites the table.</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Right-click context menus did nothing in every v3.0.x build — the menu closed itself on the click that opened it. Tables, databases, connections and the results grid all work again.</li>
+<li>Performance &rarr; Variables could not be scrolled; the list was clipped instead.</li>
+</ul>
 <h2 id="v3.0.2">v3.0.2<span class="date">2026-08-25</span></h2>
 <h3>Fixed</h3>
 <ul>

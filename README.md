@@ -2,7 +2,7 @@
 
 **One database client for your entire backend stack.**
 
-MySQL + PostgreSQL + Amazon Redshift + DynamoDB + Redis — one fast, free, native desktop IDE instead of five separate tools and five separate sets of saved credentials.
+MySQL + PostgreSQL + Amazon Redshift + DynamoDB + Redis + MongoDB — one fast, free, native desktop IDE instead of five separate tools and five separate sets of saved credentials.
 
 ![macOS](https://img.shields.io/badge/macOS-supported-blue) ![Windows](https://img.shields.io/badge/Windows-supported-blue) ![License](https://img.shields.io/badge/license-free-green) ![Downloads](https://img.shields.io/github/downloads/shubhesh07/db-connect/total)
 
@@ -99,7 +99,7 @@ brew install --cask shubhesh07/db-connect/db-connect
 ```
 
 1. Launch DB Connect
-2. **Add Connection** → choose MySQL, PostgreSQL, Redshift, DynamoDB, or Redis
+2. **Add Connection** → choose MySQL, PostgreSQL, Redshift, DynamoDB, Redis, or MongoDB
 3. Enter credentials → **Test Connection** → **Save**
 4. Write a query (or, for DynamoDB, use the visual builder or the PartiQL editor) → `Cmd+Enter` to run
 
@@ -155,7 +155,7 @@ Reordered toward the broadest database-client market first:
 2. [ ] **Linux build** — Wails already supports it; needs a packaging/CI pipeline
 3. [x] **ER diagram visualization (auto-generated from foreign keys)** — shipped in v3.1.0: right-click a MySQL database or PostgreSQL schema, laid out by foreign-key depth, pan/zoom, click a table to open it
 4. [x] **Query result diffing (compare EXPLAIN output before/after an index change)** — shipped in v3.1.0: baseline a plan, change an index, re-run, and compare access type, key and rows examined with a per-table verdict
-5. [ ] MongoDB support
+5. [x] **MongoDB support** — shipped in v3.2.0: SQL (translated to find/aggregate) or mongosh syntax, collection explorer with sampled fields, production/read-only gating, MCP tools
 6. [ ] Import/export connection profiles
 
 ## FAQ

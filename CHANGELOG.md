@@ -2,6 +2,19 @@
 
 All notable changes to DB Connect will be documented in this file.
 
+## [3.2.0] - 2026-08-31
+
+### Added — MongoDB engine
+- **MongoDB support** — sixth engine. Connect via host/port or a full `mongodb://` / `mongodb+srv://` URI (credentials kept in separate encrypted fields), browse databases → collections → sampled fields, and query with **SQL** (`SELECT`/`WHERE`/`ORDER BY`/`LIMIT`/`OFFSET`, `GROUP BY` with COUNT/SUM/AVG/MIN/MAX translated to an aggregation pipeline, `INSERT`/`UPDATE`/`DELETE`, dotted paths for nested fields, bare `id` meaning `_id`, 24-hex strings promoted to ObjectID, `LIKE` as anchored case-insensitive regex) or **mongosh syntax** (`db.coll.find({...}).sort({...}).limit(n)`, `aggregate`, `countDocuments`, `insertOne/Many`, `updateOne/Many`, `deleteOne/Many`, `ObjectId()`, `ISODate()`, bare keys and single quotes).
+- Read-only connections refuse writes; production-tagged connections route writes (SQL or shell) through the same tiered confirmation dialog as the SQL engines. Reads without a LIMIT are capped at 500 documents.
+- **MCP**: `list_databases`, `list_tables`, `describe_table` and `run_query` now dispatch to MongoDB connections — reads always available, writes require a per-connection grant, results capped at 500 rows.
+
+### Fixed
+- Results grid jumped back to the top after switching tabs and returning — scroll position is now kept per tab, restored through both the DOM and the virtualizer. Pending inline edits also survive a tab switch instead of being discarded.
+- Undo (⌘Z) stopped working after switching tabs — the editor now keeps one Monaco model per tab, preserving undo history and cursor position.
+- The Apply-changes review dialog is now a wide, **editable** SQL script (MySQL Workbench style); edited SQL still runs through the read-only/production gates.
+- Query history now records MongoDB statements, Redis console commands and DynamoDB PartiQL alongside SQL.
+
 ## [3.1.0] - 2026-08-25
 
 ### Added — MySQL server monitoring

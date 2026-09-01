@@ -103,6 +103,19 @@ brew install --cask shubhesh07/db-connect/db-connect
 3. Enter credentials → **Test Connection** → **Save**
 4. Write a query (or, for DynamoDB, use the visual builder or the PartiQL editor) → `Cmd+Enter` to run
 
+### Connect Claude (MCP) in three steps
+
+1. In DB Connect: sidebar → **MCP Server** → enable the server and tick the connections Claude may see (the allow-list).
+2. In the same dialog, press **copy** next to *Set up in Claude* — it copies a ready-made command with your URL and auth token filled in:
+   ```bash
+   claude mcp add --transport http db-connect http://127.0.0.1:8595/mcp --header "Authorization: Bearer <your-token>"
+   ```
+3. Paste it in your terminal. Done — Claude Code can now list databases/tables/collections, describe schemas, and run read-only queries against the allow-listed connections. (`/mcp` inside Claude Code shows the connection.)
+
+For **Claude Desktop** (or any JSON-configured MCP client), the dialog also has a copy button for the matching `mcpServers` JSON block — merge it into `claude_desktop_config.json` (Settings → Developer → Edit Config) and restart Claude Desktop.
+
+Writes stay blocked until you grant them per connection, time-bounded, from the desktop app — an agent can never grant itself write access.
+
 ### Keyboard shortcuts
 
 | Shortcut | Action |

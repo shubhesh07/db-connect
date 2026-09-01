@@ -108,7 +108,7 @@ brew install --cask shubhesh07/db-connect/db-connect
 1. In DB Connect: sidebar → **MCP Server** → enable the server and tick the connections Claude may see (the allow-list).
 2. In the same dialog, press **copy** next to *Set up in Claude* — it copies a ready-made command with your URL and auth token filled in:
    ```bash
-   claude mcp add --transport http db-connect http://127.0.0.1:8595/mcp --header "Authorization: Bearer <your-token>"
+   claude mcp add --transport http db-connect http://127.0.0.1:47823/mcp --header "Authorization: Bearer <your-token>"
    ```
 3. Paste it in your terminal. Done — Claude Code can now list databases/tables/collections, describe schemas, and run read-only queries against the allow-listed connections. (`/mcp` inside Claude Code shows the connection.)
 

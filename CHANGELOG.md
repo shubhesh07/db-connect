@@ -2,6 +2,13 @@
 
 All notable changes to DB Connect will be documented in this file.
 
+## [3.2.1] - 2026-09-03
+
+### Fixed
+- DynamoDB: selecting a table in one tab changed it in every open tab — the query builder is now per-tab (table, Scan/Query/PartiQL mode and statement text independent and remembered per tab).
+- Results grid: sort, column filters, filter-row visibility and row selection leaked across tabs; a filter from one tab could silently hide rows in another. All are now per-tab, restored on switch-back, reset on a new result.
+- Results grid: the sticky row-number column was translucent, letting horizontally-scrolled cell text bleed through the numbers. Now opaque in both themes.
+
 ## [3.2.0] - 2026-08-31
 
 ### Added — MongoDB engine

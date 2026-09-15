@@ -2,6 +2,21 @@
 
 All notable changes to DB Connect will be documented in this file.
 
+## [3.2.2] - 2026-09-15
+
+### Fixed
+- **A tab could execute different SQL than it displayed** — after switching tabs, a tab's stored query could silently go stale, so Run kept executing an older statement (old columns in results) while the editor showed the new text. The executed SQL is now reconciled from the visible editor on every tab switch.
+- Statement splitter no longer splits on `;` inside double-quoted strings.
+- Sort and column filters survive re-running a query (per tab); row selection still resets with fresh results.
+- Editing the Apply-changes SQL and having it fail no longer discards pending edits.
+- MongoDB `INSERT` maps a bare `id` column to `_id`, matching WHERE/SET, so inserted rows stay queryable.
+
+### Added
+- JSON cell values (DynamoDB maps/lists, MongoDB nested documents, MySQL JSON columns) expand into a collapsible JSON tree with per-node copy.
+
+### Performance
+- JSON detection no longer parses every visible cell per render; the editor no longer re-reads the document per keystroke.
+
 ## [3.2.1] - 2026-09-03
 
 ### Fixed

@@ -2,6 +2,17 @@
 
 All notable changes to DB Connect will be documented in this file.
 
+## [3.2.3] - 2026-09-16
+
+### Changed
+- **Run executes the selection or the statement under the cursor** (previously the whole tab, displaying the last result — which looked like a query returning another query's columns). **Run All Statements** is in the ⋯ menu; the statement that will run is highlighted.
+
+### Fixed
+- Duplicate column names (`SELECT a, a`, JOINs sharing `id`/`created_at`) corrupted the results grid — stale header/cell DOM from a previous result could appear in the next one rendered in that tab.
+- JOINs silently lost column values: with duplicate names only the last column's data was kept. Duplicates are now renamed (`id`, `id_2`, …) so all values survive, in the grid and exports.
+- Sticky headers smeared while scrolling (WebKit `position:sticky` + `border-collapse` bug) — rows bled through the header band. Grids use a WebKit-safe layout with opaque sticky rows.
+- CSV import mapping with duplicate CSV headers.
+
 ## [3.2.2] - 2026-09-15
 
 ### Fixed

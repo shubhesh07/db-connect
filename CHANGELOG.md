@@ -2,6 +2,34 @@
 
 All notable changes to DB Connect will be documented in this file.
 
+## [3.3.0] - 2026-10-09
+
+### Fixed
+- **Results grid hung and jumped while scrolling** — rows are measured (not estimated at the wrong height) and the per-cell copy button is gone; wide 100-row results scroll at full frame rate.
+- **Query history showed nothing** — the panel now follows the tab's connection, refreshes after every run, and the favourite star updates.
+- **`WITH` / `CALL` / `TABLE` / `VALUES` returned 0 rows** when a database was selected in the tab. `CALL` now shows every result set.
+- **Index Manager broke on tables with a functional index** (which also broke tree expand and the ALTER designer). `SHOW INDEX` is read by column name (MySQL + MariaDB); prefix (`name(20)`) and DESC index parts are supported; the list refreshes after create/drop.
+- **ALTER designer dropped column attributes** (UNSIGNED, charset/collation, ON UPDATE, GENERATED, INVISIBLE, SRID, comment) and move up/down marked every column modified.
+- **Statement splitting**: `DELIMITER` (procedures/triggers), `"…"`, backticks, `\'`, `#` comments and `$$` bodies are handled by one scanner for Run, Run All and the safety classifier. Auto-LIMIT handles CTEs, `FOR UPDATE`, trailing comments and subquery LIMITs.
+- **Session state lost between statements** — Run All executes on one pinned connection, so `SET @x`, temp tables and `SET SESSION` carry across.
+- **MySQL types**: BLOB/VARBINARY/GEOMETRY rendered as garbage (now `0x…` hex), `BIT(n)` showed `[0 5]` (now an integer), BIT(1) edits failed in strict mode. Database names with `-` or space could not be queried.
+- **SSH tunnel + SSL never connected** (TLS verified against 127.0.0.1). EXPLAIN failed on MariaDB/MySQL 5.6 and ignored the tab database. Locks tab enabled on MariaDB.
+- **Table editor could not write NULL** (stored the string `'NULL'`). CSV import turned empty cells into `''` and ran without a transaction.
+- **Kill** did nothing for idle-in-transaction sessions — "Kill connection" is offered for them (the only thing that releases their locks).
+- **Redis**: opening a sorted set with a `+inf`/`-inf` score exited the app; `SELECT`/`MULTI`/`AUTH`/`HELLO` ran on pooled connections; the read-only allow-list blocked common reads (set/bit/geo/stream ops, `CONFIG GET`, `CLIENT LIST`, RedisJSON/RediSearch/TimeSeries); "Scan all" looped forever on an error; Add Key overwrote existing keys.
+- A stale run could overwrite a newer result or steal its cancel handle; per-tab state leaked on close; dumps/exports were world-readable; session/settings writes were not atomic.
+
+### Added
+- Production confirmation on CreateTable, every ALTER, index create/drop, table-editor writes, grid Apply, CSV import, Restore and Kill; a `requireWritable` gate enforces read-only on 40 mutating bindings. Typed `BEGIN` is refused on MySQL/Postgres (use the toolbar transaction controls).
+- Result size cap (32 MB per result, 256 KB per cell) with a warning and a "limited to N rows · Load more" badge.
+- Foreign key add/drop and PK/UNIQUE changes in the ALTER designer.
+- Custom CA / client certificate fields for MySQL; mysqldump `--no-tablespaces --hex-blob --set-gtid-purged=OFF --column-statistics=0` + TLS flags; "Backup Schema Only".
+- "Set to NULL" in the table editor; "Treat empty cells as NULL" in CSV import; BOM stripping and streaming for large files.
+- Logs at `~/.querypilot/logs/querypilot.log` (Wails panics captured, credentials redacted).
+
+### Performance
+- App is ~9 MB smaller: Monaco ships only the SQL and JSON languages. Undo history survives pane switches.
+
 ## [3.2.3] - 2026-09-16
 
 ### Changed

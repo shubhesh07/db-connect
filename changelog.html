@@ -479,6 +479,27 @@
     <div class="container" style="max-width:860px">
         <h1>Changelog</h1>
         <p class="lead">Every release, newest first. Downloads for each version are on <a href="https://github.com/shubhesh07/db-connect/releases" style="color:var(--accent)">GitHub Releases</a>.</p>
+<h2 id="v3.3.0">v3.3.0<span class="date">2026-10-09</span></h2>
+<h3>Fixed</h3>
+<ul>
+<li><b>Results grid no longer hangs or jumps while scrolling</b> — rows are measured instead of estimated and the per-cell copy button is gone; wide 100-row results scroll at full frame rate.</li>
+<li><b>Query history shows your history</b> — the panel follows the tab's connection, refreshes after every run, and the favourite star updates.</li>
+<li><b><code>WITH</code> / <code>CALL</code> / <code>TABLE</code> / <code>VALUES</code> returned 0 rows</b> when a database was selected in the tab. <code>CALL</code> now shows every result set.</li>
+<li><b>Index Manager</b> broke on tables with a functional index (which also broke tree expand and the ALTER designer); prefix (<code>name(20)</code>) and DESC index parts are supported; the list refreshes after create/drop.</li>
+<li><b>ALTER designer keeps the full column definition</b> — UNSIGNED, charset/collation, ON UPDATE, GENERATED, INVISIBLE, SRID and comments survive a modify; move up/down reorders only the moved column; PK/UNIQUE ticks and foreign keys work.</li>
+<li><b>One statement scanner</b> with <code>DELIMITER</code> (stored procedures and triggers), double quotes, backticks, <code>#</code> comments and <code>$$</code> bodies. Run All executes on one pinned connection, so <code>SET @x</code>, temp tables and session settings carry across statements.</li>
+<li><b>MySQL types</b>: BLOB/VARBINARY/GEOMETRY render as hex, <code>BIT(n)</code> as an integer, BIT(1) edits bind correctly; database names with <code>-</code> or space can be queried.</li>
+<li><b>Connectivity</b>: SSH tunnel + SSL connects; custom CA / client cert fields; EXPLAIN works on MariaDB and MySQL 5.6 and honours the tab database; mysqldump gets the missing flags and a "Backup Schema Only" item.</li>
+<li><b>Table editor</b> writes a real NULL; CSV import treats empty cells as NULL, runs in one transaction, strips a BOM and streams large files. Kill offers "Kill connection" for idle-in-transaction sessions.</li>
+<li><b>Redis</b>: a sorted set with a <code>+inf</code>/<code>-inf</code> score no longer exits the app; connection-state commands are refused in the console; the read-only allow-list no longer blocks common reads; "Scan all" stops on error; Add Key refuses to overwrite.</li>
+<li>A stale run can no longer overwrite a newer result; per-tab state is released on close; dumps and exports are owner-only; session/settings writes are atomic; logs go to <code>~/.querypilot/logs/</code>.</li>
+</ul>
+<h3>Added</h3>
+<ul>
+<li>Production confirmation on CreateTable, every ALTER, index create/drop, table-editor writes, grid Apply, CSV import, Restore and Kill; read-only is enforced on every mutating binding. Typed <code>BEGIN</code> is refused on MySQL/Postgres.</li>
+<li>Result size cap (32 MB per result, 256 KB per cell) with a "limited to N rows · Load more" badge.</li>
+<li>App is ~9 MB smaller — Monaco ships only SQL and JSON; undo history survives pane switches.</li>
+</ul>
 <h2 id="v3.1.0">v3.1.0<span class="date">2026-08-25</span></h2>
 <h3>Added — MySQL server monitoring</h3>
 <ul>

@@ -2,6 +2,65 @@
 
 All notable changes to DB Connect will be documented in this file.
 
+## [3.4.0] - 2026-10-10
+
+v3.4.0 is the largest release so far: ten commits, ~760 tests, every engine touched. Highlights by area.
+
+#### Results grid and editor
+✨ **Find in results** (⌘F in the grid): live match count, Enter/Shift+Enter cycling, highlighted hits.
+✨ **Column resize, reorder and hide**, a Columns… popover, and a **row detail side panel** that follows the focused cell. Arrow keys move between cells.
+✨ **Copy rows as INSERT or JSON**, **selection stats** (count / sum / avg / min / max) in the footer, and **charts** from any result (bar, line, area, pie, scatter) with per-tab config.
+✨ **⌘S saves the query** (in place when linked), **dirty-tab confirm** on close, **Local History** with autosave every 2 s plus run/close snapshots, diff and restore.
+✨ **Query parameters**: `{{name}}` / `:name` prompt at run time with safe literals. **Error squiggles** at the server-reported position. **Routine templates** with DELIMITER, **Run… with params** for procedures, event scheduler tooling.
+✨ **Visual EXPLAIN tree** (MySQL, Postgres, Mongo), **FK click-through** (open the referenced row, or rows referencing this one), **Run All** button and ⌘⇧Enter, History / Saved Queries / Snippets / Local History in the sidebar.
+🐛 Session restore could be overwritten by an early save and lose your tabs; the panels now follow the tab's connection; many more.
+
+#### Explorer, schema and transfer
+✨ **Schema diff** between two connections with a migration script (A→B or B→A, DROPs opt-in).
+✨ **Virtualised explorer** (5,000 tables: 35k DOM nodes → 266), per-node Refresh, inline "Failed to load — Retry".
+✨ **Truncate / Duplicate table**, **Copy DDL**, **Import connections** from DBeaver (credentials decrypted), DataGrip and `~/.my.cnf`.
+✨ **Streaming export to file** (CSV / JSON / XLSX) with Stop, formula protection and a warning on capped exports.
+
+#### Transactions and safety
+🛡️ **Transactions are scoped to a tab** on MySQL, Postgres and Redshift; Run All runs on one pinned connection (`SET @x`, temp tables carry across); typed COMMIT/ROLLBACK stay in sync; rollback on tab close.
+🛡️ **Production confirmation on every mutating binding** (designers, table editor, imports, restore, kill, Redis keys, Dynamo items, Postgres indexes, views). Side-effect calls like `pg_terminate_backend`, `SET ROLE` and `COPY` to files count as destructive.
+🛡️ SSH keepalive + ssh-agent auth, single-instance lock, SQLite busy timeout, AWS keys redacted from history, Mongo tunnel secrets encrypted.
+
+#### Stability
+🧯 **Error boundaries** around every pane with Reload panel and **Copy diagnostics**; a global error funnel; a clear message when frontend and backend are out of sync.
+🧯 Pollers pause when the window is hidden and back off on failures. **Lost connections show a Reconnect banner** that rebuilds the pool and SSH tunnel in place.
+🧯 **Result retention cap** (released results show Re-run), 20,000-line scripts no longer lag, **Settings dialog** (⌘,), layout persists across restarts, grid accessibility (roles, `aria-sort`, keyboard row selection).
+
+#### MySQL
+🐛 Index Manager broke on tables with a functional index; `WITH`/`CALL` showed 0 rows when a database was selected; BLOB/BIT rendering; hyphenated database names; ALTER designer dropped UNSIGNED/charset/ON UPDATE/GENERATED; SSH + SSL never connected; EXPLAIN on MariaDB; table editor could not write NULL; `KILL` did nothing for idle-in-transaction sessions.
+✨ MySQL 8 **roles**, **partition view**, foreign keys in the designer, mysqldump flags + "Backup Schema Only", custom CA / client cert.
+
+#### PostgreSQL
+✨ **Performance pane**: activity with cancel/terminate, blocking tree, `pg_stat_statements`, unused/redundant/invalid index advisor, vacuum and bloat, overview tiles.
+✨ **Multiple databases per server**, functions/procedures/triggers viewer and editor, sequence and enum editors, default privileges and role membership, `pg_dump`/`pg_restore`, COPY-based CSV import, NOTICE messages and the "transaction is aborted" hint, LISTEN/NOTIFY panel, RDS IAM auth, PgBouncer pooler mode, SSL CA / client cert.
+🐛 Tree actions overwrote the active tab, `SELECT … INTO` was auto-limited, `search_path` dropped `public`, single-row edits ran without a transaction, PK found only by `_pkey` name, `pg_%` filter hid `pgboss`-style schemas.
+
+#### Redshift
+✨ **Serverless support** (`SYS_*`), load-error viewer with fix hints, WLM queues + QMR actions, per-step query report, table advisor, **COPY/UNLOAD dialog**, designer with DISTSTYLE / SORTKEY / ENCODE, users, groups and grants, matviews/procedures/datashares in the tree, editor transactions.
+🐛 IAM credentials expired after 15 minutes; `prefer_simple_protocol` was silently ignored by pgx v5.
+
+#### DynamoDB
+🐛 Numbers above 2^53 were rounded (wrong item deleted or a phantom created), sets saved as lists, every save rewrote untouched attributes, "Add Item" overwrote silently, GSI queries used base-table keys, BETWEEN never worked.
+✨ Typed items end to end, conditional minimal writes, Stop, **batch delete / delete by filter** (dry run first), **JSON import and export** with a pre-scan cost gate, **table admin** (create/delete, capacity, GSI, TTL, PITR, backups, streams), PartiQL paging + parameters, assume-role with MFA, free-text region.
+
+#### MongoDB
+🐛 HAVING and DISTINCT were silently dropped, COUNT(col) counted everything, aliases became nested paths, the shell rewrote text inside strings, `NumberLong` became Int32, `upsert` was ignored.
+✨ **Document editor** (typed extended JSON, optimistic save, clone), **index manager**, **explain tree**, collection stats, sampled schema analyzer, **performance pane** with kill op, **aggregation pipeline builder** with per-stage preview, JSON/CSV import and export, validation rules, users and roles, change-stream watch, auth mechanisms, read preference, TLS certs, SSH tunnel.
+
+#### Redis
+🐛 A sorted set with `+inf` exited the app; `SELECT`/`MULTI`/`AUTH` poisoned pooled connections; the read-only allow-list blocked common reads; "Scan all" looped on error.
+✨ Timeouts follow settings, binary-safe values with a hex view, delete by pattern with dry run, multi-line console, cluster seeds and sentinel password, paging inside big values, stream groups, console history survives navigation.
+
+#### Known limits
+- Redshift catalog columns for serverless views and some Dynamo/Mongo flows were verified with unit tests, not a live server. Try them on a non-production target first.
+- Postgres COPY import falls back to INSERT for enum/custom-type columns (untick COPY).
+- Dynamo lists and maps are edited as typed DynamoDB JSON.
+
 ## [3.3.0] - 2026-10-09
 
 ### Fixed

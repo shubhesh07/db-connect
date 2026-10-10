@@ -479,6 +479,73 @@
     <div class="container" style="max-width:860px">
         <h1>Changelog</h1>
         <p class="lead">Every release, newest first. Downloads for each version are on <a href="https://github.com/shubhesh07/db-connect/releases" style="color:var(--accent)">GitHub Releases</a>.</p>
+<h2 id="v3.4.0">v3.4.0<span class="date">2026-10-10</span></h2>
+<h3>Results grid and editor</h3>
+<ul>
+<li><b>Find in results</b> (⌘F in the grid): live match count, Enter/Shift+Enter cycling, highlighted hits.</li>
+<li><b>Column resize, reorder and hide</b>, a Columns… popover, and a <b>row detail side panel</b> that follows the focused cell. Arrow keys move between cells.</li>
+<li><b>Copy rows as INSERT or JSON</b>, <b>selection stats</b> (count / sum / avg / min / max) in the footer, and <b>charts</b> from any result (bar, line, area, pie, scatter) with per-tab config.</li>
+<li><b>⌘S saves the query</b> (in place when linked), <b>dirty-tab confirm</b> on close, <b>Local History</b> with autosave every 2 s plus run/close snapshots, diff and restore.</li>
+<li><b>Query parameters</b>: <code>{{name}}</code> / <code>:name</code> prompt at run time with safe literals. <b>Error squiggles</b> at the server-reported position. <b>Routine templates</b> with DELIMITER, <b>Run… with params</b> for procedures, event scheduler tooling.</li>
+<li><b>Visual EXPLAIN tree</b> (MySQL, Postgres, Mongo), <b>FK click-through</b> (open the referenced row, or rows referencing this one), <b>Run All</b> button and ⌘⇧Enter, History / Saved Queries / Snippets / Local History in the sidebar.</li>
+<li>Session restore could be overwritten by an early save and lose your tabs; the panels now follow the tab&#x27;s connection; many more.</li>
+</ul>
+<h3>Explorer, schema and transfer</h3>
+<ul>
+<li><b>Schema diff</b> between two connections with a migration script (A→B or B→A, DROPs opt-in).</li>
+<li><b>Virtualised explorer</b> (5,000 tables: 35k DOM nodes → 266), per-node Refresh, inline &quot;Failed to load — Retry&quot;.</li>
+<li><b>Truncate / Duplicate table</b>, <b>Copy DDL</b>, <b>Import connections</b> from DBeaver (credentials decrypted), DataGrip and <code>~/.my.cnf</code>.</li>
+<li><b>Streaming export to file</b> (CSV / JSON / XLSX) with Stop, formula protection and a warning on capped exports.</li>
+</ul>
+<h3>Transactions and safety</h3>
+<ul>
+<li><b>Transactions are scoped to a tab</b> on MySQL, Postgres and Redshift; Run All runs on one pinned connection (<code>SET @x</code>, temp tables carry across); typed COMMIT/ROLLBACK stay in sync; rollback on tab close.</li>
+<li><b>Production confirmation on every mutating binding</b> (designers, table editor, imports, restore, kill, Redis keys, Dynamo items, Postgres indexes, views). Side-effect calls like <code>pg_terminate_backend</code>, <code>SET ROLE</code> and <code>COPY</code> to files count as destructive.</li>
+<li>SSH keepalive + ssh-agent auth, single-instance lock, SQLite busy timeout, AWS keys redacted from history, Mongo tunnel secrets encrypted.</li>
+</ul>
+<h3>Stability</h3>
+<ul>
+<li><b>Error boundaries</b> around every pane with Reload panel and <b>Copy diagnostics</b>; a global error funnel; a clear message when frontend and backend are out of sync.</li>
+<li>Pollers pause when the window is hidden and back off on failures. <b>Lost connections show a Reconnect banner</b> that rebuilds the pool and SSH tunnel in place.</li>
+<li><b>Result retention cap</b> (released results show Re-run), 20,000-line scripts no longer lag, <b>Settings dialog</b> (⌘,), layout persists across restarts, grid accessibility (roles, <code>aria-sort</code>, keyboard row selection).</li>
+</ul>
+<h3>MySQL</h3>
+<ul>
+<li>Index Manager broke on tables with a functional index; <code>WITH</code>/<code>CALL</code> showed 0 rows when a database was selected; BLOB/BIT rendering; hyphenated database names; ALTER designer dropped UNSIGNED/charset/ON UPDATE/GENERATED; SSH + SSL never connected; EXPLAIN on MariaDB; table editor could not write NULL; <code>KILL</code> did nothing for idle-in-transaction sessions.</li>
+<li>MySQL 8 <b>roles</b>, <b>partition view</b>, foreign keys in the designer, mysqldump flags + &quot;Backup Schema Only&quot;, custom CA / client cert.</li>
+</ul>
+<h3>PostgreSQL</h3>
+<ul>
+<li><b>Performance pane</b>: activity with cancel/terminate, blocking tree, <code>pg_stat_statements</code>, unused/redundant/invalid index advisor, vacuum and bloat, overview tiles.</li>
+<li><b>Multiple databases per server</b>, functions/procedures/triggers viewer and editor, sequence and enum editors, default privileges and role membership, <code>pg_dump</code>/<code>pg_restore</code>, COPY-based CSV import, NOTICE messages and the &quot;transaction is aborted&quot; hint, LISTEN/NOTIFY panel, RDS IAM auth, PgBouncer pooler mode, SSL CA / client cert.</li>
+<li>Tree actions overwrote the active tab, <code>SELECT … INTO</code> was auto-limited, <code>search_path</code> dropped <code>public</code>, single-row edits ran without a transaction, PK found only by <code>_pkey</code> name, <code>pg_%</code> filter hid <code>pgboss</code>-style schemas.</li>
+</ul>
+<h3>Redshift</h3>
+<ul>
+<li><b>Serverless support</b> (<code>SYS_*</code>), load-error viewer with fix hints, WLM queues + QMR actions, per-step query report, table advisor, <b>COPY/UNLOAD dialog</b>, designer with DISTSTYLE / SORTKEY / ENCODE, users, groups and grants, matviews/procedures/datashares in the tree, editor transactions.</li>
+<li>IAM credentials expired after 15 minutes; <code>prefer_simple_protocol</code> was silently ignored by pgx v5.</li>
+</ul>
+<h3>DynamoDB</h3>
+<ul>
+<li>Numbers above 2^53 were rounded (wrong item deleted or a phantom created), sets saved as lists, every save rewrote untouched attributes, &quot;Add Item&quot; overwrote silently, GSI queries used base-table keys, BETWEEN never worked.</li>
+<li>Typed items end to end, conditional minimal writes, Stop, <b>batch delete / delete by filter</b> (dry run first), <b>JSON import and export</b> with a pre-scan cost gate, <b>table admin</b> (create/delete, capacity, GSI, TTL, PITR, backups, streams), PartiQL paging + parameters, assume-role with MFA, free-text region.</li>
+</ul>
+<h3>MongoDB</h3>
+<ul>
+<li>HAVING and DISTINCT were silently dropped, COUNT(col) counted everything, aliases became nested paths, the shell rewrote text inside strings, <code>NumberLong</code> became Int32, <code>upsert</code> was ignored.</li>
+<li><b>Document editor</b> (typed extended JSON, optimistic save, clone), <b>index manager</b>, <b>explain tree</b>, collection stats, sampled schema analyzer, <b>performance pane</b> with kill op, <b>aggregation pipeline builder</b> with per-stage preview, JSON/CSV import and export, validation rules, users and roles, change-stream watch, auth mechanisms, read preference, TLS certs, SSH tunnel.</li>
+</ul>
+<h3>Redis</h3>
+<ul>
+<li>A sorted set with <code>+inf</code> exited the app; <code>SELECT</code>/<code>MULTI</code>/<code>AUTH</code> poisoned pooled connections; the read-only allow-list blocked common reads; &quot;Scan all&quot; looped on error.</li>
+<li>Timeouts follow settings, binary-safe values with a hex view, delete by pattern with dry run, multi-line console, cluster seeds and sentinel password, paging inside big values, stream groups, console history survives navigation.</li>
+</ul>
+<h3>Known limits</h3>
+<ul>
+<li>Redshift catalog columns for serverless views and some Dynamo/Mongo flows were verified with unit tests, not a live server. Try them on a non-production target first.</li>
+<li>Postgres COPY import falls back to INSERT for enum/custom-type columns (untick COPY).</li>
+<li>Dynamo lists and maps are edited as typed DynamoDB JSON.</li>
+</ul>
 <h2 id="v3.3.0">v3.3.0<span class="date">2026-10-09</span></h2>
 <h3>Fixed</h3>
 <ul>

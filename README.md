@@ -8,6 +8,9 @@ MySQL + PostgreSQL + Amazon Redshift + DynamoDB + Redis + MongoDB — one fast, 
 
 ![DB Connect — PostgreSQL query with results, sidebar grouped by engine](screenshots/hero-sql.png)
 
+**Guides:** [MySQL](https://shubhesh07.github.io/db-connect/mysql-client.html) · [PostgreSQL](https://shubhesh07.github.io/db-connect/postgresql-client.html) · [Redshift](https://shubhesh07.github.io/db-connect/redshift-client.html) · [DynamoDB](https://shubhesh07.github.io/db-connect/dynamodb-gui.html) · [Redis](https://shubhesh07.github.io/db-connect/redis-gui.html) · [MongoDB](https://shubhesh07.github.io/db-connect/mongodb-client.html) · [Case study: MySQL CPU 90% → 30%](https://shubhesh07.github.io/db-connect/mysql-cpu-case-study.html)
+**Compared with:** [DataGrip](https://shubhesh07.github.io/db-connect/vs-datagrip.html) · [DBeaver](https://shubhesh07.github.io/db-connect/vs-dbeaver.html) · [TablePlus](https://shubhesh07.github.io/db-connect/vs-tableplus.html) · [MySQL Workbench](https://shubhesh07.github.io/db-connect/vs-mysql-workbench.html) · [Sequel Ace](https://shubhesh07.github.io/db-connect/vs-sequel-ace.html) · [pgAdmin](https://shubhesh07.github.io/db-connect/vs-pgadmin.html) · [RedisInsight](https://shubhesh07.github.io/db-connect/vs-redisinsight.html) · [NoSQL Workbench](https://shubhesh07.github.io/db-connect/vs-nosql-workbench.html) · [Dynobase](https://shubhesh07.github.io/db-connect/vs-dynobase.html) · [MongoDB Compass](https://shubhesh07.github.io/db-connect/vs-mongodb-compass.html) · [Studio 3T](https://shubhesh07.github.io/db-connect/vs-studio-3t.html)
+
 ## Download
 
 | | |
@@ -22,7 +25,7 @@ Full manual-download links (DMG, portable ZIPs) are in [Manual downloads](#manua
 
 - **One tool, not three.** If your stack is MySQL or PostgreSQL for transactional data, Redshift for analytics, DynamoDB for high-throughput key-value access and Redis for caching, you know the pain of five GUI clients, five credential stores, and five query histories. DB Connect treats all five as equal, first-class citizens.
 - **Free forever.** No subscription, no trial limits, no feature paywall.
-- **Fast.** Opens in under 2 seconds. 18MB installed. Built with Go + Wails — a native app, not Electron, so there's no bundled Chromium sitting in your dock for a database browser.
+- **Fast.** Opens in under 2 seconds. ~35 MB installed. Built with Go + Wails — a native app, not Electron, so there's no bundled Chromium sitting in your dock for a database browser.
 - **DynamoDB done properly.** A visual Scan/Query/GetItem builder *and* a PartiQL editor for writing real `SELECT * FROM "table" WHERE ...` statements — most GUI database tools ignore DynamoDB entirely or bolt on a bare-bones table browser.
 - **Built to work with your AI coding tools.** A local MCP server lets Claude Code, Cursor, or any MCP-aware client query your already-open connections directly — schema, read-only queries, gated behind a per-install auth token, an explicit connection allow-list, and time-bounded write grants.
 - **No cloud sync, no telemetry.** Credentials are AES-256-GCM encrypted with the key in your OS keychain. Nothing you connect to or query ever leaves your machine.
@@ -177,7 +180,7 @@ Reordered toward the broadest database-client market first:
 Free for personal and commercial use, no subscription, no feature paywall, no account required. Source code is not open source (see [License](#license)).
 
 **Why not just use DBeaver — it's free too?**
-DBeaver Community is a solid generalist tool, but it's Java/Eclipse-based (slower startup, heavier footprint) and its DynamoDB support sits behind the paid tiers (Lite and above) — it's not in the free Community edition. DB Connect is built specifically around MySQL + Redshift + DynamoDB as equal citizens, starts in under 2 seconds, and is 18MB installed.
+DBeaver Community is a solid generalist tool, but it's Java/Eclipse-based (slower startup, heavier footprint) and its DynamoDB support sits behind the paid tiers (Lite and above) — it's not in the free Community edition. DB Connect is built specifically around MySQL + Redshift + DynamoDB as equal citizens, starts in under 2 seconds, and is ~35 MB installed.
 
 **Does DynamoDB support mean real SQL-like querying, or just a table browser?**
 Both. There's a visual Scan/Query/GetItem builder for form-based filtering, and a PartiQL editor for writing `SELECT * FROM "table" WHERE ...` directly via AWS's native PartiQL support — with autocomplete that learns each table's attributes as you query it.

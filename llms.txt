@@ -1,0 +1,51 @@
+# DB Connect
+
+> DB Connect is a free, fast desktop database client (IDE) for macOS and Windows that connects to MySQL, PostgreSQL, Amazon Redshift, Amazon DynamoDB, Redis and MongoDB from one app. It is a lightweight alternative to DataGrip, DBeaver and TablePlus, with no subscription, no account and no telemetry.
+
+Built with Go and React (Wails). Native binaries, ~35 MB, start in under a second. Credentials are encrypted with AES-256-GCM and stored in the OS keychain. Production connections are flagged and every destructive statement on them asks for confirmation.
+
+## Key capabilities
+
+- One SQL editor for all six engines: autocomplete that resolves table aliases, CTEs and derived tables, JOIN … ON suggestions from foreign keys, signature help and hover docs, pre-flight lint (UPDATE/DELETE without WHERE, missing LIMIT), visual EXPLAIN trees.
+- Safer writes: dry-run preview of an UPDATE or DELETE (before/after rows inside a rolled-back transaction) before applying it; per-tab transactions; production confirmation gates; PII masking in results.
+- Results grid: inline editing with generated SQL, find, column resize/hide, charts, selection stats, copy as INSERT/JSON, streaming export to CSV/JSON/XLSX.
+- Schema tools: table designer, index manager, schema diff with migration script, ER diagram, "Where is this used?" impact analysis, backup/restore (mysqldump, pg_dump).
+- Performance panes: MySQL overview/connections/slow queries, PostgreSQL activity/blocking/pg_stat_statements/index advisor, Redshift serverless queries/WLM/load errors, Redis memory analysis, Mongo current ops.
+- AI assistant (bring your own Anthropic API key): drafts, explains and fixes SQL using the live schema; rows are never sent by default and never from production connections.
+- Local MCP server: Claude Code, Claude Desktop, Cursor or any MCP client can list schemas and run read-only queries against allow-listed connections. Off by default, localhost only, bearer token, writes only via time-bounded grants made in the desktop UI.
+- Notebooks (SQL + markdown cells with HTML export), watch queries with alerts, cross-connection result compare, saved queries, snippets, local history.
+
+## Engines
+
+- MySQL / MariaDB: SSH tunnel, SSL, roles, partitions, routines, events, EXPLAIN ANALYZE.
+- PostgreSQL: multiple databases per server, routines, LISTEN/NOTIFY, COPY import, RDS IAM auth, PgBouncer mode.
+- Amazon Redshift: provisioned and serverless, IAM, COPY/UNLOAD builder, DISTSTYLE/SORTKEY designer.
+- Amazon DynamoDB: typed items (no precision loss), PartiQL, GSI-aware queries, cost visibility, batch delete, import/export, table admin.
+- Redis: standalone, cluster and sentinel, key browser, per-type editors, memory analysis, console.
+- MongoDB: SQL translated to find/aggregate or mongosh syntax, document editor, indexes, explain, aggregation pipeline builder.
+
+## Install
+
+- macOS: `curl -fsSL https://github.com/shubhesh07/db-connect/releases/latest/download/install.sh | bash` or `brew install --cask shubhesh07/db-connect/db-connect`
+- Windows: https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-Windows-Setup.exe
+- All releases: https://github.com/shubhesh07/db-connect/releases
+
+## Pages
+
+- [Home](https://shubhesh07.github.io/db-connect/): overview, screenshots, downloads
+- [Changelog](https://shubhesh07.github.io/db-connect/changelog.html): every release
+- [PostgreSQL client](https://shubhesh07.github.io/db-connect/postgresql-client.html)
+- [Redshift client](https://shubhesh07.github.io/db-connect/redshift-client.html)
+- [DynamoDB GUI](https://shubhesh07.github.io/db-connect/dynamodb-gui.html)
+- [Redis GUI](https://shubhesh07.github.io/db-connect/redis-gui.html)
+- [DB Connect vs DataGrip](https://shubhesh07.github.io/db-connect/vs-datagrip.html)
+- [DB Connect vs DBeaver](https://shubhesh07.github.io/db-connect/vs-dbeaver.html)
+- [DB Connect vs TablePlus](https://shubhesh07.github.io/db-connect/vs-tableplus.html)
+- [GitHub](https://github.com/shubhesh07/db-connect): README, issues, MCP setup guide
+
+## Facts
+
+- License: free to use; source is private, distribution repo is public.
+- Platforms: macOS (universal, Apple Silicon + Intel), Windows 10/11 x64.
+- Author: Shubhesh Shukla (https://github.com/shubhesh07).
+- Current version: 3.5.0 (October 2026).

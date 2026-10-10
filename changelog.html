@@ -479,6 +479,43 @@
     <div class="container" style="max-width:860px">
         <h1>Changelog</h1>
         <p class="lead">Every release, newest first. Downloads for each version are on <a href="https://github.com/shubhesh07/db-connect/releases" style="color:var(--accent)">GitHub Releases</a>.</p>
+<h2 id="v3.5.0">v3.5.0<span class="date">2026-10-10</span></h2>
+<p>v3.5.0 is about writing SQL faster and running it with fewer surprises: a rebuilt autocomplete, dry-run writes, an AI assistant that knows your schema, a workload index advisor, and a notebook mode.</p>
+<h3>Autocomplete and editor</h3>
+<ul>
+<li><b>Alias-aware completions</b>: <code>o.</code> lists the columns of the table aliased <code>o</code> anywhere in the statement, including CTEs, derived tables, INSERT targets and UPDATE … SET. Context is detected from the whole statement, not the current line.</li>
+<li><b>JOIN … ON suggestions from foreign keys</b>: after <code>ON</code>, the editor proposes the matching key pairs; column items show type, nullability and key badges.</li>
+<li><b>Signature help and hover</b> for MySQL and Postgres functions (<code>IFNULL(</code>, <code>DATE_FORMAT(</code>, <code>COALESCE(</code> …) and for tables and columns.</li>
+<li>Completion index keyed per database, bulk-loaded in one query and invalidated on DDL; identifiers that need quoting are quoted automatically.</li>
+<li><b>Pre-flight lint</b> while you type: <code>DELETE</code>/<code>UPDATE</code> without WHERE, <code>SELECT *</code> into production tables, missing LIMIT, implicit cross joins. A quiet background EXPLAIN flags full scans on SELECTs before you run them (optional on production, Settings → Safety).</li>
+</ul>
+<h3>Safer writes</h3>
+<ul>
+<li><b>Dry-run preview</b> for a single UPDATE or DELETE: see the affected rows, before/after values and the row count inside a transaction that is rolled back; Apply then runs the real statement under the usual production confirmation.</li>
+<li><b>Where is this used?</b> on any table or column: references from views, routines, triggers, foreign keys and saved queries before you drop or rename.</li>
+<li><b>PII masking</b> toggle in the results grid (emails, phones, cards, national IDs) that also applies to copies and exports.</li>
+</ul>
+<h3>Performance</h3>
+<ul>
+<li><b>Workload index advisor</b> (Performance → Index Health → Workload): mines slow-log / <code>pg_stat_statements</code> digests, proposes composite indexes with the expected gain, and trials them with MySQL invisible indexes or Postgres hypopg before you create anything.</li>
+</ul>
+<h3>Assistant</h3>
+<ul>
+<li><b>Ask</b> (⌘⇧A): a Claude-powered side panel that drafts, explains and fixes SQL using your live schema (tables, columns, keys, sampled types). Rows are never sent by default and never on production connections. Bring your own Anthropic API key (Settings → AI assistant, stored encrypted).</li>
+</ul>
+<h3>Compare, watch and notebooks</h3>
+<ul>
+<li><b>Compare on…</b> runs the same query on two connections and diffs the results row by row (added / removed / changed cells).</li>
+<li><b>Watch…</b> re-runs a query on an interval with a threshold alert and a desktop notification when it fires.</li>
+<li><b>Notebooks</b>: SQL and markdown cells on one connection, run all, inline charts, export to a self-contained HTML report.</li>
+</ul>
+<h3>Fixes</h3>
+<ul>
+<li><b>Grid columns no longer shift while scrolling.</b> Every column now gets a pinned width from the loaded rows, so scrolling right and then down keeps the header and cells aligned (with or without Mask PII). Longer values further down truncate with a hover tooltip; drag the header edge to widen.</li>
+<li>⌘⇧Enter (Run All) did nothing while the editor had focus; it inserted a blank line instead.</li>
+<li>Shift-click range selection could select only the two end rows, so the selection stats were wrong.</li>
+<li>EXPLAIN summary showed "Worst Access: N/A" when every step was efficient.</li>
+</ul>
 <h2 id="v3.4.0">v3.4.0<span class="date">2026-10-10</span></h2>
 <h3>Results grid and editor</h3>
 <ul>

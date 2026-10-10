@@ -8,7 +8,7 @@
     <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <meta name="description" content="DB Connect is a free, fast desktop database client for MySQL, PostgreSQL, Amazon Redshift, DynamoDB, Redis, and MongoDB. SQL editor with autocomplete, schema browser, SSH tunnels. Alternative to DataGrip, DBeaver, TablePlus.">
-    <meta name="keywords" content="database client, mysql gui, postgresql gui, postgres client, dynamodb client, redshift client, sql editor, free database tool, database ide, mysql client, ddb client, aws database tool, datagrip alternative, dbeaver alternative, tableplus alternative">
+    <meta name="keywords" content="database client, mysql gui, postgresql gui, postgres client, dynamodb client, redshift client, sql editor, free database tool, database ide, mysql client, ddb client, aws database tool, datagrip alternative, dbeaver alternative, tableplus alternative, mongodb gui, mongodb client, redis gui, redis client, ddb gui, dynamodb gui, pg client, postgres gui, mysql workbench alternative, sequel ace alternative, pgadmin alternative, redisinsight alternative, nosql workbench alternative, dynobase alternative, mongodb compass alternative, studio 3t alternative, ai sql assistant, mcp server database, aurora mysql client, rds client, mariadb gui">
     <meta name="author" content="Shubhesh Shukla">
     <meta name="google-site-verification" content="_PESYTJNW-CfStYVJBKhisxCNNc4m8ze4ZcXOz6YB4g" />
 
@@ -36,7 +36,11 @@
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "DB Connect",
-      "description": "Free, fast desktop database IDE for MySQL, PostgreSQL, Amazon Redshift, DynamoDB, Redis, and MongoDB. SQL editor with autocomplete, schema browser, SSH tunnels.",
+      "alternateName": ["DB Connect by Shubhesh Shukla", "DBConnect desktop database client"],
+      "description": "Free, fast desktop database IDE for MySQL, PostgreSQL, Amazon Redshift, DynamoDB, Redis, and MongoDB. SQL editor with alias-aware autocomplete, dry-run writes, visual EXPLAIN, performance panes, AI assistant (your own API key) and a local MCP server for Claude and Cursor.",
+      "featureList": "SQL editor with autocomplete; dry-run preview for UPDATE and DELETE; visual EXPLAIN; MySQL and PostgreSQL performance panes; schema diff; ER diagram; DynamoDB typed items and PartiQL; Redis key browser and memory analysis; MongoDB SQL and mongosh; AI assistant; MCP server; notebooks",
+      "keywords": "mysql gui, postgresql client, redshift client, dynamodb gui, ddb gui, redis gui, mongodb gui, datagrip alternative, dbeaver alternative, tableplus alternative, mysql workbench alternative, sequel ace alternative, mongodb compass alternative, dynobase alternative, free database client",
+      "sameAs": ["https://github.com/shubhesh07/db-connect", "https://github.com/shubhesh07/homebrew-db-connect"],
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "macOS, Windows",
       "offers": {
@@ -513,6 +517,7 @@
             <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-Windows-Setup.exe" class="btn btn-secondary">Download for Windows</a>
         </div>
         <div class="meta"><span>Free for personal &amp; commercial use</span><span>~32 MB, opens in under 2 s</span><span>Credentials encrypted in your OS keychain</span><span>No account, no telemetry</span></div>
+        <p style="margin:14px 0 22px;color:var(--text-muted);font-size:15px">Real result: <a href="mysql-cpu-case-study.html" style="color:var(--accent)">how I cut a production MySQL server from 90% to 30% CPU without dropping a feature &rarr;</a></p>
         <div class="hero-shot">
             <img src="screenshots/hero-sql.png" alt="DB Connect running a PostgreSQL query: sidebar grouped by engine, SQL editor with autocomplete, results grid" width="2000" height="906">
         </div>
@@ -521,8 +526,8 @@
 
 <section class="showcase" id="whats-new">
     <div class="container">
-        <h2 class="section-title">New in 3.0: Redis, done properly</h2>
-        <p class="section-lead">Key browsing, per-type editing, memory analysis, a console — in the same app as your SQL.</p>
+        <h2 class="section-title">Highlights: MySQL monitoring and Redis, done properly</h2>
+        <p class="section-lead">Server health at a glance, key browsing, per-type editing, memory analysis, a console — in the same app as your SQL. New in 3.5: dry-run writes, an AI assistant, a workload index advisor and notebooks (see the <a href="changelog.html" style="color:var(--accent)">changelog</a>).</p>
 
         <div class="show-row">
             <div class="show-text">
@@ -600,12 +605,12 @@
         <h2 class="section-title">Connect once. Query anything.</h2>
         <p class="section-lead">Each engine gets its own tooling — not a generic SQL box with the logo swapped.</p>
         <div class="engine-grid">
-            <div class="engine"><div class="stripe" style="background:#4479A1"></div><h3>MySQL</h3><p>Transactions, table &amp; index designers, routines, users &amp; privileges, backup/restore, performance pane.</p></div>
+            <div class="engine"><div class="stripe" style="background:#4479A1"></div><h3><a href="mysql-client.html" style="color:inherit;text-decoration:none">MySQL &amp; MariaDB &rarr;</a></h3><p>Aurora and RDS too. Transactions, table &amp; index designers, routines, users &amp; privileges, backup/restore, performance pane with a workload index advisor, dry-run writes.</p></div>
             <div class="engine"><div class="stripe" style="background:#336791"></div><h3><a href="postgresql-client.html" style="color:inherit;text-decoration:none">PostgreSQL &rarr;</a></h3><p>Extensions, ENUM types, materialized views, sequences, RLS &amp; partition visibility, EXPLAIN ANALYZE.</p></div>
             <div class="engine"><div class="stripe" style="background:#8C4FFF"></div><h3><a href="redshift-client.html" style="color:inherit;text-decoration:none">Amazon Redshift &rarr;</a></h3><p>IAM or password auth, SSH tunnel, structured EXPLAIN, WLM queue time, UNLOAD/COPY, Spectrum schemas.</p></div>
             <div class="engine"><div class="stripe" style="background:#FF9900"></div><h3><a href="dynamodb-gui.html" style="color:inherit;text-decoration:none">DynamoDB &rarr;</a></h3><p>Scan/Query/PartiQL with cost stats, item editor, GSI queries, Load more, consistent reads, native capacity monitoring.</p></div>
             <div class="engine"><div class="stripe" style="background:#DC382D"></div><h3><a href="redis-gui.html" style="color:inherit;text-decoration:none">Redis &rarr;</a></h3><p>Auto-detected cluster, key browser with tree grouping, type-aware editors, Analyze pane, console.</p></div>
-            <div class="engine"><div class="stripe" style="background:#00ED64"></div><h3>MongoDB</h3><p>Query with SQL (translated to find/aggregate) or mongosh syntax, collection explorer with sampled fields, ObjectId-aware.</p></div>
+            <div class="engine"><div class="stripe" style="background:#00ED64"></div><h3><a href="mongodb-client.html" style="color:inherit;text-decoration:none">MongoDB &rarr;</a></h3><p>Atlas and DocumentDB too. Query with SQL (translated to find/aggregate) or mongosh syntax, document editor, indexes, explain, pipeline builder, change streams.</p></div>
         </div>
     </div>
 </section>
@@ -836,7 +841,8 @@
 <footer>
     <div class="container">
         <p>Built by <a href="https://github.com/shubhesh07" target="_blank" rel="noopener">Shubhesh Shukla</a> · <a href="https://github.com/shubhesh07/db-connect" target="_blank" rel="noopener">GitHub</a> · <a href="https://github.com/shubhesh07/db-connect/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a> · <a href="https://github.com/shubhesh07/db-connect/releases" target="_blank" rel="noopener">Releases</a> · Free for personal and commercial use</p>
-        <p style="margin-top: 8px;"><a href="vs-datagrip.html">DB Connect vs DataGrip</a> · <a href="vs-dbeaver.html">DB Connect vs DBeaver</a> · <a href="vs-tableplus.html">DB Connect vs TablePlus</a></p>
+        <p style="margin-top: 8px;">Engines: <a href="mysql-client.html">MySQL</a> · <a href="postgresql-client.html">PostgreSQL</a> · <a href="redshift-client.html">Redshift</a> · <a href="dynamodb-gui.html">DynamoDB</a> · <a href="redis-gui.html">Redis</a> · <a href="mongodb-client.html">MongoDB</a> · <a href="mysql-cpu-case-study.html">MySQL CPU case study</a></p>
+        <p style="margin-top: 8px;">Compare: <a href="vs-datagrip.html">DataGrip</a> · <a href="vs-dbeaver.html">DBeaver</a> · <a href="vs-tableplus.html">TablePlus</a> · <a href="vs-mysql-workbench.html">MySQL Workbench</a> · <a href="vs-sequel-ace.html">Sequel Ace</a> · <a href="vs-pgadmin.html">pgAdmin</a> · <a href="vs-redisinsight.html">RedisInsight</a> · <a href="vs-nosql-workbench.html">NoSQL Workbench</a> · <a href="vs-dynobase.html">Dynobase</a> · <a href="vs-mongodb-compass.html">MongoDB Compass</a> · <a href="vs-studio-3t.html">Studio 3T</a></p>
     </div>
 </footer>
 

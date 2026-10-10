@@ -55,4 +55,15 @@
     <priority>0.7</priority>
   </url>
   <url><loc>https://shubhesh07.github.io/db-connect/llms.txt</loc></url>
+  <url><loc>https://shubhesh07.github.io/db-connect/mysql-client.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://shubhesh07.github.io/db-connect/mongodb-client.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://shubhesh07.github.io/db-connect/mysql-cpu-case-study.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://shubhesh07.github.io/db-connect/vs-mysql-workbench.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://shubhesh07.github.io/db-connect/vs-sequel-ace.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://shubhesh07.github.io/db-connect/vs-pgadmin.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://shubhesh07.github.io/db-connect/vs-redisinsight.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://shubhesh07.github.io/db-connect/vs-nosql-workbench.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://shubhesh07.github.io/db-connect/vs-dynobase.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://shubhesh07.github.io/db-connect/vs-mongodb-compass.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://shubhesh07.github.io/db-connect/vs-studio-3t.html</loc><lastmod>2026-10-10</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>

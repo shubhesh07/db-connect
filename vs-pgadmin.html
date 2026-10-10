@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DB Connect vs pgAdmin 4 — Free Native PostgreSQL Client Alternative</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="description" content="DB Connect vs pgAdmin 4: both free. pgAdmin is the complete open-source PostgreSQL admin tool; DB Connect is a ~35 MB native client with activity, blocking, pg_stat_statements and index-advisor views, plus MySQL, Redshift, DynamoDB, Redis and MongoDB.">
+    <meta name="keywords" content="pgadmin alternative, pgadmin 4 alternative, free postgresql client, postgres gui mac, postgresql client windows, pgadmin vs db connect, pg_stat_statements gui, postgres index advisor">
+    <meta name="author" content="Shubhesh Shukla">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="DB Connect vs pgAdmin 4 — An Honest Comparison">
+    <meta property="og:description" content="Both free. Where pgAdmin is better, where a native client like DB Connect is better, and who should pick which.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://shubhesh07.github.io/db-connect/vs-pgadmin.html">
+    <meta property="og:image" content="https://shubhesh07.github.io/db-connect/og-image.png">
+    <meta property="og:site_name" content="DB Connect">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="DB Connect vs pgAdmin 4 — An Honest Comparison">
+    <meta name="twitter:description" content="Both free. Where pgAdmin is better, where a native client like DB Connect is better, and who should pick which.">
+    <meta name="twitter:image" content="https://shubhesh07.github.io/db-connect/og-image.png">
+
+    <link rel="canonical" href="https://shubhesh07.github.io/db-connect/vs-pgadmin.html">
+
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is there a faster alternative to pgAdmin?", "acceptedAnswer": {"@type": "Answer", "text": "If you mainly query and tune PostgreSQL, DB Connect is a free native desktop client of about 35 MB that opens straight to your connections, without a local web server behind the UI. pgAdmin remains the more complete administration tool."}}, {"@type": "Question", "name": "Is there a free PostgreSQL GUI for Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. pgAdmin 4 and DB Connect are both free on macOS. DB Connect ships as a universal binary for Apple Silicon and Intel, and also runs on Windows."}}, {"@type": "Question", "name": "Does DB Connect work with Amazon RDS and Aurora PostgreSQL?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Add them as PostgreSQL connections; RDS IAM authentication and custom SSL certificates are supported, and the performance pane works against them."}}, {"@type": "Question", "name": "Does DB Connect show pg_stat_statements?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. When the pg_stat_statements extension is installed, the PostgreSQL performance pane lists the top statements, alongside activity, blocking, an index advisor and vacuum/bloat views."}}, {"@type": "Question", "name": "Can DB Connect back up and restore a PostgreSQL database?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, it runs pg_dump and restore from the app. For scheduled jobs and maintenance tasks such as REINDEX, pgAdmin with pgAgent is the better fit."}}, {"@type": "Question", "name": "Can I use DB Connect with Amazon Redshift too?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Redshift provisioned and serverless are supported, with SYS views, WLM, load errors, a COPY/UNLOAD builder and a DISTSTYLE/SORTKEY designer. pgAdmin does not target Redshift."}}]}</script>
+
+    <style>
+        :root {
+            --bg: #0a0a0b;
+            --surface: #141416;
+            --surface-2: #1c1c20;
+            --border: #2a2a2f;
+            --text: #f0f0f2;
+            --text-muted: #8b8b96;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --green: #22c55e;
+            --orange: #f97316;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Nav */
+        nav {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+        }
+        .logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); }
+
+        /* Hero */
+        .hero {
+            padding: 100px 0 80px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+        .hero h1 .highlight { color: var(--accent); }
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        .btn-secondary {
+            background: var(--surface-2);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover { border-color: var(--accent); }
+        .badge {
+            display: inline-block;
+            margin-top: 24px;
+            padding: 6px 14px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--green);
+        }
+
+        /* Features / Why Switch */
+        .features {
+            padding: 80px 0;
+        }
+        .features h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 50px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        .feature-card {
+            padding: 28px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: border-color 0.2s;
+        }
+        .feature-card:hover { border-color: var(--accent); }
+        .feature-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .feature-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        /* Comparison */
+        .comparison {
+            padding: 80px 0;
+        }
+        .comparison h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 14px 16px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .comparison-table th {
+            background: var(--surface);
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .comparison-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+        }
+        .comparison-table tr:hover td { background: var(--surface); }
+        .check { color: var(--green); }
+        .cross { color: var(--text-muted); }
+        .highlight-col { background: rgba(59, 130, 246, 0.05); }
+
+        /* Download */
+        .download {
+            padding: 80px 0;
+            text-align: center;
+        }
+        .download h2 {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+        .download p {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .download-card {
+            padding: 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+        }
+        .download-card h3 { margin-bottom: 8px; }
+        .download-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
+        .download-card .btn { width: 100%; justify-content: center; }
+
+        /* macOS warning */
+        .macos-warning {
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: rgba(249, 115, 22, 0.08);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            border-radius: 10px;
+            text-align: left;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .macos-warning strong {
+            color: var(--orange);
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+        .macos-warning code {
+            display: inline-block;
+            margin: 8px 0;
+            padding: 8px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.85rem;
+            color: var(--green);
+            user-select: all;
+            cursor: pointer;
+            word-break: break-all;
+        }
+        .macos-warning .hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        /* Screenshot, table note, FAQ, Homebrew */
+        .shot { max-width: 1000px; margin: 56px auto 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--surface); box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+        .shot img { display: block; width: 100%; height: auto; }
+        .table-wrap { overflow-x: auto; }
+        .table-note { text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-top: 16px; }
+        .table-note a, .feature-card p a, .faq p a { color: var(--accent); text-decoration: none; }
+        .faq { padding: 40px 0 0; }
+        .faq .container { max-width: 820px; }
+        .faq h2 { text-align: center; font-size: 2rem; margin-bottom: 24px; }
+        .faq details { border-bottom: 1px solid var(--border); padding: 14px 0; }
+        .faq summary { cursor: pointer; font-weight: 600; }
+        .faq p { color: var(--text-muted); margin-top: 8px; font-size: 0.95rem; }
+        .brew { margin-top: 28px; font-size: 0.9rem; color: var(--text-muted); }
+        .brew code { padding: 4px 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace; color: var(--green); user-select: all; word-break: break-all; }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero { padding: 60px 0 50px; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .comparison-table { font-size: 0.8rem; }
+            .comparison-table th, .comparison-table td { padding: 10px 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="container">
+        <a href="/db-connect/" class="logo">DB<span>Connect</span></a>
+        <div class="nav-links">
+            <a href="/db-connect/">Home</a>
+            <a href="index.html#comparison">Compare</a>
+            <a href="index.html#download">Download</a>
+            <a href="https://github.com/shubhesh07/db-connect">GitHub</a>
+        </div>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="container">
+        <h1>DB Connect vs <span class="highlight">pgAdmin 4</span></h1>
+        <p>Both are free. pgAdmin 4 is the PostgreSQL community's complete administration tool. DB Connect is a ~35 MB native client focused on querying and tuning Postgres &mdash; and five other engines from the same window.</p>
+        <div class="hero-buttons">
+            <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg" class="btn btn-primary">Download for macOS</a>
+            <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-Windows-Setup.exe" class="btn btn-secondary">Download for Windows</a>
+        </div>
+        <div class="badge">Free forever. No account. No telemetry.</div>
+        <div class="shot"><img src="screenshots/hero-sql.png" alt="DB Connect desktop database client: sidebar grouped by engine, SQL editor with autocomplete, results grid" width="2000" height="906"></div>
+    </div>
+</section>
+
+<section class="comparison" id="comparison">
+    <div class="container">
+        <h2>Feature-by-feature comparison</h2>
+        <div class="table-wrap">
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th class="highlight-col">DB Connect</th>
+                    <th>pgAdmin 4</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Price</td>
+                    <td class="highlight-col"><strong>Free</strong></td>
+                    <td>Free</td>
+                </tr>
+                <tr>
+                    <td>Source code</td>
+                    <td class="highlight-col">Private (free binary)</td>
+                    <td>Open source (PostgreSQL licence)</td>
+                </tr>
+                <tr>
+                    <td>Platforms</td>
+                    <td class="highlight-col">macOS (universal), Windows x64</td>
+                    <td>Windows, macOS, Linux; server mode in a browser or container</td>
+                </tr>
+                <tr>
+                    <td>Architecture</td>
+                    <td class="highlight-col"><strong>Native desktop app (Go + Wails)</strong></td>
+                    <td>Python web app, run in server mode or as a desktop app</td>
+                </tr>
+                <tr>
+                    <td>Engines</td>
+                    <td class="highlight-col"><strong>PostgreSQL, MySQL/MariaDB, Redshift, DynamoDB, Redis, MongoDB</strong></td>
+                    <td>PostgreSQL</td>
+                </tr>
+                <tr>
+                    <td>Dialogs for every object type</td>
+                    <td class="highlight-col">Core objects: databases, schemas, tables, indexes, routines</td>
+                    <td><span class="check">Yes</span> &mdash; very complete</td>
+                </tr>
+                <tr>
+                    <td>Server activity</td>
+                    <td class="highlight-col">Activity, blocking, pg_stat_statements, index advisor, vacuum/bloat</td>
+                    <td>Dashboard with sessions, locks and server activity</td>
+                </tr>
+                <tr>
+                    <td>Graphical EXPLAIN / EXPLAIN ANALYZE</td>
+                    <td class="highlight-col"><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                </tr>
+                <tr>
+                    <td>Backup / restore</td>
+                    <td class="highlight-col">pg_dump / restore</td>
+                    <td>pg_dump / pg_restore dialogs</td>
+                </tr>
+                <tr>
+                    <td>ER diagram, schema diff</td>
+                    <td class="highlight-col"><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                </tr>
+                <tr>
+                    <td>PL/pgSQL debugger</td>
+                    <td class="highlight-col"><span class="cross">No</span></td>
+                    <td><span class="check">Yes</span></td>
+                </tr>
+                <tr>
+                    <td>pgAgent job scheduling</td>
+                    <td class="highlight-col"><span class="cross">No</span></td>
+                    <td><span class="check">Yes</span></td>
+                </tr>
+                <tr>
+                    <td>Multi-user web deployment</td>
+                    <td class="highlight-col"><span class="cross">No</span></td>
+                    <td><span class="check">Yes</span></td>
+                </tr>
+                <tr>
+                    <td>Dry-run preview of UPDATE/DELETE, production gates</td>
+                    <td class="highlight-col"><span class="check">Yes</span></td>
+                    <td><span class="cross">Not built in</span></td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <p class="table-note">pgAdmin details as of 2026 &mdash; check <a href="https://www.pgadmin.org/" target="_blank" rel="noopener">pgadmin.org</a> for the current release.</p>
+    </div>
+</section>
+
+<section class="features" id="where-pgadmin-wins">
+    <div class="container">
+        <h2>Where pgAdmin 4 is better</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#128450;</div>
+                <h3>Covers every PostgreSQL object</h3>
+                <p>Dialogs for creating and altering nearly every object PostgreSQL has, from roles and tablespaces to extensions and foreign data wrappers. DB Connect covers the objects you query day to day, not all of them.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128736;</div>
+                <h3>Administration and maintenance</h3>
+                <p>VACUUM/ANALYZE/REINDEX dialogs, pgAgent job scheduling and a PL/pgSQL debugger &mdash; tools DB Connect does not have.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#127760;</div>
+                <h3>Server mode for teams</h3>
+                <p>Deploy pgAdmin once as a web application or container and give a team browser access with centralised login. DB Connect is a single-user desktop app.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128039;</div>
+                <h3>Open source, Linux, community-built</h3>
+                <p>Maintained alongside the PostgreSQL community, open source, and available on Linux. DB Connect is macOS and Windows only for now.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features" id="why-switch">
+    <div class="container">
+        <h2>Where DB Connect is better</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#9889;</div>
+                <h3>Native and quick to open</h3>
+                <p>A ~35 MB native app that opens straight to your connections &mdash; no local Python web server behind the UI.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128200;</div>
+                <h3>Tuning views that point at the problem</h3>
+                <p>Activity and blocking chains, top statements from pg_stat_statements, an index advisor that can trial hypothetical indexes with hypopg, and vacuum/bloat views.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128737;</div>
+                <h3>Safer writes</h3>
+                <p>Preview an UPDATE or DELETE as before/after rows inside a rolled-back transaction before you apply it. Per-tab transactions, read-only connections and confirmation gates on production-tagged connections.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#9000;</div>
+                <h3>An editor that knows your schema</h3>
+                <p>Alias-aware autocomplete, JOIN &hellip; ON suggestions from foreign keys, signature help, visual EXPLAIN and EXPLAIN ANALYZE. Results grid with inline edit, find, charts, PII masking and streaming export.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128024;</div>
+                <h3>Postgres conveniences</h3>
+                <p>Multiple databases per server, LISTEN/NOTIFY panel, COPY import, PgBouncer mode, RDS IAM authentication and custom SSL certificates.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128279;</div>
+                <h3>Your other databases too</h3>
+                <p>MySQL/MariaDB, Redshift (provisioned and serverless), DynamoDB, Redis and MongoDB in the same window &mdash; plus an optional Claude assistant and local MCP server.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features" id="verdict">
+    <div class="container">
+        <h2>Who should pick which</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>Pick pgAdmin 4 if&hellip;</h3>
+                <p>you administer PostgreSQL servers end to end &mdash; roles, tablespaces, maintenance, pgAgent jobs, the debugger &mdash; want one shared web deployment for a team, or need Linux and open source.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Pick DB Connect if&hellip;</h3>
+                <p>you mostly write and tune queries, want a fast native desktop app, want dry-run previews and production gates on writes, or also work with MySQL, Redshift, DynamoDB, Redis or MongoDB.</p>
+            </div>
+        </div>
+        <p class="table-note">See also: <a href="postgresql-client.html">DB Connect as a PostgreSQL client</a> &middot; <a href="vs-dbeaver.html">DB Connect vs DBeaver</a></p>
+    </div>
+</section>
+
+<section class="faq" id="faq">
+    <div class="container">
+        <h2>Frequently asked</h2>
+        <details><summary>Is there a faster alternative to pgAdmin?</summary><p>If you mainly query and tune PostgreSQL, DB Connect is a free native desktop client of about 35 MB that opens straight to your connections, without a local web server behind the UI. pgAdmin remains the more complete administration tool.</p></details>
+        <details><summary>Is there a free PostgreSQL GUI for Mac?</summary><p>Yes. pgAdmin 4 and DB Connect are both free on macOS. DB Connect ships as a universal binary for Apple Silicon and Intel, and also runs on Windows.</p></details>
+        <details><summary>Does DB Connect work with Amazon RDS and Aurora PostgreSQL?</summary><p>Yes. Add them as PostgreSQL connections; RDS IAM authentication and custom SSL certificates are supported, and the performance pane works against them.</p></details>
+        <details><summary>Does DB Connect show pg_stat_statements?</summary><p>Yes. When the pg_stat_statements extension is installed, the PostgreSQL performance pane lists the top statements, alongside activity, blocking, an index advisor and vacuum/bloat views.</p></details>
+        <details><summary>Can DB Connect back up and restore a PostgreSQL database?</summary><p>Yes, it runs pg_dump and restore from the app. For scheduled jobs and maintenance tasks such as REINDEX, pgAdmin with pgAgent is the better fit.</p></details>
+        <details><summary>Can I use DB Connect with Amazon Redshift too?</summary><p>Yes. Redshift provisioned and serverless are supported, with SYS views, WLM, load errors, a COPY/UNLOAD builder and a DISTSTYLE/SORTKEY designer. pgAdmin does not target Redshift.</p></details>
+    </div>
+</section>
+
+<section class="download" id="download">
+    <div class="container">
+        <h2>Try DB Connect today</h2>
+        <p>Free for personal and commercial use. No account required.</p>
+        <div class="download-grid">
+            <div class="download-card">
+                <h3>macOS</h3>
+                <p>macOS 11.0 (Big Sur) or later<br>Intel & Apple Silicon</p>
+                <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg" class="btn btn-primary">Download .dmg</a>
+                <div class="macos-warning">
+                    <strong>After installing, run this in Terminal:</strong>
+                    <code>xattr -cr /Applications/DBConnect.app</code>
+                    <br>macOS blocks unsigned apps &mdash; without this command, you'll see <em>"DBConnect is damaged and can't be opened"</em>. One-time fix.
+                </div>
+            </div>
+            <div class="download-card">
+                <h3>Windows</h3>
+                <p>Windows 10 or later<br>64-bit</p>
+                <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-Windows-Setup.exe" class="btn btn-primary">Download .exe</a>
+            </div>
+        </div>
+        <p class="brew">Prefer Homebrew? <code>brew install --cask shubhesh07/db-connect/db-connect</code></p>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>Built by <a href="https://linkedin.com/in/shubheshshukla7">Shubhesh Shukla</a> &middot; <a href="https://github.com/shubhesh07/db-connect">GitHub</a> &middot; Free for personal and commercial use</p>
+            <p style="margin-top: 8px;">Engines: <a href="mysql-client.html">MySQL</a> · <a href="postgresql-client.html">PostgreSQL</a> · <a href="redshift-client.html">Redshift</a> · <a href="dynamodb-gui.html">DynamoDB</a> · <a href="redis-gui.html">Redis</a> · <a href="mongodb-client.html">MongoDB</a> · <a href="mysql-cpu-case-study.html">MySQL CPU case study</a></p>
+        <p style="margin-top: 8px;">Compare: <a href="vs-datagrip.html">DataGrip</a> · <a href="vs-dbeaver.html">DBeaver</a> · <a href="vs-tableplus.html">TablePlus</a> · <a href="vs-mysql-workbench.html">MySQL Workbench</a> · <a href="vs-sequel-ace.html">Sequel Ace</a> · <a href="vs-pgadmin.html">pgAdmin</a> · <a href="vs-redisinsight.html">RedisInsight</a> · <a href="vs-nosql-workbench.html">NoSQL Workbench</a> · <a href="vs-dynobase.html">Dynobase</a> · <a href="vs-mongodb-compass.html">MongoDB Compass</a> · <a href="vs-studio-3t.html">Studio 3T</a> · <a href="changelog.html">Changelog</a></p>
+</div>
+</footer>
+
+</body>
+</html>

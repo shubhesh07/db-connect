@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DB Connect vs MongoDB Compass — Free MongoDB GUI with SQL Queries</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="description" content="DB Connect vs MongoDB Compass: both free. Compass leads on schema analysis and Atlas integration; DB Connect lets you query MongoDB with SQL or mongosh syntax in a native app that also covers MySQL, PostgreSQL, Redshift, DynamoDB and Redis.">
+    <meta name="keywords" content="mongodb compass alternative, mongodb gui, mongodb gui mac, query mongodb with sql, mongodb client windows, free mongodb gui, mongodb compass vs db connect, mongodb aggregation builder">
+    <meta name="author" content="Shubhesh Shukla">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="DB Connect vs MongoDB Compass — An Honest Comparison">
+    <meta property="og:description" content="Both free. Compass for schema analysis and Atlas; DB Connect for SQL-on-Mongo and one app for every database.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://shubhesh07.github.io/db-connect/vs-mongodb-compass.html">
+    <meta property="og:image" content="https://shubhesh07.github.io/db-connect/og-image.png">
+    <meta property="og:site_name" content="DB Connect">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="DB Connect vs MongoDB Compass — An Honest Comparison">
+    <meta name="twitter:description" content="Both free. Compass for schema analysis and Atlas; DB Connect for SQL-on-Mongo and one app for every database.">
+    <meta name="twitter:image" content="https://shubhesh07.github.io/db-connect/og-image.png">
+
+    <link rel="canonical" href="https://shubhesh07.github.io/db-connect/vs-mongodb-compass.html">
+
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can I query MongoDB with SQL?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, in DB Connect. SELECT with WHERE, ORDER BY, LIMIT/OFFSET and GROUP BY with COUNT, SUM, AVG, MIN and MAX, plus INSERT, UPDATE and DELETE, are translated to MongoDB find and aggregate operations. mongosh-style syntax works too."}}, {"@type": "Question", "name": "Is there a lighter alternative to MongoDB Compass?", "acceptedAnswer": {"@type": "Answer", "text": "DB Connect is a native app of about 35 MB built with Go and Wails rather than Electron. It is free, needs no account, and also connects to MySQL/MariaDB, PostgreSQL, Redshift, DynamoDB and Redis."}}, {"@type": "Question", "name": "Does DB Connect work with MongoDB Atlas?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Connect with your connection URI (or host and port) over TLS. Atlas-specific features such as Compass's natural-language query are not part of DB Connect."}}, {"@type": "Question", "name": "Does DB Connect have a MongoDB aggregation pipeline builder?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. There is a pipeline builder, and SQL with GROUP BY is translated to an aggregation pipeline for you."}}, {"@type": "Question", "name": "Does DB Connect show MongoDB explain plans and indexes?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. You can run explain on a query and create or drop indexes from the index manager."}}, {"@type": "Question", "name": "Can Claude query my MongoDB database?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, if you allow it. DB Connect's local MCP server is off by default, listens on localhost only, needs a per-install token and only reaches connections you allow-list. Claude Code, Claude Desktop or Cursor can list and describe databases and collections and run read-only queries; writes need a time-bounded grant you make in the desktop app."}}]}</script>
+
+    <style>
+        :root {
+            --bg: #0a0a0b;
+            --surface: #141416;
+            --surface-2: #1c1c20;
+            --border: #2a2a2f;
+            --text: #f0f0f2;
+            --text-muted: #8b8b96;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --green: #22c55e;
+            --orange: #f97316;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Nav */
+        nav {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+        }
+        .logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); }
+
+        /* Hero */
+        .hero {
+            padding: 100px 0 80px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+        .hero h1 .highlight { color: var(--accent); }
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        .btn-secondary {
+            background: var(--surface-2);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover { border-color: var(--accent); }
+        .badge {
+            display: inline-block;
+            margin-top: 24px;
+            padding: 6px 14px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--green);
+        }
+
+        /* Features / Why Switch */
+        .features {
+            padding: 80px 0;
+        }
+        .features h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 50px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        .feature-card {
+            padding: 28px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: border-color 0.2s;
+        }
+        .feature-card:hover { border-color: var(--accent); }
+        .feature-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .feature-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        /* Comparison */
+        .comparison {
+            padding: 80px 0;
+        }
+        .comparison h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 14px 16px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .comparison-table th {
+            background: var(--surface);
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .comparison-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+        }
+        .comparison-table tr:hover td { background: var(--surface); }
+        .check { color: var(--green); }
+        .cross { color: var(--text-muted); }
+        .highlight-col { background: rgba(59, 130, 246, 0.05); }
+
+        /* Download */
+        .download {
+            padding: 80px 0;
+            text-align: center;
+        }
+        .download h2 {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+        .download p {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .download-card {
+            padding: 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+        }
+        .download-card h3 { margin-bottom: 8px; }
+        .download-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
+        .download-card .btn { width: 100%; justify-content: center; }
+
+        /* macOS warning */
+        .macos-warning {
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: rgba(249, 115, 22, 0.08);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            border-radius: 10px;
+            text-align: left;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .macos-warning strong {
+            color: var(--orange);
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+        .macos-warning code {
+            display: inline-block;
+            margin: 8px 0;
+            padding: 8px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.85rem;
+            color: var(--green);
+            user-select: all;
+            cursor: pointer;
+            word-break: break-all;
+        }
+        .macos-warning .hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        /* Screenshot, table note, FAQ, Homebrew */
+        .shot { max-width: 1000px; margin: 56px auto 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--surface); box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+        .shot img { display: block; width: 100%; height: auto; }
+        .table-wrap { overflow-x: auto; }
+        .table-note { text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-top: 16px; }
+        .table-note a, .feature-card p a, .faq p a { color: var(--accent); text-decoration: none; }
+        .faq { padding: 40px 0 0; }
+        .faq .container { max-width: 820px; }
+        .faq h2 { text-align: center; font-size: 2rem; margin-bottom: 24px; }
+        .faq details { border-bottom: 1px solid var(--border); padding: 14px 0; }
+        .faq summary { cursor: pointer; font-weight: 600; }
+        .faq p { color: var(--text-muted); margin-top: 8px; font-size: 0.95rem; }
+        .brew { margin-top: 28px; font-size: 0.9rem; color: var(--text-muted); }
+        .brew code { padding: 4px 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace; color: var(--green); user-select: all; word-break: break-all; }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero { padding: 60px 0 50px; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .comparison-table { font-size: 0.8rem; }
+            .comparison-table th, .comparison-table td { padding: 10px 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="container">
+        <a href="/db-connect/" class="logo">DB<span>Connect</span></a>
+        <div class="nav-links">
+            <a href="/db-connect/">Home</a>
+            <a href="index.html#comparison">Compare</a>
+            <a href="index.html#download">Download</a>
+            <a href="https://github.com/shubhesh07/db-connect">GitHub</a>
+        </div>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="container">
+        <h1>DB Connect vs <span class="highlight">MongoDB Compass</span></h1>
+        <p>Both are free. MongoDB Compass is MongoDB's official GUI, with excellent schema analysis and Atlas integration. DB Connect lets you query collections with SQL or mongosh syntax, in one native app with your other databases.</p>
+        <div class="hero-buttons">
+            <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg" class="btn btn-primary">Download for macOS</a>
+            <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-Windows-Setup.exe" class="btn btn-secondary">Download for Windows</a>
+        </div>
+        <div class="badge">Free forever. No account. No telemetry.</div>
+        <div class="shot"><img src="screenshots/hero-sql.png" alt="DB Connect desktop database client: sidebar grouped by engine, SQL editor with autocomplete, results grid" width="2000" height="906"></div>
+    </div>
+</section>
+
+<section class="comparison" id="comparison">
+    <div class="container">
+        <h2>Feature-by-feature comparison</h2>
+        <div class="table-wrap">
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th class="highlight-col">DB Connect</th>
+                    <th>MongoDB Compass</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Price</td>
+                    <td class="highlight-col"><strong>Free</strong></td>
+                    <td>Free</td>
+                </tr>
+                <tr>
+                    <td>Maker</td>
+                    <td class="highlight-col">Independent developer</td>
+                    <td>MongoDB, Inc.</td>
+                </tr>
+                <tr>
+                    <td>Platforms</td>
+                    <td class="highlight-col">macOS (universal), Windows x64</td>
+                    <td>Windows, macOS, Linux</td>
+                </tr>
+                <tr>
+                    <td>Runtime</td>
+                    <td class="highlight-col"><strong>Native (Go + Wails), ~35 MB</strong></td>
+                    <td>Electron</td>
+                </tr>
+                <tr>
+                    <td>Engines</td>
+                    <td class="highlight-col"><strong>MongoDB, MySQL/MariaDB, PostgreSQL, Redshift, DynamoDB, Redis</strong></td>
+                    <td>MongoDB</td>
+                </tr>
+                <tr>
+                    <td>Query with SQL</td>
+                    <td class="highlight-col"><span class="check">Yes</span> &mdash; translated to find / aggregate</td>
+                    <td><span class="cross">No</span></td>
+                </tr>
+                <tr>
+                    <td>mongosh</td>
+                    <td class="highlight-col">mongosh-style queries in the editor</td>
+                    <td>Embedded mongosh shell</td>
+                </tr>
+                <tr>
+                    <td>Schema analysis</td>
+                    <td class="highlight-col">Sampled fields in the explorer</td>
+                    <td><span class="check">Yes</span> &mdash; types and value distributions</td>
+                </tr>
+                <tr>
+                    <td>Aggregation pipeline builder</td>
+                    <td class="highlight-col"><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span> &mdash; with stage previews</td>
+                </tr>
+                <tr>
+                    <td>Explain plans, index management</td>
+                    <td class="highlight-col"><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                </tr>
+                <tr>
+                    <td>Document editor, import / export</td>
+                    <td class="highlight-col"><span class="check">Yes</span></td>
+                    <td><span class="check">Yes</span></td>
+                </tr>
+                <tr>
+                    <td>Users and roles, change streams</td>
+                    <td class="highlight-col"><span class="check">Yes</span></td>
+                    <td>&mdash;</td>
+                </tr>
+                <tr>
+                    <td>Schema validation rules</td>
+                    <td class="highlight-col"><span class="cross">Not built in</span></td>
+                    <td><span class="check">Yes</span></td>
+                </tr>
+                <tr>
+                    <td>Production confirmation gates</td>
+                    <td class="highlight-col"><span class="check">Yes</span></td>
+                    <td>&mdash;</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <p class="table-note">MongoDB Compass details as of 2026 &mdash; check <a href="https://www.mongodb.com/products/tools/compass" target="_blank" rel="noopener">MongoDB's Compass page</a>. A dash means we did not verify it; check the vendor.</p>
+    </div>
+</section>
+
+<section class="features" id="where-compass-wins">
+    <div class="container">
+        <h2>Where MongoDB Compass is better</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#128300;</div>
+                <h3>Schema analysis</h3>
+                <p>Sample a collection and see field types and value distributions at a glance. DB Connect samples fields for the explorer but has no equivalent analysis view.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#129513;</div>
+                <h3>Aggregation builder with previews</h3>
+                <p>Build pipelines stage by stage with live previews of each stage's output, and export queries to driver code.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#9729;</div>
+                <h3>Atlas and AI features</h3>
+                <p>Made by MongoDB, with Atlas integration and natural-language query generation when its AI features are enabled (check MongoDB's docs for current requirements).</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128039;</div>
+                <h3>Official, Linux, validation rules</h3>
+                <p>It tracks new MongoDB features, edits schema validation rules and runs on Linux. DB Connect is macOS and Windows only for now.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features" id="why-switch">
+    <div class="container">
+        <h2>Where DB Connect is better</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#128221;</div>
+                <h3>Query MongoDB with SQL</h3>
+                <p>SELECT &hellip; WHERE &hellip; ORDER BY &hellip; LIMIT, GROUP BY with COUNT/SUM/AVG/MIN/MAX, and INSERT/UPDATE/DELETE &mdash; translated to find and aggregate. Prefer the shell? mongosh-style db.coll.find({&hellip;}) works too.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128295;</div>
+                <h3>A full MongoDB toolkit</h3>
+                <p>Document editor, index manager, explain, pipeline builder, import/export, users and roles, and change streams.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128737;</div>
+                <h3>Production gates</h3>
+                <p>Read-only connections refuse writes, and writes on production-tagged connections need confirmation &mdash; including shell writes like deleteMany.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128279;</div>
+                <h3>One app for every database</h3>
+                <p>MySQL/MariaDB, PostgreSQL, Redshift, DynamoDB and Redis alongside MongoDB, with one connection list and one history.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128274;</div>
+                <h3>Light and private</h3>
+                <p>A ~35 MB native app (Go + Wails), not Electron. No account, no telemetry; credentials are AES-256-GCM encrypted with the key in your OS keychain.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#129302;</div>
+                <h3>Works with Claude</h3>
+                <p>An optional assistant using your own Anthropic API key (rows never sent by default, never from production), and a local MCP server so Claude Code, Claude Desktop or Cursor can query allow-listed connections.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features" id="verdict">
+    <div class="container">
+        <h2>Who should pick which</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>Pick MongoDB Compass if&hellip;</h3>
+                <p>MongoDB is your main database, you lean on schema analysis and validation rules, you use Atlas or natural-language query features, or you work on Linux.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Pick DB Connect if&hellip;</h3>
+                <p>you think in SQL, MongoDB is one of several databases you use, or you want production gates, a lighter native app and a local MCP server for Claude.</p>
+            </div>
+        </div>
+        <p class="table-note">Also compare: <a href="vs-studio-3t.html">DB Connect vs Studio 3T</a></p>
+    </div>
+</section>
+
+<section class="faq" id="faq">
+    <div class="container">
+        <h2>Frequently asked</h2>
+        <details><summary>Can I query MongoDB with SQL?</summary><p>Yes, in DB Connect. SELECT with WHERE, ORDER BY, LIMIT/OFFSET and GROUP BY with COUNT, SUM, AVG, MIN and MAX, plus INSERT, UPDATE and DELETE, are translated to MongoDB find and aggregate operations. mongosh-style syntax works too.</p></details>
+        <details><summary>Is there a lighter alternative to MongoDB Compass?</summary><p>DB Connect is a native app of about 35 MB built with Go and Wails rather than Electron. It is free, needs no account, and also connects to MySQL/MariaDB, PostgreSQL, Redshift, DynamoDB and Redis.</p></details>
+        <details><summary>Does DB Connect work with MongoDB Atlas?</summary><p>Yes. Connect with your connection URI (or host and port) over TLS. Atlas-specific features such as Compass's natural-language query are not part of DB Connect.</p></details>
+        <details><summary>Does DB Connect have a MongoDB aggregation pipeline builder?</summary><p>Yes. There is a pipeline builder, and SQL with GROUP BY is translated to an aggregation pipeline for you.</p></details>
+        <details><summary>Does DB Connect show MongoDB explain plans and indexes?</summary><p>Yes. You can run explain on a query and create or drop indexes from the index manager.</p></details>
+        <details><summary>Can Claude query my MongoDB database?</summary><p>Yes, if you allow it. DB Connect's local MCP server is off by default, listens on localhost only, needs a per-install token and only reaches connections you allow-list. Claude Code, Claude Desktop or Cursor can list and describe databases and collections and run read-only queries; writes need a time-bounded grant you make in the desktop app.</p></details>
+    </div>
+</section>
+
+<section class="download" id="download">
+    <div class="container">
+        <h2>Try DB Connect today</h2>
+        <p>Free for personal and commercial use. No account required.</p>
+        <div class="download-grid">
+            <div class="download-card">
+                <h3>macOS</h3>
+                <p>macOS 11.0 (Big Sur) or later<br>Intel & Apple Silicon</p>
+                <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg" class="btn btn-primary">Download .dmg</a>
+                <div class="macos-warning">
+                    <strong>After installing, run this in Terminal:</strong>
+                    <code>xattr -cr /Applications/DBConnect.app</code>
+                    <br>macOS blocks unsigned apps &mdash; without this command, you'll see <em>"DBConnect is damaged and can't be opened"</em>. One-time fix.
+                </div>
+            </div>
+            <div class="download-card">
+                <h3>Windows</h3>
+                <p>Windows 10 or later<br>64-bit</p>
+                <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-Windows-Setup.exe" class="btn btn-primary">Download .exe</a>
+            </div>
+        </div>
+        <p class="brew">Prefer Homebrew? <code>brew install --cask shubhesh07/db-connect/db-connect</code></p>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>Built by <a href="https://linkedin.com/in/shubheshshukla7">Shubhesh Shukla</a> &middot; <a href="https://github.com/shubhesh07/db-connect">GitHub</a> &middot; Free for personal and commercial use</p>
+            <p style="margin-top: 8px;">Engines: <a href="mysql-client.html">MySQL</a> · <a href="postgresql-client.html">PostgreSQL</a> · <a href="redshift-client.html">Redshift</a> · <a href="dynamodb-gui.html">DynamoDB</a> · <a href="redis-gui.html">Redis</a> · <a href="mongodb-client.html">MongoDB</a> · <a href="mysql-cpu-case-study.html">MySQL CPU case study</a></p>
+        <p style="margin-top: 8px;">Compare: <a href="vs-datagrip.html">DataGrip</a> · <a href="vs-dbeaver.html">DBeaver</a> · <a href="vs-tableplus.html">TablePlus</a> · <a href="vs-mysql-workbench.html">MySQL Workbench</a> · <a href="vs-sequel-ace.html">Sequel Ace</a> · <a href="vs-pgadmin.html">pgAdmin</a> · <a href="vs-redisinsight.html">RedisInsight</a> · <a href="vs-nosql-workbench.html">NoSQL Workbench</a> · <a href="vs-dynobase.html">Dynobase</a> · <a href="vs-mongodb-compass.html">MongoDB Compass</a> · <a href="vs-studio-3t.html">Studio 3T</a> · <a href="changelog.html">Changelog</a></p>
+</div>
+</footer>
+
+</body>
+</html>

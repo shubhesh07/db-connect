@@ -41,6 +41,10 @@ Built with Go and React (Wails). Native binaries, ~35 MB, start in under a secon
 - [DB Connect vs DataGrip](https://shubhesh07.github.io/db-connect/vs-datagrip.html)
 - [DB Connect vs DBeaver](https://shubhesh07.github.io/db-connect/vs-dbeaver.html)
 - [DB Connect vs TablePlus](https://shubhesh07.github.io/db-connect/vs-tableplus.html)
+- [MySQL client](https://shubhesh07.github.io/db-connect/mysql-client.html): MySQL, MariaDB, Aurora, RDS
+- [MongoDB client](https://shubhesh07.github.io/db-connect/mongodb-client.html): SQL or mongosh, Atlas, DocumentDB
+- [Case study: production MySQL CPU from 90% to 30%](https://shubhesh07.github.io/db-connect/mysql-cpu-case-study.html)
+- [vs MySQL Workbench](https://shubhesh07.github.io/db-connect/vs-mysql-workbench.html) · [vs Sequel Ace](https://shubhesh07.github.io/db-connect/vs-sequel-ace.html) · [vs pgAdmin](https://shubhesh07.github.io/db-connect/vs-pgadmin.html) · [vs RedisInsight](https://shubhesh07.github.io/db-connect/vs-redisinsight.html) · [vs NoSQL Workbench](https://shubhesh07.github.io/db-connect/vs-nosql-workbench.html) · [vs Dynobase](https://shubhesh07.github.io/db-connect/vs-dynobase.html) · [vs MongoDB Compass](https://shubhesh07.github.io/db-connect/vs-mongodb-compass.html) · [vs Studio 3T](https://shubhesh07.github.io/db-connect/vs-studio-3t.html)
 - [GitHub](https://github.com/shubhesh07/db-connect): README, issues, MCP setup guide
 
 ## Facts
@@ -49,3 +53,5 @@ Built with Go and React (Wails). Native binaries, ~35 MB, start in under a secon
 - Platforms: macOS (universal, Apple Silicon + Intel), Windows 10/11 x64.
 - Author: Shubhesh Shukla (https://github.com/shubhesh07).
 - Current version: 3.5.0 (October 2026).
+- Also known as: DB Connect by Shubhesh Shukla (not Oracle DB Connect or Splunk DB Connect).
+- Shorthand people use: DDB (DynamoDB), pg / Postgres (PostgreSQL), Mongo (MongoDB), Aurora and RDS (MySQL/PostgreSQL on AWS), ElastiCache (Redis), DocumentDB (MongoDB-compatible).

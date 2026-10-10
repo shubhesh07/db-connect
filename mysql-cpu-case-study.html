@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How I cut a production MySQL server from 90% to 30% CPU — without dropping a feature</title>
+    <meta name="description" content="A first-person account of taking a production e-commerce MySQL server from about 90% to about 30% CPU over four months without removing a feature, using DB Connect&#x27;s Performance pane and EXPLAIN tooling, plus the steps to try on your own server.">
+    <meta name="keywords" content="mysql high cpu, reduce mysql cpu usage, mysql full table scan, mysql explain analyze, mysql index tuning, mysql idle in transaction, mysql invisible index, mysql performance tuning">
+    <link rel="canonical" href="https://shubhesh07.github.io/db-connect/mysql-cpu-case-study.html">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="How I cut a production MySQL server from 90% to 30% CPU — without dropping a feature">
+    <meta property="og:description" content="A first-person account of taking a production e-commerce MySQL server from about 90% to about 30% CPU over four months without removing a feature, using DB Connect&#x27;s Performance pane and EXPLAIN tooling, plus the steps to try on your own server.">
+    <meta property="og:url" content="https://shubhesh07.github.io/db-connect/mysql-cpu-case-study.html">
+    <meta property="og:image" content="https://shubhesh07.github.io/db-connect/screenshots/mysql-overview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="How I cut a production MySQL server from 90% to 30% CPU — without dropping a feature">
+    <meta name="twitter:description" content="A first-person account of taking a production e-commerce MySQL server from about 90% to about 30% CPU over four months without removing a feature, using DB Connect&#x27;s Performance pane and EXPLAIN tooling, plus the steps to try on your own server.">
+    <meta name="twitter:image" content="https://shubhesh07.github.io/db-connect/screenshots/mysql-overview.png">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How do I reduce high CPU usage on MySQL?", "acceptedAnswer": {"@type": "Answer", "text": "Find the statements that read far more rows than they return, usually full table scans and unindexed joins, and give them an index they can use. Then make sure no session sits idle inside an open transaction while holding locks. Measure rows read per second before and after each change."}}, {"@type": "Question", "name": "How do I find queries that don't use an index in MySQL?", "acceptedAnswer": {"@type": "Answer", "text": "performance_schema records statement digests along with whether they used an index. In DB Connect, clicking the full-table-scan tile in Performance \u2192 Overview lists those digests, who runs them and a sample statement you can send to EXPLAIN."}}, {"@type": "Question", "name": "What is the difference between EXPLAIN and EXPLAIN ANALYZE in MySQL?", "acceptedAnswer": {"@type": "Answer", "text": "EXPLAIN shows the optimizer's plan and estimates without running the query. EXPLAIN ANALYZE (MySQL 8.0.18+) actually runs it and reports measured time, actual rows and loops for each operator, so run it on a replica or at a quiet time."}}, {"@type": "Question", "name": "What does 'idle in transaction' mean in MySQL?", "acceptedAnswer": {"@type": "Answer", "text": "A session that opened a transaction and then went quiet without committing. It looks idle in the process list, but it keeps holding row locks and undo history, which slows other writers and purge."}}, {"@type": "Question", "name": "What is an invisible index in MySQL?", "acceptedAnswer": {"@type": "Answer", "text": "An index the optimizer ignores unless a session turns on use_invisible_indexes. You can build one, test plans against it in your own session, and only then make it visible to all traffic."}}, {"@type": "Question", "name": "Do I need DB Connect to do this?", "acceptedAnswer": {"@type": "Answer", "text": "No. Everything here comes from performance_schema, EXPLAIN and the process list, which you can query by hand. DB Connect puts them one click apart, which is what made the work fit into a normal day."}}]}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "How I cut a production MySQL server from 90% to 30% CPU \u2014 without dropping a feature", "author": {"@type": "Person", "name": "Shubhesh Shukla", "url": "https://github.com/shubhesh07"}, "image": "https://shubhesh07.github.io/db-connect/screenshots/mysql-overview.png", "mainEntityOfPage": "https://shubhesh07.github.io/db-connect/mysql-cpu-case-study.html"}</script>
+<style>
+        :root {
+            --bg: #0a0a0b;
+            --surface: #141416;
+            --surface-2: #1c1c20;
+            --border: #2a2a2f;
+            --text: #f0f0f2;
+            --text-muted: #8b8b96;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --green: #22c55e;
+            --orange: #f97316;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Nav */
+        nav {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+        }
+        .logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); }
+
+        /* Hero */
+        .hero {
+            padding: 100px 0 80px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+        .hero h1 .highlight { color: var(--accent); }
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        .btn-secondary {
+            background: var(--surface-2);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover { border-color: var(--accent); }
+        .badge {
+            display: inline-block;
+            margin-top: 24px;
+            padding: 6px 14px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--green);
+        }
+
+        /* Databases */
+        .databases {
+            padding: 60px 0;
+            text-align: center;
+        }
+        .db-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        .db-item {
+            padding: 24px 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            min-width: 180px;
+        }
+        .db-item h3 { font-size: 1.1rem; margin-bottom: 4px; }
+        .db-item p { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* Features */
+        .features {
+            padding: 80px 0;
+        }
+        .features h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 50px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        .feature-card {
+            padding: 28px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: border-color 0.2s;
+        }
+        .feature-card:hover { border-color: var(--accent); }
+        .feature-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .feature-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        /* Comparison */
+        .comparison {
+            padding: 80px 0;
+        }
+        .comparison h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 14px 16px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .comparison-table th {
+            background: var(--surface);
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .comparison-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+        }
+        .comparison-table tr:hover td { background: var(--surface); }
+        .check { color: var(--green); }
+        .cross { color: var(--text-muted); }
+        .highlight-col { background: rgba(59, 130, 246, 0.05); }
+
+        /* Download */
+        .download {
+            padding: 80px 0;
+            text-align: center;
+        }
+        .download h2 {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+        .download p {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .download-card {
+            padding: 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+        }
+        .download-card h3 { margin-bottom: 8px; }
+        .download-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
+        .download-card .btn { width: 100%; justify-content: center; }
+
+        /* Quick install (hero) */
+        .quick-install {
+            margin: 36px auto 0;
+            max-width: 720px;
+            padding: 18px 22px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(59, 130, 246, 0.06));
+            border: 1px solid rgba(34, 197, 94, 0.35);
+            border-radius: 12px;
+            text-align: left;
+        }
+        .quick-install .qi-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--green);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 10px;
+        }
+        .quick-install .qi-label .pill {
+            padding: 2px 8px;
+            background: rgba(34, 197, 94, 0.15);
+            border-radius: 999px;
+            font-size: 0.7rem;
+            color: var(--green);
+        }
+        .quick-install code {
+            display: block;
+            padding: 12px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.9rem;
+            color: var(--green);
+            user-select: all;
+            cursor: pointer;
+            word-break: break-all;
+            line-height: 1.5;
+        }
+        .quick-install .qi-hint {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Stat bar */
+        .stat-bar {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+            margin-top: 32px;
+        }
+        .stat-item { text-align: center; }
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1.2;
+        }
+        .stat-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-top: 2px;
+        }
+
+        /* Workflow */
+        .workflow-section {
+            padding: 50px 0 20px;
+            text-align: center;
+        }
+        .workflow-section h2 {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+        .workflow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .workflow-step {
+            padding: 14px 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        .workflow-arrow {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        /* macOS warning */
+        .macos-warning {
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: rgba(249, 115, 22, 0.08);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            border-radius: 10px;
+            text-align: left;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .macos-warning strong {
+            color: var(--orange);
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+        .macos-warning code {
+            display: inline-block;
+            margin: 8px 0;
+            padding: 8px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.85rem;
+            color: var(--green);
+            user-select: all;
+            cursor: pointer;
+            word-break: break-all;
+        }
+        .macos-warning .hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero { padding: 60px 0 50px; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .comparison-table { font-size: 0.8rem; }
+            .comparison-table th, .comparison-table td { padding: 10px 8px; }
+        }
+
+        /* v3 additions */
+        .hero { padding: 72px 0 40px; }
+        .hero .sub { font-size: 1.15rem; max-width: 720px; }
+        .hero .meta { margin-top: 18px; font-size: 0.85rem; color: var(--text-muted); display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+        .hero .meta span::before { content: "·"; margin-right: 14px; color: var(--border); }
+        .hero .meta span:first-child::before { content: none; }
+        .release-pill { display:inline-flex; align-items:center; gap:8px; margin-bottom: 22px; padding: 6px 12px 6px 8px; border:1px solid var(--border); background: var(--surface); border-radius: 999px; font-size: 0.8rem; color: var(--text-muted); text-decoration:none; }
+        .release-pill b { color: var(--green); font-weight: 600; }
+        .release-pill:hover { border-color: var(--accent); color: var(--text); }
+        .hero-shot { margin: 44px auto 0; max-width: 1100px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--surface); box-shadow: 0 30px 80px rgba(0,0,0,0.55); }
+        .hero-shot img { display:block; width:100%; height:auto; }
+        .section-title { text-align:center; font-size: 2rem; letter-spacing: -0.01em; margin-bottom: 10px; }
+        .section-lead { text-align:center; color: var(--text-muted); max-width: 640px; margin: 0 auto 48px; }
+        .showcase { padding: 80px 0 20px; }
+        .show-row { display:grid; grid-template-columns: 1fr 1.4fr; gap: 40px; align-items:center; margin-bottom: 72px; }
+        .show-row.flip .show-text { order: 2; }
+        .show-text h3 { font-size: 1.5rem; margin-bottom: 10px; letter-spacing: -0.01em; }
+        .show-text p { color: var(--text-muted); font-size: 1rem; margin-bottom: 14px; }
+        .show-text ul { list-style:none; color: var(--text-muted); font-size: 0.92rem; display:grid; gap: 6px; }
+        .show-text li::before { content: "\2713"; color: var(--green); margin-right: 8px; font-weight: 700; }
+        .show-tag { display:inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+        .show-img { border: 1px solid var(--border); border-radius: 10px; overflow:hidden; background: var(--surface); box-shadow: 0 20px 50px rgba(0,0,0,0.45); }
+        .show-img img { display:block; width:100%; height:auto; }
+        .engine-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin-top: 32px; }
+        .engine { padding: 20px; background: var(--surface); border:1px solid var(--border); border-radius: 12px; text-align:left; }
+        .engine .stripe { height: 3px; border-radius: 2px; margin-bottom: 14px; }
+        .engine h3 { font-size: 1.05rem; margin-bottom: 6px; }
+        .engine p { font-size: 0.85rem; color: var(--text-muted); }
+        .feature-grid.compact { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+        .feature-grid.compact .feature-card { padding: 18px 20px; display:flex; gap: 14px; align-items:flex-start; }
+        .feature-grid.compact .feature-icon { font-size: 1.2rem; margin: 0; line-height: 1.4; }
+        .feature-grid.compact h3 { font-size: 0.98rem; margin-bottom: 3px; }
+        .feature-grid.compact p { font-size: 0.85rem; }
+        @media (max-width: 860px) { .show-row, .show-row.flip { grid-template-columns: 1fr; } .show-row.flip .show-text { order: 0; } .hero { padding: 48px 0 24px; } }
+
+        .page { padding: 64px 0 40px; }
+        .page h1 { font-size: clamp(2rem, 4vw, 2.8rem); letter-spacing:-0.02em; line-height:1.15; margin-bottom: 14px; }
+        .page .lead { color: var(--text-muted); font-size: 1.1rem; max-width: 720px; margin-bottom: 28px; }
+        .shot { border:1px solid var(--border); border-radius: 12px; overflow:hidden; background: var(--surface); box-shadow: 0 24px 60px rgba(0,0,0,.5); margin: 28px 0 40px; }
+        .shot img { display:block; width:100%; height:auto; }
+        .cols { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 16px; margin: 24px 0 40px; }
+        .col { padding: 18px 20px; background: var(--surface); border:1px solid var(--border); border-radius: 12px; }
+        .col h3 { font-size: 1rem; margin-bottom: 6px; }
+        .col p { font-size: .9rem; color: var(--text-muted); }
+        .faq { max-width: 820px; margin: 0 auto 48px; }
+        .faq h2 { font-size: 1.6rem; margin-bottom: 18px; }
+        .faq details { border-bottom: 1px solid var(--border); padding: 14px 0; }
+        .faq summary { cursor:pointer; font-weight: 600; }
+        .faq p { color: var(--text-muted); margin-top: 8px; font-size: .95rem; }
+        .cta { text-align:center; padding: 40px 0 60px; }
+        .cta .hero-buttons { margin-top: 16px; }
+        .cl h2 { font-size: 1.5rem; margin: 40px 0 6px; }
+        .cl h3 { font-size: 1.05rem; margin: 18px 0 8px; color: var(--text); }
+        .cl ul { padding-left: 20px; color: var(--text-muted); display:grid; gap: 6px; font-size: .95rem; }
+        .cl code { background: var(--surface-2); padding: 1px 5px; border-radius: 4px; font-size: .85em; }
+        .cl .date { color: var(--text-muted); font-size: .85rem; font-weight: 400; margin-left: 8px; }
+    
+        /* SEO pages: comparison wrapper, notes, article */
+        .table-wrap { overflow-x: auto; margin: 8px 0 12px; border: 1px solid var(--border); border-radius: 12px; }
+        .table-wrap .comparison-table td, .table-wrap .comparison-table th { text-align: left; }
+        .fine { font-size: .8rem; color: var(--text-muted); margin-bottom: 48px; }
+        .page h2.block { font-size: 1.6rem; margin: 8px 0 14px; letter-spacing: -0.01em; }
+        .note { padding: 12px 16px; background: rgba(249, 115, 22, 0.08); border: 1px solid rgba(249, 115, 22, 0.3); border-radius: 10px; color: var(--text); font-size: .92rem; margin: 0 0 28px; }
+        .page code, .faq code { background: var(--surface-2); padding: 1px 5px; border-radius: 4px; font-size: .85em; font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace; }
+        .page a:not(.btn) { color: var(--accent); }
+        .caption { font-size: .85rem; color: var(--text-muted); margin: -28px 0 36px; }
+        .article { max-width: 760px; margin: 0 auto; }
+        .article .byline { color: var(--text-muted); font-size: .9rem; margin-bottom: 18px; }
+        .article h2 { font-size: 1.4rem; margin: 36px 0 10px; letter-spacing: -0.01em; }
+        .article p, .article li { color: #c9c9d1; font-size: 1.02rem; margin-bottom: 14px; }
+        .article ol, .article ul { padding-left: 22px; margin-bottom: 14px; }
+        .try { margin: 40px 0; padding: 22px 24px; background: var(--surface); border: 1px solid rgba(34, 197, 94, 0.35); border-radius: 12px; }
+        .try h2 { margin-top: 0; }
+    </style>
+</head>
+<body>
+<nav>
+    <div class="container">
+        <a href="index.html" class="logo">DB<span>Connect</span></a>
+        <div class="nav-links">
+            <a href="index.html#whats-new">What's new</a>
+            <a href="index.html#features">Features</a>
+            <a href="index.html#comparison">Compare</a>
+            <a href="index.html#download">Download</a>
+            <a href="mysql-client.html">MySQL</a>
+            <a href="mongodb-client.html">MongoDB</a>
+            <a href="vs-datagrip.html">vs DataGrip</a>
+            <a href="vs-dbeaver.html">vs DBeaver</a>
+            <a href="vs-tableplus.html">vs TablePlus</a>
+            <a href="changelog.html">Changelog</a>
+            <a href="https://github.com/shubhesh07/db-connect" target="_blank" rel="noopener">GitHub</a>
+        </div>
+    </div>
+</nav>
+<section class="page">
+    <div class="container">
+        <article class="article">
+        <h1>How I cut a production MySQL server from 90% to 30% CPU — without dropping a feature</h1>
+        <p class="byline">Shubhesh Shukla · I build <a href="index.html">DB Connect</a> and use it every day</p>
+        <p class="note">Numbers are from my own production server; your results depend on your workload.</p>
+        <p>For the last four months I've used DB Connect every day on the MySQL fleet behind a production e-commerce platform. When I started, the main server was running at around 90% CPU. Today it sits around 30%. Nothing was switched off to get there: no feature was removed and no use case was dropped. The same product does the same things, and the database does far less work to serve them.</p>
+        <p>I built the tool, so read this with that in mind. I'm not writing it to say the tool is magic. The method is ordinary, and I want to show it as a loop you can repeat. Each step below is one screen in DB Connect.</p>
+
+        <h2>1. Start with rates, not counters</h2>
+        <p>Performance → Overview samples the server every five seconds and shows each value as a real rate over real elapsed time. Queries per second are split into reads, writes and prepared statements, next to rows read, full table scans, unindexed joins, threads running and row lock waits. A health strip at the top says in plain words what looks wrong and which tab to open next.</p>
+        <p>The tiles that matter most for CPU are rows read and full table scans. A server can handle the same number of queries per second while reading a small fraction of the rows, and that difference is mostly where CPU goes.</p>
+        <div class="shot"><img src="screenshots/mysql-overview.png" alt="DB Connect MySQL Performance Overview with health findings for row lock waits and full table scans, and tiles for queries per second, threads running, buffer pool hit rate, slow queries, full table scans, rows read, temp tables on disk, row lock waits, network, new connections and uptime" width="2000" height="1166" loading="lazy"></div>
+
+        <h2>2. Click the full-table-scan tile</h2>
+        <p>That tile opens a list of the statement digests that ran without a usable index. Expand one and you see who runs it (user@host), a sample statement, and a button that copies it into the editor for EXPLAIN. Knowing who runs a query matters as much as the query itself, because it tells you which service owns it. In my case the honest answer to "do we need this query?" was always yes, which is why nothing was cut.</p>
+
+        <h2>3. Read the plan, then measure it</h2>
+        <p>EXPLAIN shows the access type, the key the optimizer picked and how many rows it expects to examine. <code>ALL</code> on a large table is the usual suspect. EXPLAIN ANALYZE, on MySQL 8.0.18 and later, actually runs the statement and reports measured time, actual rows and loops for each operator, which is where estimates and reality part ways. Because it runs the query, I used it on a replica or at quiet times.</p>
+        <div class="shot"><img src="screenshots/explain-analyze.png" alt="DB Connect query editor with the Explain tab showing an EXPLAIN ANALYZE plan, execution time and a warning about sequential scans (PostgreSQL connection shown; MySQL 8.0.18+ uses the same Analyze button)" width="2000" height="906" loading="lazy"></div>
+
+        <h2>4. Design the index, and try it before you commit to it</h2>
+        <p>The Index Manager shows the indexes a table already has, including functional and prefix ones, so you can extend an existing index instead of piling on a near-duplicate. Every index costs something on writes, so I aimed for the fewest indexes that fixed the most digests. Building an index on a big table is real work for the server, so schedule it for a quiet window.</p>
+        <p>Since 3.5.0, Index Health → Workload reads the slow-query digests, proposes composite indexes with the expected gain, and lets you trial each one as an <i>invisible</i> index that the optimizer ignores for normal traffic. That arrived after most of this work. If I were starting today, I'd start there.</p>
+
+        <h2>5. Compare the plan before and after</h2>
+        <p>Before adding an index, I saved the current plan as a baseline. After adding it, I ran EXPLAIN again. The diff shows access type, chosen key and rows examined for each table, with an improved or regressed verdict. Changing <code>ALL</code> to <code>ref</code> counts as a win even when the row estimate barely moves, and the reverse counts as a regression even when the estimate drops. That stopped me from fooling myself with estimates.</p>
+
+        <h2>6. Look for sessions that look idle but aren't</h2>
+        <p>Performance → Connections groups the process list by user@host, user, host or database. Its age threshold also applies to open transactions, so a session that has been asleep for two seconds but has held a transaction open for minutes is flagged <i>idle in transaction</i>. Those sessions hold locks and undo history while looking harmless. The real fix is in the application code that forgot to commit. Killing the session goes through the production confirmation.</p>
+
+        <h2>7. Watch the rates drop, then go again</h2>
+        <p>After each change I went back to Overview. Full table scans and rows read fall first, and CPU follows. Then I picked the next digest from the top of the list. No single change did the work; each pass took a few minutes once the loop felt familiar.</p>
+
+        <section class="try">
+        <h2>Try it on your own server</h2>
+        <ol>
+            <li>Install DB Connect. It's free and needs no account: <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg">macOS DMG</a>, <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-Windows-Setup.exe">Windows installer</a>, <code>brew install --cask shubhesh07/db-connect/db-connect</code>, or <code>curl -fsSL https://github.com/shubhesh07/db-connect/releases/latest/download/install.sh | bash</code>.</li>
+            <li>Add your MySQL connection (SSH tunnel and SSL are in the form). Tag it production so every write asks first, or make it read-only.</li>
+            <li>Open Performance → Overview and let it sample for a few minutes.</li>
+            <li>Click the full-table-scan tile, pick the top digest, and run EXPLAIN (and EXPLAIN ANALYZE on a replica).</li>
+            <li>Design the index in the Index Manager or the Workload advisor, compare plans before and after, check Connections for idle-in-transaction sessions, and watch the Overview rates.</li>
+        </ol>
+        <p>The "who runs it" detail comes from <code>performance_schema.events_statements_history_long</code>. That consumer is off by default in MySQL, so enable it if that column is empty. On managed services, check your parameter group.</p>
+        <div class="hero-buttons" style="justify-content:flex-start"><a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg" class="btn btn-primary">Download for macOS</a><a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-Windows-Setup.exe" class="btn btn-secondary">Download for Windows</a></div>
+        </section>
+        <p>More on the MySQL side of DB Connect is on the <a href="mysql-client.html">MySQL client page</a>.</p>
+        </article>
+        <div class="faq"><h2>Frequently asked</h2><details><summary>How do I reduce high CPU usage on MySQL?</summary><p>Find the statements that read far more rows than they return, usually full table scans and unindexed joins, and give them an index they can use. Then make sure no session sits idle inside an open transaction while holding locks. Measure rows read per second before and after each change.</p></details><details><summary>How do I find queries that don't use an index in MySQL?</summary><p>performance_schema records statement digests along with whether they used an index. In DB Connect, clicking the full-table-scan tile in Performance → Overview lists those digests, who runs them and a sample statement you can send to EXPLAIN.</p></details><details><summary>What is the difference between EXPLAIN and EXPLAIN ANALYZE in MySQL?</summary><p>EXPLAIN shows the optimizer's plan and estimates without running the query. EXPLAIN ANALYZE (MySQL 8.0.18+) actually runs it and reports measured time, actual rows and loops for each operator, so run it on a replica or at a quiet time.</p></details><details><summary>What does 'idle in transaction' mean in MySQL?</summary><p>A session that opened a transaction and then went quiet without committing. It looks idle in the process list, but it keeps holding row locks and undo history, which slows other writers and purge.</p></details><details><summary>What is an invisible index in MySQL?</summary><p>An index the optimizer ignores unless a session turns on use_invisible_indexes. You can build one, test plans against it in your own session, and only then make it visible to all traffic.</p></details><details><summary>Do I need DB Connect to do this?</summary><p>No. Everything here comes from performance_schema, EXPLAIN and the process list, which you can query by hand. DB Connect puts them one click apart, which is what made the work fit into a normal day.</p></details></div>
+    </div>
+</section>
+<footer>
+    <div class="container">
+        <p>Built by <a href="https://github.com/shubhesh07" target="_blank" rel="noopener">Shubhesh Shukla</a> · <a href="https://github.com/shubhesh07/db-connect" target="_blank" rel="noopener">GitHub</a> · <a href="https://github.com/shubhesh07/db-connect/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a> · <a href="https://github.com/shubhesh07/db-connect/releases" target="_blank" rel="noopener">Releases</a> · Free for personal and commercial use</p>
+        <p style="margin-top: 8px;"><a href="mysql-client.html">MySQL client</a> · <a href="mongodb-client.html">MongoDB client</a> · <a href="mysql-cpu-case-study.html">MySQL CPU case study</a> · <a href="vs-datagrip.html">DB Connect vs DataGrip</a> · <a href="vs-dbeaver.html">DB Connect vs DBeaver</a> · <a href="vs-tableplus.html">DB Connect vs TablePlus</a></p>
+            <p style="margin-top: 8px;">Engines: <a href="mysql-client.html">MySQL</a> · <a href="postgresql-client.html">PostgreSQL</a> · <a href="redshift-client.html">Redshift</a> · <a href="dynamodb-gui.html">DynamoDB</a> · <a href="redis-gui.html">Redis</a> · <a href="mongodb-client.html">MongoDB</a> · <a href="mysql-cpu-case-study.html">MySQL CPU case study</a></p>
+        <p style="margin-top: 8px;">Compare: <a href="vs-datagrip.html">DataGrip</a> · <a href="vs-dbeaver.html">DBeaver</a> · <a href="vs-tableplus.html">TablePlus</a> · <a href="vs-mysql-workbench.html">MySQL Workbench</a> · <a href="vs-sequel-ace.html">Sequel Ace</a> · <a href="vs-pgadmin.html">pgAdmin</a> · <a href="vs-redisinsight.html">RedisInsight</a> · <a href="vs-nosql-workbench.html">NoSQL Workbench</a> · <a href="vs-dynobase.html">Dynobase</a> · <a href="vs-mongodb-compass.html">MongoDB Compass</a> · <a href="vs-studio-3t.html">Studio 3T</a> · <a href="changelog.html">Changelog</a></p>
+</div>
+</footer>
+</body>
+</html>

@@ -2,6 +2,39 @@
 
 All notable changes to DB Connect will be documented in this file.
 
+## [3.5.0] - 2026-10-10
+
+v3.5.0 is about writing SQL faster and running it with fewer surprises: a rebuilt autocomplete, dry-run writes, an AI assistant that knows your schema, a workload index advisor, and a notebook mode.
+
+#### Autocomplete and editor
+✨ **Alias-aware completions**: `o.` lists the columns of the table aliased `o` anywhere in the statement, including CTEs, derived tables, INSERT targets and UPDATE … SET. Context is detected from the whole statement, not the current line.
+✨ **JOIN … ON suggestions from foreign keys**: after `ON`, the editor proposes the matching key pairs; column items show type, nullability and key badges.
+✨ **Signature help and hover** for MySQL and Postgres functions (`IFNULL(`, `DATE_FORMAT(`, `COALESCE(` …) and for tables and columns.
+✨ Completion index keyed per database, bulk-loaded in one query and invalidated on DDL; identifiers that need quoting are quoted automatically.
+✨ **Pre-flight lint** while you type: `DELETE`/`UPDATE` without WHERE, `SELECT *` into production tables, missing LIMIT, implicit cross joins. A quiet background EXPLAIN flags full scans on SELECTs before you run them (optional on production, Settings → Safety).
+
+#### Safer writes
+🛡️ **Dry-run preview** for a single UPDATE or DELETE: see the affected rows, before/after values and the row count inside a transaction that is rolled back; Apply then runs the real statement under the usual production confirmation.
+🛡️ **Where is this used?** on any table or column: references from views, routines, triggers, foreign keys and saved queries before you drop or rename.
+🔐 **PII masking** toggle in the results grid (emails, phones, cards, national IDs) that also applies to copies and exports.
+
+#### Performance
+✨ **Workload index advisor** (Performance → Index Health → Workload): mines slow-log / `pg_stat_statements` digests, proposes composite indexes with the expected gain, and trials them with MySQL invisible indexes or Postgres hypopg before you create anything.
+
+#### Assistant
+✨ **Ask** (⌘⇧A): a Claude-powered side panel that drafts, explains and fixes SQL using your live schema (tables, columns, keys, sampled types). Rows are never sent by default and never on production connections. Bring your own Anthropic API key (Settings → AI assistant, stored encrypted).
+
+#### Compare, watch and notebooks
+✨ **Compare on…** runs the same query on two connections and diffs the results row by row (added / removed / changed cells).
+✨ **Watch…** re-runs a query on an interval with a threshold alert and a desktop notification when it fires.
+✨ **Notebooks**: SQL and markdown cells on one connection, run all, inline charts, export to a self-contained HTML report.
+
+#### Fixes
+🐛 **Grid columns no longer shift while scrolling.** Every column now gets a pinned width from the loaded rows, so scrolling right and then down keeps the header and cells aligned (with or without Mask PII). Longer values further down truncate with a hover tooltip; drag the header edge to widen.
+🐛 ⌘⇧Enter (Run All) did nothing while the editor had focus; it inserted a blank line instead.
+🐛 Shift-click range selection could select only the two end rows, so the selection stats were wrong.
+🐛 EXPLAIN summary showed "Worst Access: N/A" when every step was efficient.
+
 ## [3.4.0] - 2026-10-10
 
 v3.4.0 is the largest release so far: ten commits, ~760 tests, every engine touched. Highlights by area.

@@ -479,6 +479,33 @@
     <div class="container" style="max-width:860px">
         <h1>Changelog</h1>
         <p class="lead">Every release, newest first. Downloads for each version are on <a href="https://github.com/shubhesh07/db-connect/releases" style="color:var(--accent)">GitHub Releases</a>.</p>
+<h2 id="v3.6.0">v3.6.0<span class="date">2026-10-17</span></h2>
+<p>v3.6.0 is a UI and stability release. Nothing was removed; the app looks more structured, the sidebar is one tree, and connections stop dropping on you after a laptop sleep or a VPN blip.</p>
+<h3>Connections sidebar</h3>
+<ul>
+<li><b>One tree.</b> Every connection now expands in place: click the chevron and its databases, tables, views and columns appear right under it, indented under the engine group. Open several at once; the set is remembered between launches. The separate Explorer section is gone.</li>
+<li><b>Structured rail</b>: header toolbar (add, import, switch, group), engine groups with colour dots, tinted PROD / STG / LOCAL chips, hover actions (disconnect, edit, more), a compact icon footer for history, saved queries, snippets, local history, notebooks, performance, backup, MCP, settings, about and theme.</li>
+<li><b>Tree polish</b>: indent guides per level, folder icons for Tables / Views / Indexes / Foreign keys, "n of m" counts while filtering, Collapse all, per-connection filter and refresh.</li>
+</ul>
+<h3>Fewer false "connection lost"</h3>
+<ul>
+<li>Most drops were one 3-second ping failing right after sleep or a VPN reconnect. The app now pings up to three times over ~15 s with an 8 s budget, and when a drop is real it rebuilds the pool or SSH tunnel silently and toasts "Reconnected". You are only asked when the rebuild fails or a tab has an open transaction that a reconnect would roll back.</li>
+</ul>
+<h3>Look and feel</h3>
+<ul>
+<li>Layered surfaces and hairline borders in all four themes (dark, light, dim, solarized dark); the editor's Monaco theme is generated from the app theme so gutters, selection and current line match.</li>
+<li>Connection-coloured accent on editor tabs and a PROD / STG strip so you always know which environment a tab is on.</li>
+<li>Grouped toolbars with a prominent Run; labels collapse to icons before the toolbar overflows on narrow windows.</li>
+<li>Zebra-striped grid rows and a selection tint; elevated popovers and menus with short motion (honours reduce-motion).</li>
+<li>Shortcut cheat-sheet in empty states; a single keyboard-shortcut registry so the editor, menus and tooltips all show the same keys.</li>
+</ul>
+<h3>Stability and accessibility</h3>
+<ul>
+<li>Every panel and overlay has its own error boundary that resets when you switch tabs, so one bad render no longer takes the shell down.</li>
+<li>Closing a tab now frees its editor model, grid state and per-tab stores (memory no longer grows with every closed tab).</li>
+<li>Shell no longer re-renders on every store update; snippets, notebook and performance panel open state persists; splitters work with the keyboard.</li>
+<li>Tree, tabs and dialogs expose proper roles, labels and arrow-key navigation; Escape closes the innermost dialog or menu first; AA contrast on text and status colours in every theme.</li>
+</ul>
 <h2 id="v3.5.0">v3.5.0<span class="date">2026-10-10</span></h2>
 <p>v3.5.0 is about writing SQL faster and running it with fewer surprises: a rebuilt autocomplete, dry-run writes, an AI assistant that knows your schema, a workload index advisor, and a notebook mode.</p>
 <h3>Autocomplete and editor</h3>

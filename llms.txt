@@ -52,6 +52,6 @@ Built with Go and React (Wails). Native binaries, ~35 MB, start in under a secon
 - License: free to use; source is private, distribution repo is public.
 - Platforms: macOS (universal, Apple Silicon + Intel), Windows 10/11 x64.
 - Author: Shubhesh Shukla (https://github.com/shubhesh07).
-- Current version: 3.5.0 (October 2026).
+- Current version: 3.6.0 (October 2026).
 - Also known as: DB Connect by Shubhesh Shukla (not Oracle DB Connect or Splunk DB Connect).
 - Shorthand people use: DDB (DynamoDB), pg / Postgres (PostgreSQL), Mongo (MongoDB), Aurora and RDS (MySQL/PostgreSQL on AWS), ElastiCache (Redis), DocumentDB (MongoDB-compatible).

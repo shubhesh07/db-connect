@@ -2,13 +2,13 @@
 
 **One database client for your entire backend stack.**
 
-MySQL + PostgreSQL + Amazon Redshift + DynamoDB + Redis + MongoDB — one fast, free, native desktop IDE instead of five separate tools and five separate sets of saved credentials.
+MySQL + PostgreSQL + Amazon Redshift + DynamoDB + Redis + MongoDB + Elasticsearch/OpenSearch — one fast, free, native desktop IDE instead of seven separate tools and seven separate sets of saved credentials.
 
 ![macOS](https://img.shields.io/badge/macOS-supported-blue) ![Windows](https://img.shields.io/badge/Windows-supported-blue) ![License](https://img.shields.io/badge/license-free-green) ![Downloads](https://img.shields.io/github/downloads/shubhesh07/db-connect/total)
 
 ![DB Connect — PostgreSQL query with results, sidebar grouped by engine](screenshots/hero-sql.png)
 
-**Guides:** [MySQL](https://shubhesh07.github.io/db-connect/mysql-client.html) · [PostgreSQL](https://shubhesh07.github.io/db-connect/postgresql-client.html) · [Redshift](https://shubhesh07.github.io/db-connect/redshift-client.html) · [DynamoDB](https://shubhesh07.github.io/db-connect/dynamodb-gui.html) · [Redis](https://shubhesh07.github.io/db-connect/redis-gui.html) · [MongoDB](https://shubhesh07.github.io/db-connect/mongodb-client.html) · [Case study: MySQL CPU 90% → 30%](https://shubhesh07.github.io/db-connect/mysql-cpu-case-study.html)
+**Guides:** [MySQL](https://shubhesh07.github.io/db-connect/mysql-client.html) · [PostgreSQL](https://shubhesh07.github.io/db-connect/postgresql-client.html) · [Redshift](https://shubhesh07.github.io/db-connect/redshift-client.html) · [DynamoDB](https://shubhesh07.github.io/db-connect/dynamodb-gui.html) · [Redis](https://shubhesh07.github.io/db-connect/redis-gui.html) · [MongoDB](https://shubhesh07.github.io/db-connect/mongodb-client.html) · [Elasticsearch / OpenSearch](https://shubhesh07.github.io/db-connect/elasticsearch-client.html) · [Case study: MySQL CPU 90% → 30%](https://shubhesh07.github.io/db-connect/mysql-cpu-case-study.html)
 **Compared with:** [DataGrip](https://shubhesh07.github.io/db-connect/vs-datagrip.html) · [DBeaver](https://shubhesh07.github.io/db-connect/vs-dbeaver.html) · [TablePlus](https://shubhesh07.github.io/db-connect/vs-tableplus.html) · [MySQL Workbench](https://shubhesh07.github.io/db-connect/vs-mysql-workbench.html) · [Sequel Ace](https://shubhesh07.github.io/db-connect/vs-sequel-ace.html) · [pgAdmin](https://shubhesh07.github.io/db-connect/vs-pgadmin.html) · [RedisInsight](https://shubhesh07.github.io/db-connect/vs-redisinsight.html) · [NoSQL Workbench](https://shubhesh07.github.io/db-connect/vs-nosql-workbench.html) · [Dynobase](https://shubhesh07.github.io/db-connect/vs-dynobase.html) · [MongoDB Compass](https://shubhesh07.github.io/db-connect/vs-mongodb-compass.html) · [Studio 3T](https://shubhesh07.github.io/db-connect/vs-studio-3t.html)
 
 ## Download
@@ -23,33 +23,46 @@ Full manual-download links (DMG, portable ZIPs) are in [Manual downloads](#manua
 
 ## Why DB Connect?
 
-- **One tool, not three.** If your stack is MySQL or PostgreSQL for transactional data, Redshift for analytics, DynamoDB for high-throughput key-value access and Redis for caching, you know the pain of five GUI clients, five credential stores, and five query histories. DB Connect treats all five as equal, first-class citizens.
+- **One tool, not three.** If your stack is MySQL or PostgreSQL for transactional data, Redshift for analytics, DynamoDB for high-throughput key-value access, Redis for caching, MongoDB for documents and Elasticsearch or OpenSearch for search, you know the pain of a GUI client, credential store and query history per engine. DB Connect treats all seven engines as equal, first-class citizens.
 - **Free forever.** No subscription, no trial limits, no feature paywall.
 - **Fast.** Opens in under 2 seconds. ~35 MB installed. Built with Go + Wails — a native app, not Electron, so there's no bundled Chromium sitting in your dock for a database browser.
 - **DynamoDB done properly.** A visual Scan/Query/GetItem builder *and* a PartiQL editor for writing real `SELECT * FROM "table" WHERE ...` statements — most GUI database tools ignore DynamoDB entirely or bolt on a bare-bones table browser.
 - **Built to work with your AI coding tools.** A local MCP server lets Claude Code, Cursor, or any MCP-aware client query your already-open connections directly — schema, read-only queries, gated behind a per-install auth token, an explicit connection allow-list, and time-bounded write grants.
 - **No cloud sync, no telemetry.** Credentials are AES-256-GCM encrypted with the key in your OS keychain. Nothing you connect to or query ever leaves your machine.
 
-## MySQL · Redshift · DynamoDB
+## MySQL · Redshift · DynamoDB · Elasticsearch
 
-| | MySQL | Redshift | DynamoDB |
-|---|---|---|---|
-| SQL query editor | ✅ | ✅ | — |
-| PartiQL query editor | — | — | ✅ |
-| Visual Scan/Query/GetItem builder | — | — | ✅ |
-| Schema/table browser | ✅ | ✅ | ✅ |
-| Context-aware autocomplete | ✅ | ✅ | ✅ (keywords, tables, per-table attributes) |
-| EXPLAIN visualization | ✅ | ✅ | — |
-| Inline row editing | ✅ | ✅ | ✅ (item editor) |
-| Table designer (CREATE/ALTER) | ✅ | — | — |
-| Index manager | ✅ | — | — |
-| Transactions | ✅ | — | — |
-| SSH tunnel | ✅ | — | — |
-| GSI-aware querying | — | — | ✅ |
-| Multiple AWS auth modes (access key, SSO profile, IAM role) | — | — | ✅ |
-| Real backup/restore (`mysqldump`) | ✅ | ✅ | — |
-| Native performance monitoring | ✅ | ✅ | ✅ (capacity/throttle, no CloudWatch) |
-| Export (CSV, JSON, Excel) | ✅ | ✅ | ✅ |
+| | MySQL | Redshift | DynamoDB | Elasticsearch / OpenSearch |
+|---|---|---|---|---|
+| SQL query editor | ✅ | ✅ | — | ✅ (`_sql` / `_plugins/_sql`) + Kibana-style console |
+| PartiQL query editor | — | — | ✅ | — |
+| Visual Scan/Query/GetItem builder | — | — | ✅ | — |
+| Schema/table browser | ✅ | ✅ | ✅ | ✅ (indices, aliases, mapping fields) |
+| Context-aware autocomplete | ✅ | ✅ | ✅ (keywords, tables, per-table attributes) | ✅ (endpoints, query DSL, mapped fields) |
+| EXPLAIN visualization | ✅ | ✅ | — | ✅ (Profile and Explain trees) |
+| Inline row editing | ✅ | ✅ | ✅ (item editor) | ✅ (grid + document editor) |
+| Table designer (CREATE/ALTER) | ✅ | — | — | — |
+| Index manager | ✅ | — | — | ✅ (new/delete index, aliases, reindex) |
+| Transactions | ✅ | — | — | — |
+| SSH tunnel | ✅ | — | — | ✅ |
+| GSI-aware querying | — | — | ✅ | — |
+| Multiple AWS auth modes (access key, SSO profile, IAM role) | — | — | ✅ | — |
+| Real backup/restore (`mysqldump`) | ✅ | ✅ | — | — |
+| Native performance monitoring | ✅ | ✅ | ✅ (capacity/throttle, no CloudWatch) | ✅ (health, rates, tasks, shards, hot threads) |
+| Export (CSV, JSON, Excel) | ✅ | ✅ | ✅ | ✅ (streams through cursor or scroll) |
+
+## Elasticsearch / OpenSearch
+
+New in v3.7.0, the seventh engine. [Full guide](https://shubhesh07.github.io/db-connect/elasticsearch-client.html).
+
+- **Connect** to Elasticsearch or OpenSearch: self-managed, Elastic Cloud, AWS OpenSearch Service and AWS Elasticsearch domains. Username and password or an API key, TLS with a custom CA, SSH tunnel. The distribution and version are detected on connect; AWS domains get a port and TLS hint if misconfigured.
+- **Explorer**: indices with aliases, doc counts and health, expanding to mapping fields (nested objects, multi-fields). Right-click for Query (SQL), Search (console), Mapping, Settings, Stats, Count, Refresh, Reindex, Add alias, New index, Delete index, New document and Bulk insert; cluster-level Health, Nodes, Shards and Aliases.
+- **SQL and console in one editor**: `SELECT … FROM index` (Elastic `_sql`, OpenSearch `_plugins/_sql`, or the Open Distro endpoint on AWS Elasticsearch domains, chosen automatically) or Kibana-style requests such as `GET /index/_search` with a JSON body, several per run, with endpoint and query-DSL autocomplete that knows your mapped field names.
+- **Results and document editing**: hits become rows with `_index`, `_id`, `_score` and the source fields; aggregations arrive as a second result set; `_cat` output becomes a table. Edit cells, delete rows and insert documents from the grid (one `_update` per document) or in the full document editor. Load more through the SQL cursor or `from`/`size`; export streams through the cursor or scroll API.
+- **Profile and Explain**: per-shard query, collector and aggregation timings as a tree, or why each hit scored.
+- **Performance pane**: cluster health, search and indexing rates and latencies per node and index, heap, CPU and rejections, plus Tasks (with cancel), Shards (with allocation explain), Hot threads, Pending tasks and circuit breakers.
+- **Safety**: read-only profiles and production confirmation apply to every write, including `DELETE`, `PUT`, `_update_by_query`, `_delete_by_query`, task cancel and document edits.
+- **MCP**: `list_tables`, `describe_table`, `run_query` (SQL or console), `explain_query`, `active_sessions` and `cluster_health` work on Elasticsearch connections; writes still need a grant.
 
 ## How it compares
 
@@ -102,7 +115,7 @@ brew install --cask shubhesh07/db-connect/db-connect
 ```
 
 1. Launch DB Connect
-2. **Add Connection** → choose MySQL, PostgreSQL, Redshift, DynamoDB, Redis, or MongoDB
+2. **Add Connection** → choose MySQL, PostgreSQL, Redshift, DynamoDB, Redis, MongoDB, or Elasticsearch/OpenSearch
 3. Enter credentials → **Test Connection** → **Save**
 4. Write a query (or, for DynamoDB, use the visual builder or the PartiQL editor) → `Cmd+Enter` to run
 
@@ -113,7 +126,7 @@ brew install --cask shubhesh07/db-connect/db-connect
    ```bash
    claude mcp add --transport http db-connect http://127.0.0.1:47823/mcp --header "Authorization: Bearer <your-token>"
    ```
-3. Paste it in your terminal. Done — Claude Code can now list databases/tables/collections, describe schemas, and run read-only queries against the allow-listed connections. (`/mcp` inside Claude Code shows the connection.)
+3. Paste it in your terminal. Done — Claude Code can now list databases/tables/collections/indices, describe schemas, and run read-only queries (SQL, or console requests on Elasticsearch/OpenSearch) against the allow-listed connections. (`/mcp` inside Claude Code shows the connection.)
 
 For **Claude Desktop** (or any JSON-configured MCP client), the dialog also has a copy button for the matching `mcpServers` JSON block — merge it into `claude_desktop_config.json` (Settings → Developer → Edit Config) and restart Claude Desktop.
 
@@ -172,7 +185,8 @@ Reordered toward the broadest database-client market first:
 3. [x] **ER diagram visualization (auto-generated from foreign keys)** — shipped in v3.1.0: right-click a MySQL database or PostgreSQL schema, laid out by foreign-key depth, pan/zoom, click a table to open it
 4. [x] **Query result diffing (compare EXPLAIN output before/after an index change)** — shipped in v3.1.0: baseline a plan, change an index, re-run, and compare access type, key and rows examined with a per-table verdict
 5. [x] **MongoDB support** — shipped in v3.2.0: SQL (translated to find/aggregate) or mongosh syntax, collection explorer with sampled fields, production/read-only gating, MCP tools
-6. [ ] Import/export connection profiles
+6. [x] **Elasticsearch / OpenSearch support** — shipped in v3.7.0: SQL and Kibana-style console in one editor, index explorer with mapping fields, document editing, Profile/Explain, performance pane, MCP tools
+7. [ ] Import/export connection profiles
 
 ## FAQ
 
@@ -254,4 +268,4 @@ Free for personal and commercial use. Source code is not open source.
 
 ## Keywords
 
-`mysql client` `mysql gui` `mysql ide` `database tool` `sql editor` `dynamodb gui` `dynamodb client` `ddb client` `aws dynamodb tool` `redshift client` `redshift gui` `redshift query tool` `free database client` `database ide` `sql client mac` `sql client windows` `datagrip alternative` `dbeaver alternative` `tableplus alternative` `database management tool` `query editor` `schema browser`
+`mysql client` `mysql gui` `mysql ide` `database tool` `sql editor` `dynamodb gui` `dynamodb client` `ddb client` `aws dynamodb tool` `redshift client` `redshift gui` `redshift query tool` `free database client` `database ide` `sql client mac` `sql client windows` `datagrip alternative` `dbeaver alternative` `tableplus alternative` `database management tool` `query editor` `schema browser` `elasticsearch client` `elasticsearch gui` `opensearch client` `opensearch gui` `kibana dev tools alternative`

@@ -2,6 +2,44 @@
 
 All notable changes to DB Connect will be documented in this file.
 
+## [3.7.0] - 2026-10-18
+
+v3.7.0 adds **Elasticsearch and OpenSearch** as the seventh engine, fixes a long list of bugs found in a full review of every engine (several of them safety gates), and adds the debugging tools and snippets engineers reach for on each database.
+
+#### Elasticsearch and OpenSearch
+✨ **Seventh engine.** Connect to Elasticsearch or OpenSearch (self-managed, Elastic Cloud, AWS OpenSearch Service and AWS Elasticsearch domains) with username and password or an API key, TLS with a custom CA, and SSH tunnels. The distribution and version are detected on connect; AWS domains get a port and TLS hint if misconfigured.
+✨ **Indices in the explorer**: indices with aliases, doc counts and health, expanding to mapping fields (nested objects, multi-fields). Right-click for Query (SQL), Search (console), Mapping, Settings, Stats, Count, Refresh, Reindex, Add alias, New index, Delete index, New document and Bulk insert; cluster-level Health, Nodes, Shards and Aliases.
+✨ **SQL and console in one editor.** Write `SELECT … FROM index` (Elastic `_sql`, OpenSearch `_plugins/_sql`, or the Open Distro endpoint on AWS Elasticsearch domains, chosen automatically) or Kibana-style requests such as `GET /index/_search` with a JSON body, several per run. Console text gets its own syntax colouring, endpoint and query-DSL autocomplete with your mapped field names, and Format.
+✨ **Results you can work with**: hits become rows with `_index`, `_id`, `_score` and the source fields; aggregations arrive as a second result set; `_cat` output becomes a table. Edit cells, delete rows and insert documents straight from the grid (one `_update` per document), or open the full document editor. Load more pages through the SQL cursor or `from`/`size`, and falls back cleanly on clusters that refuse paging. Export streams through the cursor or scroll API.
+✨ **Profile and Explain** buttons show per-shard query, collector and aggregation timings as a tree, or why each hit scored.
+✨ **Performance pane**: cluster health, search and indexing rates and latencies per node and index, heap, CPU and rejections, plus Tasks (with cancel), Shards (with allocation explain), Hot threads, Pending tasks and circuit breakers.
+🛡️ Read-only profiles and production confirmation apply to every write, including `DELETE`, `PUT`, `_update_by_query`, `_delete_by_query`, task cancel and document edits.
+✨ **MCP**: `list_tables`, `describe_table`, `run_query` (SQL or console), `explain_query`, `active_sessions` and `cluster_health` work on Elasticsearch connections; writes still need a grant.
+
+#### Debugging tools for every engine
+✨ **Snippets per engine**: PostgreSQL (30), Redshift (27), MongoDB (30), Redis (25), DynamoDB PartiQL (19), Elasticsearch (31) and a consolidated MySQL set, covering locks, blocking, slow queries, index usage, bloat, replication lag, WLM queues, hot keys, cluster health, unassigned shards and more. Snippets are filtered by engine and insert at the cursor instead of replacing your tab.
+✨ **Redis**: Clients (with kill), Latency and Commands tabs in the performance pane; `CONFIG GET` no longer prompts.
+✨ **MongoDB**: slow query shapes from the profiler with "where fired from", index usage via `$indexStats` with an unused-index hint and a draft `dropIndex`; `.hint()`, `.maxTimeMS()` and aggregate options are honoured.
+✨ **MCP for AI agents**: new read-only `explain_query`, `active_sessions`, `slow_queries` and `cluster_health` tools across engines, PartiQL through `run_query`, and accurate descriptions.
+✨ **Cross-engine**: history search across all connections, an "Explain this error" button that opens the assistant with the failing statement, Copy as Markdown table, IN list, CSV with header or curl, Watch for MongoDB, Elasticsearch, Redis and DynamoDB reads, a PartiQL full-scan warning, ⌘D back to multi-cursor and ⌘⇧O to jump to any table or column, a production or staging edge strip on the editor, and engine icons on every connection row.
+
+#### Safety fixes
+🛡️ The read-only and production gates could be bypassed on PostgreSQL and Redshift by a backslash or `#` inside a string, or a `$$` block (`WITH … DELETE` hidden in a CTE). The classifier is now dialect-aware.
+🛡️ MySQL `SET` tricks (`@@GLOBAL` after a comma, `PASSWORD`, `DEFAULT ROLE`), `PREPARE`/`EXECUTE`, `KILL`, `SHUTDOWN`, `PURGE` and friends now require confirmation on production.
+🛡️ Redis console on production now confirms any command that is not a read, not only a short deny-list.
+🛡️ MCP: `CONFIG GET` and `ACL GETUSER` removed from the no-grant list (they expose passwords); ungranted queries run inside a read-only transaction; DynamoDB numbers are decoded exactly so a delete by a large numeric key cannot hit a neighbouring item.
+
+#### Bug fixes
+🐛 Grid edits, SQL and CSV imports on a PostgreSQL tab bound to another database went to the connection's default database.
+🐛 Postgres and Redshift Explain always failed with an argument-count error; the quiet pre-flight EXPLAIN failed silently.
+🐛 MongoDB `UPDATE … LIMIT n` and `DELETE … LIMIT n` affected every match; `ORDER BY` was ignored. `COUNT(*)` on empty input returned no row; `WHERE 1 = 1` would not parse.
+🐛 DynamoDB: a sidebar double-click scan wrote into whatever tab was active, even another connection's; Load more paged with the builder's current inputs; export then import turned numbers into strings; PartiQL export ignored parameters.
+🐛 Grid edits could target the wrong table when the query had a subquery or CTE; the server filter dropped your WHERE and JOINs; Apply ignored the tab's open transaction; a MySQL edit that changed nothing failed the whole batch.
+🐛 Closing a running tab never cancelled the query. Switching a tab's data source stranded its transaction. `` USE `my-db` `` truncated the tab database. Auto-LIMIT and parameters misread quotes and comments. Format corrupted `DELIMITER` scripts. Shortcuts fired inside dialogs. SQL-file import of a mysqldump lost `FOREIGN_KEY_CHECKS` and `LOCK TABLES` across pooled connections.
+🐛 Redis: cluster SCAN could run until the timeout, replies were uncapped, stale scan pages mixed with new ones, keys with non-UTF-8 names could not be opened or deleted, TTL -2 showed as infinite.
+🐛 Backend: Disconnect racing a slow Connect, settings file read-modify-write races, SSH handshake without a deadline, semver pre-release compare, CSV header formula injection, SQLite busy timeouts, diagnostics report leaking hostnames, a missing keychain entry silently minting a new key over existing ciphertext.
+🐛 UI: Mongo collection names with reserved words failed to open; double-click opened three tabs; designer quoted function defaults on Postgres; AA contrast on dark primary text; nested buttons in two section headers; the dead "result memory cap" setting removed; health-ping and autosave intervals now apply.
+
 ## [3.6.0] - 2026-10-17
 
 v3.6.0 is a UI and stability release. Nothing was removed; the app looks more structured, the sidebar is one tree, and connections stop dropping on you after a laptop sleep or a VPN blip.

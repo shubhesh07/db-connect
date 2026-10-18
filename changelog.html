@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DB Connect Changelog — release notes for every version</title>
-    <meta name="description" content="What changed in each DB Connect release: new engines, features and fixes for MySQL, PostgreSQL, Redshift, DynamoDB and Redis.">
+    <meta name="description" content="What changed in each DB Connect release: new engines, features and fixes for MySQL, PostgreSQL, Redshift, DynamoDB, Redis, MongoDB and Elasticsearch/OpenSearch.">
     <link rel="canonical" href="https://shubhesh07.github.io/db-connect/changelog.html">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -479,6 +479,46 @@
     <div class="container" style="max-width:860px">
         <h1>Changelog</h1>
         <p class="lead">Every release, newest first. Downloads for each version are on <a href="https://github.com/shubhesh07/db-connect/releases" style="color:var(--accent)">GitHub Releases</a>.</p>
+<h2 id="v3.7.0">v3.7.0<span class="date">2026-10-18</span></h2>
+<p>v3.7.0 adds <b>Elasticsearch and OpenSearch</b> as the seventh engine, fixes a long list of bugs found in a full review of every engine (several of them safety gates), and adds the debugging tools and snippets engineers reach for on each database.</p>
+<h3>Elasticsearch and OpenSearch</h3>
+<ul>
+<li><b>Seventh engine.</b> Connect to Elasticsearch or OpenSearch (self-managed, Elastic Cloud, AWS OpenSearch Service and AWS Elasticsearch domains) with username and password or an API key, TLS with a custom CA, and SSH tunnels. The distribution and version are detected on connect; AWS domains get a port and TLS hint if misconfigured.</li>
+<li><b>Indices in the explorer</b>: indices with aliases, doc counts and health, expanding to mapping fields (nested objects, multi-fields). Right-click for Query (SQL), Search (console), Mapping, Settings, Stats, Count, Refresh, Reindex, Add alias, New index, Delete index, New document and Bulk insert; cluster-level Health, Nodes, Shards and Aliases.</li>
+<li><b>SQL and console in one editor.</b> Write <code>SELECT … FROM index</code> (Elastic <code>_sql</code>, OpenSearch <code>_plugins/_sql</code>, or the Open Distro endpoint on AWS Elasticsearch domains, chosen automatically) or Kibana-style requests such as <code>GET /index/_search</code> with a JSON body, several per run. Console text gets its own syntax colouring, endpoint and query-DSL autocomplete with your mapped field names, and Format.</li>
+<li><b>Results you can work with</b>: hits become rows with <code>_index</code>, <code>_id</code>, <code>_score</code> and the source fields; aggregations arrive as a second result set; <code>_cat</code> output becomes a table. Edit cells, delete rows and insert documents straight from the grid (one <code>_update</code> per document), or open the full document editor. Load more pages through the SQL cursor or <code>from</code>/<code>size</code>, and falls back cleanly on clusters that refuse paging. Export streams through the cursor or scroll API.</li>
+<li><b>Profile and Explain</b> buttons show per-shard query, collector and aggregation timings as a tree, or why each hit scored.</li>
+<li><b>Performance pane</b>: cluster health, search and indexing rates and latencies per node and index, heap, CPU and rejections, plus Tasks (with cancel), Shards (with allocation explain), Hot threads, Pending tasks and circuit breakers.</li>
+<li>Read-only profiles and production confirmation apply to every write, including <code>DELETE</code>, <code>PUT</code>, <code>_update_by_query</code>, <code>_delete_by_query</code>, task cancel and document edits.</li>
+<li><b>MCP</b>: <code>list_tables</code>, <code>describe_table</code>, <code>run_query</code> (SQL or console), <code>explain_query</code>, <code>active_sessions</code> and <code>cluster_health</code> work on Elasticsearch connections; writes still need a grant.</li>
+</ul>
+<h3>Debugging tools for every engine</h3>
+<ul>
+<li><b>Snippets per engine</b>: PostgreSQL (30), Redshift (27), MongoDB (30), Redis (25), DynamoDB PartiQL (19), Elasticsearch (31) and a consolidated MySQL set, covering locks, blocking, slow queries, index usage, bloat, replication lag, WLM queues, hot keys, cluster health, unassigned shards and more. Snippets are filtered by engine and insert at the cursor instead of replacing your tab.</li>
+<li><b>Redis</b>: Clients (with kill), Latency and Commands tabs in the performance pane; <code>CONFIG GET</code> no longer prompts.</li>
+<li><b>MongoDB</b>: slow query shapes from the profiler with "where fired from", index usage via <code>$indexStats</code> with an unused-index hint and a draft <code>dropIndex</code>; <code>.hint()</code>, <code>.maxTimeMS()</code> and aggregate options are honoured.</li>
+<li><b>MCP for AI agents</b>: new read-only <code>explain_query</code>, <code>active_sessions</code>, <code>slow_queries</code> and <code>cluster_health</code> tools across engines, PartiQL through <code>run_query</code>, and accurate descriptions.</li>
+<li><b>Cross-engine</b>: history search across all connections, an "Explain this error" button that opens the assistant with the failing statement, Copy as Markdown table, IN list, CSV with header or curl, Watch for MongoDB, Elasticsearch, Redis and DynamoDB reads, a PartiQL full-scan warning, ⌘D back to multi-cursor and ⌘⇧O to jump to any table or column, a production or staging edge strip on the editor, and engine icons on every connection row.</li>
+</ul>
+<h3>Safety fixes</h3>
+<ul>
+<li>The read-only and production gates could be bypassed on PostgreSQL and Redshift by a backslash or <code>#</code> inside a string, or a <code>$$</code> block (<code>WITH … DELETE</code> hidden in a CTE). The classifier is now dialect-aware.</li>
+<li>MySQL <code>SET</code> tricks (<code>@@GLOBAL</code> after a comma, <code>PASSWORD</code>, <code>DEFAULT ROLE</code>), <code>PREPARE</code>/<code>EXECUTE</code>, <code>KILL</code>, <code>SHUTDOWN</code>, <code>PURGE</code> and friends now require confirmation on production.</li>
+<li>Redis console on production now confirms any command that is not a read, not only a short deny-list.</li>
+<li>MCP: <code>CONFIG GET</code> and <code>ACL GETUSER</code> removed from the no-grant list (they expose passwords); ungranted queries run inside a read-only transaction; DynamoDB numbers are decoded exactly so a delete by a large numeric key cannot hit a neighbouring item.</li>
+</ul>
+<h3>Bug fixes</h3>
+<ul>
+<li>Grid edits, SQL and CSV imports on a PostgreSQL tab bound to another database went to the connection's default database.</li>
+<li>Postgres and Redshift Explain always failed with an argument-count error; the quiet pre-flight EXPLAIN failed silently.</li>
+<li>MongoDB <code>UPDATE … LIMIT n</code> and <code>DELETE … LIMIT n</code> affected every match; <code>ORDER BY</code> was ignored. <code>COUNT(*)</code> on empty input returned no row; <code>WHERE 1 = 1</code> would not parse.</li>
+<li>DynamoDB: a sidebar double-click scan wrote into whatever tab was active, even another connection's; Load more paged with the builder's current inputs; export then import turned numbers into strings; PartiQL export ignored parameters.</li>
+<li>Grid edits could target the wrong table when the query had a subquery or CTE; the server filter dropped your WHERE and JOINs; Apply ignored the tab's open transaction; a MySQL edit that changed nothing failed the whole batch.</li>
+<li>Closing a running tab never cancelled the query. Switching a tab's data source stranded its transaction. <code>USE `my-db`</code> truncated the tab database. Auto-LIMIT and parameters misread quotes and comments. Format corrupted <code>DELIMITER</code> scripts. Shortcuts fired inside dialogs. SQL-file import of a mysqldump lost <code>FOREIGN_KEY_CHECKS</code> and <code>LOCK TABLES</code> across pooled connections.</li>
+<li>Redis: cluster SCAN could run until the timeout, replies were uncapped, stale scan pages mixed with new ones, keys with non-UTF-8 names could not be opened or deleted, TTL -2 showed as infinite.</li>
+<li>Backend: Disconnect racing a slow Connect, settings file read-modify-write races, SSH handshake without a deadline, semver pre-release compare, CSV header formula injection, SQLite busy timeouts, diagnostics report leaking hostnames, a missing keychain entry silently minting a new key over existing ciphertext.</li>
+<li>UI: Mongo collection names with reserved words failed to open; double-click opened three tabs; designer quoted function defaults on Postgres; AA contrast on dark primary text; nested buttons in two section headers; the dead "result memory cap" setting removed; health-ping and autosave intervals now apply.</li>
+</ul>
 <h2 id="v3.6.0">v3.6.0<span class="date">2026-10-17</span></h2>
 <p>v3.6.0 is a UI and stability release. Nothing was removed; the app looks more structured, the sidebar is one tree, and connections stop dropping on you after a laptop sleep or a VPN blip.</p>
 <h3>Connections sidebar</h3>
@@ -864,7 +904,7 @@
 <footer>
     <div class="container">
         <p>Built by <a href="https://github.com/shubhesh07" target="_blank" rel="noopener">Shubhesh Shukla</a> · <a href="https://github.com/shubhesh07/db-connect" target="_blank" rel="noopener">GitHub</a> · <a href="https://github.com/shubhesh07/db-connect/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a> · <a href="https://github.com/shubhesh07/db-connect/releases" target="_blank" rel="noopener">Releases</a> · Free for personal and commercial use</p>
-            <p style="margin-top: 8px;">Engines: <a href="mysql-client.html">MySQL</a> · <a href="postgresql-client.html">PostgreSQL</a> · <a href="redshift-client.html">Redshift</a> · <a href="dynamodb-gui.html">DynamoDB</a> · <a href="redis-gui.html">Redis</a> · <a href="mongodb-client.html">MongoDB</a> · <a href="mysql-cpu-case-study.html">MySQL CPU case study</a></p>
+            <p style="margin-top: 8px;">Engines: <a href="mysql-client.html">MySQL</a> · <a href="postgresql-client.html">PostgreSQL</a> · <a href="redshift-client.html">Redshift</a> · <a href="dynamodb-gui.html">DynamoDB</a> · <a href="redis-gui.html">Redis</a> · <a href="mongodb-client.html">MongoDB</a> · <a href="elasticsearch-client.html">Elasticsearch</a> · <a href="mysql-cpu-case-study.html">MySQL CPU case study</a></p>
         <p style="margin-top: 8px;">Compare: <a href="vs-datagrip.html">DataGrip</a> · <a href="vs-dbeaver.html">DBeaver</a> · <a href="vs-tableplus.html">TablePlus</a> · <a href="vs-mysql-workbench.html">MySQL Workbench</a> · <a href="vs-sequel-ace.html">Sequel Ace</a> · <a href="vs-pgadmin.html">pgAdmin</a> · <a href="vs-redisinsight.html">RedisInsight</a> · <a href="vs-nosql-workbench.html">NoSQL Workbench</a> · <a href="vs-dynobase.html">Dynobase</a> · <a href="vs-mongodb-compass.html">MongoDB Compass</a> · <a href="vs-studio-3t.html">Studio 3T</a> · <a href="changelog.html">Changelog</a></p>
 </div>
 </footer>

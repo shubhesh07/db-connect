@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
     <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <meta name="description" content="DB Connect vs MongoDB Compass: both free. Compass leads on schema analysis and Atlas integration; DB Connect lets you query MongoDB with SQL or mongosh syntax in a native app that also covers MySQL, PostgreSQL, Redshift, DynamoDB and Redis.">
+    <meta name="description" content="DB Connect vs MongoDB Compass: both free. Compass leads on schema analysis and Atlas integration; DB Connect lets you query MongoDB with SQL or mongosh syntax in a native app that also covers MySQL, PostgreSQL, Redshift, DynamoDB, Redis and Elasticsearch/OpenSearch.">
     <meta name="keywords" content="mongodb compass alternative, mongodb gui, mongodb gui mac, query mongodb with sql, mongodb client windows, free mongodb gui, mongodb compass vs db connect, mongodb aggregation builder">
     <meta name="author" content="Shubhesh Shukla">
 
@@ -27,7 +27,7 @@
 
     <link rel="canonical" href="https://shubhesh07.github.io/db-connect/vs-mongodb-compass.html">
 
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can I query MongoDB with SQL?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, in DB Connect. SELECT with WHERE, ORDER BY, LIMIT/OFFSET and GROUP BY with COUNT, SUM, AVG, MIN and MAX, plus INSERT, UPDATE and DELETE, are translated to MongoDB find and aggregate operations. mongosh-style syntax works too."}}, {"@type": "Question", "name": "Is there a lighter alternative to MongoDB Compass?", "acceptedAnswer": {"@type": "Answer", "text": "DB Connect is a native app of about 35 MB built with Go and Wails rather than Electron. It is free, needs no account, and also connects to MySQL/MariaDB, PostgreSQL, Redshift, DynamoDB and Redis."}}, {"@type": "Question", "name": "Does DB Connect work with MongoDB Atlas?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Connect with your connection URI (or host and port) over TLS. Atlas-specific features such as Compass's natural-language query are not part of DB Connect."}}, {"@type": "Question", "name": "Does DB Connect have a MongoDB aggregation pipeline builder?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. There is a pipeline builder, and SQL with GROUP BY is translated to an aggregation pipeline for you."}}, {"@type": "Question", "name": "Does DB Connect show MongoDB explain plans and indexes?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. You can run explain on a query and create or drop indexes from the index manager."}}, {"@type": "Question", "name": "Can Claude query my MongoDB database?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, if you allow it. DB Connect's local MCP server is off by default, listens on localhost only, needs a per-install token and only reaches connections you allow-list. Claude Code, Claude Desktop or Cursor can list and describe databases and collections and run read-only queries; writes need a time-bounded grant you make in the desktop app."}}]}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can I query MongoDB with SQL?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, in DB Connect. SELECT with WHERE, ORDER BY, LIMIT/OFFSET and GROUP BY with COUNT, SUM, AVG, MIN and MAX, plus INSERT, UPDATE and DELETE, are translated to MongoDB find and aggregate operations. mongosh-style syntax works too."}}, {"@type": "Question", "name": "Is there a lighter alternative to MongoDB Compass?", "acceptedAnswer": {"@type": "Answer", "text": "DB Connect is a native app of about 35 MB built with Go and Wails rather than Electron. It is free, needs no account, and also connects to MySQL/MariaDB, PostgreSQL, Redshift, DynamoDB, Redis and Elasticsearch/OpenSearch."}}, {"@type": "Question", "name": "Does DB Connect work with MongoDB Atlas?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Connect with your connection URI (or host and port) over TLS. Atlas-specific features such as Compass's natural-language query are not part of DB Connect."}}, {"@type": "Question", "name": "Does DB Connect have a MongoDB aggregation pipeline builder?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. There is a pipeline builder, and SQL with GROUP BY is translated to an aggregation pipeline for you."}}, {"@type": "Question", "name": "Does DB Connect show MongoDB explain plans and indexes?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. You can run explain on a query and create or drop indexes from the index manager."}}, {"@type": "Question", "name": "Can Claude query my MongoDB database?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, if you allow it. DB Connect's local MCP server is off by default, listens on localhost only, needs a per-install token and only reaches connections you allow-list. Claude Code, Claude Desktop or Cursor can list and describe databases and collections and run read-only queries; writes need a time-bounded grant you make in the desktop app."}}]}</script>
 
     <style>
         :root {
@@ -374,7 +374,7 @@
                 </tr>
                 <tr>
                     <td>Engines</td>
-                    <td class="highlight-col"><strong>MongoDB, MySQL/MariaDB, PostgreSQL, Redshift, DynamoDB, Redis</strong></td>
+                    <td class="highlight-col"><strong>MongoDB, MySQL/MariaDB, PostgreSQL, Redshift, DynamoDB, Redis, Elasticsearch/OpenSearch</strong></td>
                     <td>MongoDB</td>
                 </tr>
                 <tr>
@@ -479,7 +479,7 @@
             <div class="feature-card">
                 <div class="feature-icon">&#128279;</div>
                 <h3>One app for every database</h3>
-                <p>MySQL/MariaDB, PostgreSQL, Redshift, DynamoDB and Redis alongside MongoDB, with one connection list and one history.</p>
+                <p>MySQL/MariaDB, PostgreSQL, Redshift, DynamoDB, Redis and Elasticsearch/OpenSearch alongside MongoDB, with one connection list and one history.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#128274;</div>
@@ -516,7 +516,7 @@
     <div class="container">
         <h2>Frequently asked</h2>
         <details><summary>Can I query MongoDB with SQL?</summary><p>Yes, in DB Connect. SELECT with WHERE, ORDER BY, LIMIT/OFFSET and GROUP BY with COUNT, SUM, AVG, MIN and MAX, plus INSERT, UPDATE and DELETE, are translated to MongoDB find and aggregate operations. mongosh-style syntax works too.</p></details>
-        <details><summary>Is there a lighter alternative to MongoDB Compass?</summary><p>DB Connect is a native app of about 35 MB built with Go and Wails rather than Electron. It is free, needs no account, and also connects to MySQL/MariaDB, PostgreSQL, Redshift, DynamoDB and Redis.</p></details>
+        <details><summary>Is there a lighter alternative to MongoDB Compass?</summary><p>DB Connect is a native app of about 35 MB built with Go and Wails rather than Electron. It is free, needs no account, and also connects to MySQL/MariaDB, PostgreSQL, Redshift, DynamoDB, Redis and Elasticsearch/OpenSearch.</p></details>
         <details><summary>Does DB Connect work with MongoDB Atlas?</summary><p>Yes. Connect with your connection URI (or host and port) over TLS. Atlas-specific features such as Compass's natural-language query are not part of DB Connect.</p></details>
         <details><summary>Does DB Connect have a MongoDB aggregation pipeline builder?</summary><p>Yes. There is a pipeline builder, and SQL with GROUP BY is translated to an aggregation pipeline for you.</p></details>
         <details><summary>Does DB Connect show MongoDB explain plans and indexes?</summary><p>Yes. You can run explain on a query and create or drop indexes from the index manager.</p></details>
@@ -552,7 +552,7 @@
 <footer>
     <div class="container">
         <p>Built by <a href="https://linkedin.com/in/shubheshshukla7">Shubhesh Shukla</a> &middot; <a href="https://github.com/shubhesh07/db-connect">GitHub</a> &middot; Free for personal and commercial use</p>
-            <p style="margin-top: 8px;">Engines: <a href="mysql-client.html">MySQL</a> · <a href="postgresql-client.html">PostgreSQL</a> · <a href="redshift-client.html">Redshift</a> · <a href="dynamodb-gui.html">DynamoDB</a> · <a href="redis-gui.html">Redis</a> · <a href="mongodb-client.html">MongoDB</a> · <a href="mysql-cpu-case-study.html">MySQL CPU case study</a></p>
+            <p style="margin-top: 8px;">Engines: <a href="mysql-client.html">MySQL</a> · <a href="postgresql-client.html">PostgreSQL</a> · <a href="redshift-client.html">Redshift</a> · <a href="dynamodb-gui.html">DynamoDB</a> · <a href="redis-gui.html">Redis</a> · <a href="mongodb-client.html">MongoDB</a> · <a href="elasticsearch-client.html">Elasticsearch</a> · <a href="mysql-cpu-case-study.html">MySQL CPU case study</a></p>
         <p style="margin-top: 8px;">Compare: <a href="vs-datagrip.html">DataGrip</a> · <a href="vs-dbeaver.html">DBeaver</a> · <a href="vs-tableplus.html">TablePlus</a> · <a href="vs-mysql-workbench.html">MySQL Workbench</a> · <a href="vs-sequel-ace.html">Sequel Ace</a> · <a href="vs-pgadmin.html">pgAdmin</a> · <a href="vs-redisinsight.html">RedisInsight</a> · <a href="vs-nosql-workbench.html">NoSQL Workbench</a> · <a href="vs-dynobase.html">Dynobase</a> · <a href="vs-mongodb-compass.html">MongoDB Compass</a> · <a href="vs-studio-3t.html">Studio 3T</a> · <a href="changelog.html">Changelog</a></p>
 </div>
 </footer>

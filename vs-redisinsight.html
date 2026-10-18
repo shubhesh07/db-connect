@@ -27,7 +27,7 @@
 
     <link rel="canonical" href="https://shubhesh07.github.io/db-connect/vs-redisinsight.html">
 
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is there a free alternative to RedisInsight?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. DB Connect is a free native Redis GUI for macOS and Windows with a key browser, per-type editors, TTL, memory analysis, slow log and a console. It also connects to MySQL/MariaDB, PostgreSQL, Redshift, DynamoDB and MongoDB."}}, {"@type": "Question", "name": "Is there a Redis GUI that isn't built on Electron?", "acceptedAnswer": {"@type": "Answer", "text": "DB Connect is built with Go and Wails, using the operating system's own web view instead of a bundled browser, and is about 35 MB."}}, {"@type": "Question", "name": "Does DB Connect support Redis Cluster and Sentinel?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Standalone, cluster and sentinel deployments are supported, and cluster mode is detected automatically."}}, {"@type": "Question", "name": "How do I delete Redis keys by pattern safely?", "acceptedAnswer": {"@type": "Answer", "text": "In DB Connect, delete-by-pattern runs as a dry run first and shows the matching keys before anything is removed. Production-tagged connections ask for confirmation and read-only connections refuse the delete."}}, {"@type": "Question", "name": "Does DB Connect support RedisJSON and RediSearch?", "acceptedAnswer": {"@type": "Answer", "text": "Not with dedicated views. DB Connect's editors cover the core Redis data types; if you work heavily with JSON documents or Search indexes, Redis Insight is the better tool for that."}}, {"@type": "Question", "name": "Can Claude query my Redis database?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, if you allow it. DB Connect's local MCP server is off by default, listens on localhost only, needs a per-install token and only reaches connections you allow-list. Claude Code, Claude Desktop or Cursor can scan keys by pattern, read a key's value and TTL, read server INFO and run read-only commands; writes need a time-bounded grant you make in the desktop app."}}]}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is there a free alternative to RedisInsight?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. DB Connect is a free native Redis GUI for macOS and Windows with a key browser, per-type editors, TTL, memory analysis, slow log and a console. It also connects to MySQL/MariaDB, PostgreSQL, Redshift, DynamoDB, MongoDB and Elasticsearch/OpenSearch."}}, {"@type": "Question", "name": "Is there a Redis GUI that isn't built on Electron?", "acceptedAnswer": {"@type": "Answer", "text": "DB Connect is built with Go and Wails, using the operating system's own web view instead of a bundled browser, and is about 35 MB."}}, {"@type": "Question", "name": "Does DB Connect support Redis Cluster and Sentinel?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Standalone, cluster and sentinel deployments are supported, and cluster mode is detected automatically."}}, {"@type": "Question", "name": "How do I delete Redis keys by pattern safely?", "acceptedAnswer": {"@type": "Answer", "text": "In DB Connect, delete-by-pattern runs as a dry run first and shows the matching keys before anything is removed. Production-tagged connections ask for confirmation and read-only connections refuse the delete."}}, {"@type": "Question", "name": "Does DB Connect support RedisJSON and RediSearch?", "acceptedAnswer": {"@type": "Answer", "text": "Not with dedicated views. DB Connect's editors cover the core Redis data types; if you work heavily with JSON documents or Search indexes, Redis Insight is the better tool for that."}}, {"@type": "Question", "name": "Can Claude query my Redis database?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, if you allow it. DB Connect's local MCP server is off by default, listens on localhost only, needs a per-install token and only reaches connections you allow-list. Claude Code, Claude Desktop or Cursor can scan keys by pattern, read a key's value and TTL, read server INFO and run read-only commands; writes need a time-bounded grant you make in the desktop app."}}]}</script>
 
     <style>
         :root {
@@ -374,7 +374,7 @@
                 </tr>
                 <tr>
                     <td>Engines</td>
-                    <td class="highlight-col"><strong>Redis, MySQL/MariaDB, PostgreSQL, Redshift, DynamoDB, MongoDB</strong></td>
+                    <td class="highlight-col"><strong>Redis, MySQL/MariaDB, PostgreSQL, Redshift, DynamoDB, MongoDB, Elasticsearch/OpenSearch</strong></td>
                     <td>Redis</td>
                 </tr>
                 <tr>
@@ -464,7 +464,7 @@
             <div class="feature-card">
                 <div class="feature-icon">&#128279;</div>
                 <h3>Redis next to your SQL</h3>
-                <p>Check the cache and the source of truth side by side: PostgreSQL, MySQL/MariaDB, Redshift, DynamoDB and MongoDB live in the same window and connection list.</p>
+                <p>Check the cache and the source of truth side by side: PostgreSQL, MySQL/MariaDB, Redshift, DynamoDB, MongoDB and Elasticsearch/OpenSearch live in the same window and connection list.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">&#129529;</div>
@@ -510,7 +510,7 @@
 <section class="faq" id="faq">
     <div class="container">
         <h2>Frequently asked</h2>
-        <details><summary>Is there a free alternative to RedisInsight?</summary><p>Yes. DB Connect is a free native Redis GUI for macOS and Windows with a key browser, per-type editors, TTL, memory analysis, slow log and a console. It also connects to MySQL/MariaDB, PostgreSQL, Redshift, DynamoDB and MongoDB.</p></details>
+        <details><summary>Is there a free alternative to RedisInsight?</summary><p>Yes. DB Connect is a free native Redis GUI for macOS and Windows with a key browser, per-type editors, TTL, memory analysis, slow log and a console. It also connects to MySQL/MariaDB, PostgreSQL, Redshift, DynamoDB, MongoDB and Elasticsearch/OpenSearch.</p></details>
         <details><summary>Is there a Redis GUI that isn't built on Electron?</summary><p>DB Connect is built with Go and Wails, using the operating system's own web view instead of a bundled browser, and is about 35 MB.</p></details>
         <details><summary>Does DB Connect support Redis Cluster and Sentinel?</summary><p>Yes. Standalone, cluster and sentinel deployments are supported, and cluster mode is detected automatically.</p></details>
         <details><summary>How do I delete Redis keys by pattern safely?</summary><p>In DB Connect, delete-by-pattern runs as a dry run first and shows the matching keys before anything is removed. Production-tagged connections ask for confirmation and read-only connections refuse the delete.</p></details>
@@ -547,7 +547,7 @@
 <footer>
     <div class="container">
         <p>Built by <a href="https://linkedin.com/in/shubheshshukla7">Shubhesh Shukla</a> &middot; <a href="https://github.com/shubhesh07/db-connect">GitHub</a> &middot; Free for personal and commercial use</p>
-            <p style="margin-top: 8px;">Engines: <a href="mysql-client.html">MySQL</a> · <a href="postgresql-client.html">PostgreSQL</a> · <a href="redshift-client.html">Redshift</a> · <a href="dynamodb-gui.html">DynamoDB</a> · <a href="redis-gui.html">Redis</a> · <a href="mongodb-client.html">MongoDB</a> · <a href="mysql-cpu-case-study.html">MySQL CPU case study</a></p>
+            <p style="margin-top: 8px;">Engines: <a href="mysql-client.html">MySQL</a> · <a href="postgresql-client.html">PostgreSQL</a> · <a href="redshift-client.html">Redshift</a> · <a href="dynamodb-gui.html">DynamoDB</a> · <a href="redis-gui.html">Redis</a> · <a href="mongodb-client.html">MongoDB</a> · <a href="elasticsearch-client.html">Elasticsearch</a> · <a href="mysql-cpu-case-study.html">MySQL CPU case study</a></p>
         <p style="margin-top: 8px;">Compare: <a href="vs-datagrip.html">DataGrip</a> · <a href="vs-dbeaver.html">DBeaver</a> · <a href="vs-tableplus.html">TablePlus</a> · <a href="vs-mysql-workbench.html">MySQL Workbench</a> · <a href="vs-sequel-ace.html">Sequel Ace</a> · <a href="vs-pgadmin.html">pgAdmin</a> · <a href="vs-redisinsight.html">RedisInsight</a> · <a href="vs-nosql-workbench.html">NoSQL Workbench</a> · <a href="vs-dynobase.html">Dynobase</a> · <a href="vs-mongodb-compass.html">MongoDB Compass</a> · <a href="vs-studio-3t.html">Studio 3T</a> · <a href="changelog.html">Changelog</a></p>
 </div>
 </footer>

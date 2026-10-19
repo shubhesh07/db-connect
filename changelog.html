@@ -479,6 +479,11 @@
     <div class="container" style="max-width:860px">
         <h1>Changelog</h1>
         <p class="lead">Every release, newest first. Downloads for each version are on <a href="https://github.com/shubhesh07/db-connect/releases" style="color:var(--accent)">GitHub Releases</a>.</p>
+<h2 id="v3.7.1">v3.7.1<span class="date">2026-10-19</span></h2>
+<h3>Fixes</h3>
+<ul>
+<li><b>MCP <code>run_query</code> failed for every statement on MySQL and PostgreSQL connections without a write grant</b>, including <code>SELECT 1</code>. Since 3.7.0 such queries run inside a read-only transaction for safety; the statement runner's guard against typed <code>BEGIN</code> / <code>START TRANSACTION</code> rejected that wrapper before the query ran. The wrapper now executes on the pinned connection the runner already discards afterwards, so reads work again while the read-only transaction still protects the database. Writes without a grant are still refused.</li>
+</ul>
 <h2 id="v3.7.0">v3.7.0<span class="date">2026-10-18</span></h2>
 <p>v3.7.0 adds <b>Elasticsearch and OpenSearch</b> as the seventh engine, fixes a long list of bugs found in a full review of every engine (several of them safety gates), and adds the debugging tools and snippets engineers reach for on each database.</p>
 <h3>Elasticsearch and OpenSearch</h3>

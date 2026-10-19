@@ -2,6 +2,10 @@
 
 All notable changes to DB Connect will be documented in this file.
 
+## [3.7.1] - 2026-10-19
+
+🐛 **MCP `run_query` failed for every statement on MySQL and PostgreSQL connections without a write grant**, including `SELECT 1`. Since 3.7.0 such queries run inside a read-only transaction for safety; the statement runner's guard against typed `BEGIN` / `START TRANSACTION` rejected that wrapper before the query ran. The wrapper now executes on the pinned connection the runner already discards afterwards, so reads work again while the read-only transaction still protects the database. Writes without a grant are still refused.
+
 ## [3.7.0] - 2026-10-18
 
 v3.7.0 adds **Elasticsearch and OpenSearch** as the seventh engine, fixes a long list of bugs found in a full review of every engine (several of them safety gates), and adds the debugging tools and snippets engineers reach for on each database.

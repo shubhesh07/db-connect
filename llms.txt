@@ -27,7 +27,7 @@ Built with Go and React (Wails). Native binaries, ~35 MB, start in under a secon
 
 ## Install
 
-- macOS: `curl -fsSL https://github.com/shubhesh07/db-connect/releases/latest/download/install.sh | bash` or `brew install --cask shubhesh07/db-connect/db-connect`
+- macOS: `curl -fsSL https://github.com/shubhesh07/db-connect/releases/latest/download/install.sh | bash` or `brew install --cask shubhesh07/db-connect/db-connect` (upgrade: `brew update && brew upgrade --cask db-connect`; repair: `brew update && brew reinstall --cask db-connect`)
 - Windows: https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-Windows-Setup.exe
 - All releases: https://github.com/shubhesh07/db-connect/releases
 

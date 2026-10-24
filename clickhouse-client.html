@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClickHouse client for macOS and Windows — DB Connect</title>
+    <meta name="description" content="A free, native ClickHouse client for macOS and Windows: SQL editor with per-tab sessions and Explain, an engine-aware schema explorer, a performance pane over the system tables, streaming export and import, and grid edits checked by a server-side dry run. Works with ClickHouse Cloud.">
+    <meta name="keywords" content="clickhouse client, clickhouse gui, clickhouse client mac, free clickhouse client, clickhouse ide, clickhouse sql editor, clickhouse cloud client, clickhouse desktop app, tabix alternative, clickhouse play alternative">
+    <link rel="canonical" href="https://shubhesh07.github.io/db-connect/clickhouse-client.html">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="ClickHouse client for macOS and Windows — DB Connect">
+    <meta property="og:description" content="A free, native ClickHouse client for macOS and Windows: SQL editor with per-tab sessions and Explain, an engine-aware schema explorer, a performance pane over the system tables, streaming export and import, and grid edits checked by a server-side dry run. Works with ClickHouse Cloud.">
+    <meta property="og:url" content="https://shubhesh07.github.io/db-connect/clickhouse-client.html">
+    <meta property="og:image" content="https://shubhesh07.github.io/db-connect/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ClickHouse client for macOS and Windows — DB Connect">
+    <meta name="twitter:description" content="A free, native ClickHouse client for macOS and Windows: SQL editor with per-tab sessions and Explain, an engine-aware schema explorer, a performance pane over the system tables, streaming export and import, and grid edits checked by a server-side dry run. Works with ClickHouse Cloud.">
+    <meta name="twitter:image" content="https://shubhesh07.github.io/db-connect/og-image.png">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does DB Connect support ClickHouse?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, since v3.8.0. It connects over the ClickHouse HTTP interface (port 8123, or 8443 with TLS) to self-managed servers and ClickHouse Cloud. The same app also covers MySQL, PostgreSQL, Redshift, DynamoDB, Redis, MongoDB and Elasticsearch/OpenSearch."}}, {"@type": "Question", "name": "Is there a free ClickHouse GUI for Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. DB Connect is free for personal and commercial use, runs natively on macOS (Intel and Apple Silicon) and Windows x64, and needs no account. Install it with brew install --cask shubhesh07/db-connect/db-connect or download the DMG."}}, {"@type": "Question", "name": "Can I edit rows in ClickHouse from the grid?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, once you turn on \"Allow grid edits\" for the connection. ClickHouse has no unique keys and a mutation reports no row count and cannot be rolled back, so DB Connect runs a dry run first: each edited row is matched on the server and must match exactly one row, the dialog shows the exact statement and how many parts it rewrites, and Apply stays disabled until every change is safe. Identical twin rows and rows that vanished since the query are refused."}}, {"@type": "Question", "name": "Does it work with ClickHouse Cloud?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Use the service host (it ends in .clickhouse.cloud) on port 8443 with TLS, and the user and password from the Cloud console. The form flips the default port when you toggle TLS and recognises Cloud hosts."}}, {"@type": "Question", "name": "Is it safe to point at a production ClickHouse?", "acceptedAnswer": {"@type": "Answer", "text": "Read-only connections send readonly=2 and allow_ddl=0 on every request, so the server itself refuses writes and DDL. Production-tagged connections ask before every write, including INSERT, mutations, OPTIMIZE, DDL, partition operations, SYSTEM and KILL, and every grid edit is shown as a dry run first. Credentials are encrypted with the key in your OS keychain."}}, {"@type": "Question", "name": "Can Claude or Cursor query my ClickHouse?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, through DB Connect's local MCP server. It's off by default, listens on 127.0.0.1, needs a bearer token, and only reaches connections you allow-list. list_databases, list_tables, describe_table, run_query, explain_query, active_sessions, slow_queries and cluster_health work on ClickHouse connections; without a write grant run_query runs with readonly=2."}}]}</script>
+<style>
+        :root {
+            --bg: #0a0a0b;
+            --surface: #141416;
+            --surface-2: #1c1c20;
+            --border: #2a2a2f;
+            --text: #f0f0f2;
+            --text-muted: #8b8b96;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --green: #22c55e;
+            --orange: #f97316;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Nav */
+        nav {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+        }
+        .logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); }
+
+        /* Hero */
+        .hero {
+            padding: 100px 0 80px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+        .hero h1 .highlight { color: var(--accent); }
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        .btn-secondary {
+            background: var(--surface-2);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover { border-color: var(--accent); }
+        .badge {
+            display: inline-block;
+            margin-top: 24px;
+            padding: 6px 14px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--green);
+        }
+
+        /* Databases */
+        .databases {
+            padding: 60px 0;
+            text-align: center;
+        }
+        .db-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        .db-item {
+            padding: 24px 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            min-width: 180px;
+        }
+        .db-item h3 { font-size: 1.1rem; margin-bottom: 4px; }
+        .db-item p { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* Features */
+        .features {
+            padding: 80px 0;
+        }
+        .features h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 50px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        .feature-card {
+            padding: 28px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: border-color 0.2s;
+        }
+        .feature-card:hover { border-color: var(--accent); }
+        .feature-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .feature-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        /* Comparison */
+        .comparison {
+            padding: 80px 0;
+        }
+        .comparison h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 14px 16px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .comparison-table th {
+            background: var(--surface);
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .comparison-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+        }
+        .comparison-table tr:hover td { background: var(--surface); }
+        .check { color: var(--green); }
+        .cross { color: var(--text-muted); }
+        .highlight-col { background: rgba(59, 130, 246, 0.05); }
+
+        /* Download */
+        .download {
+            padding: 80px 0;
+            text-align: center;
+        }
+        .download h2 {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+        .download p {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .download-card {
+            padding: 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+        }
+        .download-card h3 { margin-bottom: 8px; }
+        .download-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
+        .download-card .btn { width: 100%; justify-content: center; }
+
+        /* Quick install (hero) */
+        .quick-install {
+            margin: 36px auto 0;
+            max-width: 720px;
+            padding: 18px 22px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(59, 130, 246, 0.06));
+            border: 1px solid rgba(34, 197, 94, 0.35);
+            border-radius: 12px;
+            text-align: left;
+        }
+        .quick-install .qi-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--green);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 10px;
+        }
+        .quick-install .qi-label .pill {
+            padding: 2px 8px;
+            background: rgba(34, 197, 94, 0.15);
+            border-radius: 999px;
+            font-size: 0.7rem;
+            color: var(--green);
+        }
+        .quick-install code {
+            display: block;
+            padding: 12px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.9rem;
+            color: var(--green);
+            user-select: all;
+            cursor: pointer;
+            word-break: break-all;
+            line-height: 1.5;
+        }
+        .quick-install .qi-hint {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Stat bar */
+        .stat-bar {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+            margin-top: 32px;
+        }
+        .stat-item { text-align: center; }
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1.2;
+        }
+        .stat-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-top: 2px;
+        }
+
+        /* Workflow */
+        .workflow-section {
+            padding: 50px 0 20px;
+            text-align: center;
+        }
+        .workflow-section h2 {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+        .workflow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .workflow-step {
+            padding: 14px 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        .workflow-arrow {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        /* macOS warning */
+        .macos-warning {
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: rgba(249, 115, 22, 0.08);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            border-radius: 10px;
+            text-align: left;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .macos-warning strong {
+            color: var(--orange);
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+        .macos-warning code {
+            display: inline-block;
+            margin: 8px 0;
+            padding: 8px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.85rem;
+            color: var(--green);
+            user-select: all;
+            cursor: pointer;
+            word-break: break-all;
+        }
+        .macos-warning .hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero { padding: 60px 0 50px; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .comparison-table { font-size: 0.8rem; }
+            .comparison-table th, .comparison-table td { padding: 10px 8px; }
+        }
+
+        /* v3 additions */
+        .hero { padding: 72px 0 40px; }
+        .hero .sub { font-size: 1.15rem; max-width: 720px; }
+        .hero .meta { margin-top: 18px; font-size: 0.85rem; color: var(--text-muted); display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+        .hero .meta span::before { content: "·"; margin-right: 14px; color: var(--border); }
+        .hero .meta span:first-child::before { content: none; }
+        .release-pill { display:inline-flex; align-items:center; gap:8px; margin-bottom: 22px; padding: 6px 12px 6px 8px; border:1px solid var(--border); background: var(--surface); border-radius: 999px; font-size: 0.8rem; color: var(--text-muted); text-decoration:none; }
+        .release-pill b { color: var(--green); font-weight: 600; }
+        .release-pill:hover { border-color: var(--accent); color: var(--text); }
+        .hero-shot { margin: 44px auto 0; max-width: 1100px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--surface); box-shadow: 0 30px 80px rgba(0,0,0,0.55); }
+        .hero-shot img { display:block; width:100%; height:auto; }
+        .section-title { text-align:center; font-size: 2rem; letter-spacing: -0.01em; margin-bottom: 10px; }
+        .section-lead { text-align:center; color: var(--text-muted); max-width: 640px; margin: 0 auto 48px; }
+        .showcase { padding: 80px 0 20px; }
+        .show-row { display:grid; grid-template-columns: 1fr 1.4fr; gap: 40px; align-items:center; margin-bottom: 72px; }
+        .show-row.flip .show-text { order: 2; }
+        .show-text h3 { font-size: 1.5rem; margin-bottom: 10px; letter-spacing: -0.01em; }
+        .show-text p { color: var(--text-muted); font-size: 1rem; margin-bottom: 14px; }
+        .show-text ul { list-style:none; color: var(--text-muted); font-size: 0.92rem; display:grid; gap: 6px; }
+        .show-text li::before { content: "\2713"; color: var(--green); margin-right: 8px; font-weight: 700; }
+        .show-tag { display:inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+        .show-img { border: 1px solid var(--border); border-radius: 10px; overflow:hidden; background: var(--surface); box-shadow: 0 20px 50px rgba(0,0,0,0.45); }
+        .show-img img { display:block; width:100%; height:auto; }
+        .engine-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin-top: 32px; }
+        .engine { padding: 20px; background: var(--surface); border:1px solid var(--border); border-radius: 12px; text-align:left; }
+        .engine .stripe { height: 3px; border-radius: 2px; margin-bottom: 14px; }
+        .engine h3 { font-size: 1.05rem; margin-bottom: 6px; }
+        .engine p { font-size: 0.85rem; color: var(--text-muted); }
+        .feature-grid.compact { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+        .feature-grid.compact .feature-card { padding: 18px 20px; display:flex; gap: 14px; align-items:flex-start; }
+        .feature-grid.compact .feature-icon { font-size: 1.2rem; margin: 0; line-height: 1.4; }
+        .feature-grid.compact h3 { font-size: 0.98rem; margin-bottom: 3px; }
+        .feature-grid.compact p { font-size: 0.85rem; }
+        @media (max-width: 860px) { .show-row, .show-row.flip { grid-template-columns: 1fr; } .show-row.flip .show-text { order: 0; } .hero { padding: 48px 0 24px; } }
+
+        .page { padding: 64px 0 40px; }
+        .page h1 { font-size: clamp(2rem, 4vw, 2.8rem); letter-spacing:-0.02em; line-height:1.15; margin-bottom: 14px; }
+        .page .lead { color: var(--text-muted); font-size: 1.1rem; max-width: 720px; margin-bottom: 28px; }
+        .shot { border:1px solid var(--border); border-radius: 12px; overflow:hidden; background: var(--surface); box-shadow: 0 24px 60px rgba(0,0,0,.5); margin: 28px 0 40px; }
+        .shot img { display:block; width:100%; height:auto; }
+        .cols { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 16px; margin: 24px 0 40px; }
+        .col { padding: 18px 20px; background: var(--surface); border:1px solid var(--border); border-radius: 12px; }
+        .col h3 { font-size: 1rem; margin-bottom: 6px; }
+        .col p { font-size: .9rem; color: var(--text-muted); }
+        .faq { max-width: 820px; margin: 0 auto 48px; }
+        .faq h2 { font-size: 1.6rem; margin-bottom: 18px; }
+        .faq details { border-bottom: 1px solid var(--border); padding: 14px 0; }
+        .faq summary { cursor:pointer; font-weight: 600; }
+        .faq p { color: var(--text-muted); margin-top: 8px; font-size: .95rem; }
+        .cta { text-align:center; padding: 40px 0 60px; }
+        .cta .hero-buttons { margin-top: 16px; }
+        .cl h2 { font-size: 1.5rem; margin: 40px 0 6px; }
+        .cl h3 { font-size: 1.05rem; margin: 18px 0 8px; color: var(--text); }
+        .cl ul { padding-left: 20px; color: var(--text-muted); display:grid; gap: 6px; font-size: .95rem; }
+        .cl code { background: var(--surface-2); padding: 1px 5px; border-radius: 4px; font-size: .85em; }
+        .cl .date { color: var(--text-muted); font-size: .85rem; font-weight: 400; margin-left: 8px; }
+    
+        /* SEO pages: comparison wrapper, notes, article */
+        .table-wrap { overflow-x: auto; margin: 8px 0 12px; border: 1px solid var(--border); border-radius: 12px; }
+        .table-wrap .comparison-table td, .table-wrap .comparison-table th { text-align: left; }
+        .fine { font-size: .8rem; color: var(--text-muted); margin-bottom: 48px; }
+        .page h2.block { font-size: 1.6rem; margin: 8px 0 14px; letter-spacing: -0.01em; }
+        .note { padding: 12px 16px; background: rgba(249, 115, 22, 0.08); border: 1px solid rgba(249, 115, 22, 0.3); border-radius: 10px; color: var(--text); font-size: .92rem; margin: 0 0 28px; }
+        .page code, .faq code { background: var(--surface-2); padding: 1px 5px; border-radius: 4px; font-size: .85em; font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace; }
+        .page a:not(.btn) { color: var(--accent); }
+        .caption { font-size: .85rem; color: var(--text-muted); margin: -28px 0 36px; }
+        .article { max-width: 760px; margin: 0 auto; }
+        .article .byline { color: var(--text-muted); font-size: .9rem; margin-bottom: 18px; }
+        .article h2 { font-size: 1.4rem; margin: 36px 0 10px; letter-spacing: -0.01em; }
+        .article p, .article li { color: #c9c9d1; font-size: 1.02rem; margin-bottom: 14px; }
+        .article ol, .article ul { padding-left: 22px; margin-bottom: 14px; }
+        .try { margin: 40px 0; padding: 22px 24px; background: var(--surface); border: 1px solid rgba(34, 197, 94, 0.35); border-radius: 12px; }
+        .try h2 { margin-top: 0; }
+        pre.snippet { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin: 0 0 24px; overflow-x: auto; }
+        pre.snippet code { background: none; padding: 0; font-size: .88rem; line-height: 1.55; color: var(--text); }
+    </style>
+</head>
+<body>
+<nav>
+    <div class="container">
+        <a href="index.html" class="logo">DB<span>Connect</span></a>
+        <div class="nav-links">
+            <a href="index.html#whats-new">What's new</a>
+            <a href="index.html#features">Features</a>
+            <a href="index.html#comparison">Compare</a>
+            <a href="index.html#download">Download</a>
+            <a href="mysql-client.html">MySQL</a>
+            <a href="mongodb-client.html">MongoDB</a>
+            <a href="clickhouse-client.html">Elasticsearch</a>
+            <a href="vs-datagrip.html">vs DataGrip</a>
+            <a href="vs-dbeaver.html">vs DBeaver</a>
+            <a href="vs-tableplus.html">vs TablePlus</a>
+            <a href="changelog.html">Changelog</a>
+            <a href="https://github.com/shubhesh07/db-connect" target="_blank" rel="noopener">GitHub</a>
+        </div>
+    </div>
+</nav>
+<section class="page">
+    <div class="container">
+        <h1>A free ClickHouse client with sessions, Explain and a dry run for every edit</h1>
+        <p class="lead">Query ClickHouse over its HTTP interface with per-tab sessions, browse databases down to engine families, key columns and codecs, watch merges, mutations and replication in a performance pane, and edit rows only after the server has proved which row a mutation will touch. It's a native ClickHouse GUI for Mac and Windows that also speaks MySQL, PostgreSQL, Redshift, DynamoDB, Redis, MongoDB and Elasticsearch, with no account and no telemetry.</p>
+        <div class="hero-buttons" style="justify-content:flex-start">
+            <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-macOS.dmg" class="btn btn-primary">Download for macOS</a>
+            <a href="https://github.com/shubhesh07/db-connect/releases/latest/download/DBConnect-Windows-Setup.exe" class="btn btn-secondary">Download for Windows</a>
+        </div>
+        <div class="quick-install" style="margin-left:0">
+            <div class="qi-label">Install from the terminal <span class="pill">macOS</span></div>
+            <code>brew install --cask shubhesh07/db-connect/db-connect</code>
+            <code style="margin-top:8px">curl -fsSL https://github.com/shubhesh07/db-connect/releases/latest/download/install.sh | bash</code>
+            <div class="qi-hint">Homebrew or the one-line installer. One universal build for Intel and Apple Silicon; Windows x64 uses the installer above.</div>
+        </div>
+        <h2 class="block" style="margin-top:48px">SQL with ClickHouse's own tooling</h2>
+        <p style="color:var(--text-muted);margin-bottom:12px">Write ClickHouse SQL as you would in <code>clickhouse-client</code>; autocomplete knows ClickHouse's keywords and functions, and Explain shows the plan with the parts and granules each index pruned (or Estimate, Pipeline and Syntax):</p>
+        <pre class="snippet"><code>SELECT toStartOfHour(ts) AS hour, count() AS events, uniqExact(user_id) AS users
+FROM events
+WHERE ts &gt;= now() - INTERVAL 1 DAY
+GROUP BY hour
+ORDER BY hour</code></pre>
+        <p style="color:var(--text-muted);margin-bottom:12px">Thirty built-in snippets go straight to the system tables: running queries, slow shapes from <code>query_log</code>, parts per partition, merges, mutations, replication lag, memory, dictionaries and disks. For example, the one that finds tables getting too many small inserts:</p>
+        <pre class="snippet"><code>SELECT database, table, partition, count() AS parts, sum(rows) AS rows
+FROM system.parts
+WHERE active
+GROUP BY database, table, partition
+ORDER BY parts DESC
+LIMIT 20</code></pre>
+        <h2 class="block">A ClickHouse GUI with the tools you reach for every day</h2>
+        <div class="cols"><div class="col"><h3>Connect anywhere</h3><p>Self-managed ClickHouse or ClickHouse Cloud over the HTTP interface: port 8123, or 8443 with TLS and an optional CA file, username and password, and an SSH tunnel through a bastion. Version, timezone and user show on connect. Cloud hosts are recognised and the form flips the default port with TLS.</p></div><div class="col"><h3>An explorer that knows MergeTree</h3><p>Databases, then tables grouped by engine family: MergeTree, Replicated, Distributed, Log, Memory, dictionaries, views and materialized views with the table they feed. Columns carry primary, sorting and partition key badges, default kinds and codecs; skip indexes have their own folder; Users &amp; roles opens a grants viewer. Right-click a table for Query, DDL, Describe, Parts, Column sizes, Running queries, Export to file or Import file.</p></div><div class="col"><h3>Sessions, exact numbers, cancel</h3><p>Each tab has its own server session, so <code>USE</code>, <code>SET</code> and temporary tables persist between runs. 64-bit integers and decimals arrive exact, the toolbar LIMIT is placed before <code>SETTINGS</code> and <code>FORMAT</code>, and Cancel issues <code>KILL QUERY</code>.</p></div><div class="col"><h3>Grid edits with a dry run</h3><p>Opt in per connection, then edit cells, remove rows and add rows in the grid. Before anything runs, every edited row is matched on the server: it must match exactly one row, the dialog shows the exact mutation and how many parts it rewrites, and Apply stays disabled until every change is safe. Values are bound as typed query parameters, never spliced into SQL.</p></div><div class="col"><h3>Performance pane</h3><p>Memory, load, CPU, cache hit rates, merge pool, delayed inserts, parts per partition and replica delay at a glance. Running queries with Kill, slow query shapes from <code>system.query_log</code> with where they were fired from, merges and mutations with Kill, replication, parts and disks, errors and dictionaries. A cluster picker switches every list to <code>clusterAllReplicas</code>.</p></div><div class="col"><h3>Export, import, watch</h3><p>Export CSV, JSON Lines or Parquet streamed straight from the server with <code>FORMAT</code>, with progress. Import CSV, TSV, JSON Lines or Parquet into a table from the native file picker. Watch re-runs a read on an interval and alerts on a condition.</p></div><div class="col"><h3>Safety by default</h3><p>Read-only connections send <code>readonly=2</code> and <code>allow_ddl=0</code> on every request, so the server enforces them. Production connections confirm every write: inserts, mutations, OPTIMIZE, DDL, partition operations, SYSTEM, KILL, GRANT and REVOKE.</p></div><div class="col"><h3>MCP for Claude and Cursor</h3><p>The local MCP server exposes <code>list_databases</code>, <code>list_tables</code>, <code>describe_table</code>, <code>run_query</code>, <code>explain_query</code>, <code>active_sessions</code>, <code>slow_queries</code> and <code>cluster_health</code> for allow-listed ClickHouse connections; without a write grant queries run with <code>readonly=2</code>.</p></div></div>
+        <h2 class="block">ClickHouse Play, Tabix, DBeaver: how it compares</h2>
+        <p style="color:var(--text-muted);margin-bottom:12px">The Play UI that ships with every ClickHouse server is free and needs nothing installed, but it is one query box per browser tab, with no schema explorer, history or safety rails. Tabix is an open-source web client with a schema tree and charts. DBeaver and DataGrip reach ClickHouse through the JDBC driver and are capable general-purpose IDEs, but they do not read the system tables into a performance view or check what a mutation will touch before running it. DB Connect is for engineers who query ClickHouse next to the transactional databases, caches and search clusters behind it: one desktop app with every connection, per-tab sessions, a performance pane, grid edits behind a server-side dry run, and a local MCP server for AI tools. Pick by workflow, not by feature count, and check each tool's current docs, since all of them change often.</p>
+        <p class="fine">Corrections are welcome: <a href="https://github.com/shubhesh07/db-connect/issues" target="_blank" rel="noopener">open an issue</a>.</p>
+        <div class="faq"><h2>Frequently asked</h2><details><summary>Does DB Connect support ClickHouse?</summary><p>Yes, since v3.8.0. It connects over the ClickHouse HTTP interface (port 8123, or 8443 with TLS) to self-managed servers and ClickHouse Cloud. The same app also covers MySQL, PostgreSQL, Redshift, DynamoDB, Redis, MongoDB and Elasticsearch/OpenSearch.</p></details><details><summary>Is there a free ClickHouse GUI for Mac?</summary><p>Yes. DB Connect is free for personal and commercial use, runs natively on macOS (Intel and Apple Silicon) and Windows x64, and needs no account. Install it with <code>brew install --cask shubhesh07/db-connect/db-connect</code> or download the DMG.</p></details><details><summary>Can I edit rows in ClickHouse from the grid?</summary><p>Yes, once you turn on &quot;Allow grid edits&quot; for the connection. ClickHouse has no unique keys and a mutation reports no row count and cannot be rolled back, so DB Connect runs a dry run first: each edited row is matched on the server and must match exactly one row, the dialog shows the exact statement and how many parts it rewrites, and Apply stays disabled until every change is safe. Identical twin rows and rows that vanished since the query are refused.</p></details><details><summary>Does it work with ClickHouse Cloud?</summary><p>Yes. Use the service host (it ends in .clickhouse.cloud) on port 8443 with TLS, and the user and password from the Cloud console. The form flips the default port when you toggle TLS and recognises Cloud hosts.</p></details><details><summary>Is it safe to point at a production ClickHouse?</summary><p>Read-only connections send readonly=2 and allow_ddl=0 on every request, so the server itself refuses writes and DDL. Production-tagged connections ask before every write, including INSERT, mutations, OPTIMIZE, DDL, partition operations, SYSTEM and KILL, and every grid edit is shown as a dry run first. Credentials are encrypted with the key in your OS keychain.</p></details><details><summary>Can Claude or Cursor query my ClickHouse?</summary><p>Yes, through DB Connect&#x27;s local MCP server. It&#x27;s off by default, listens on 127.0.0.1, needs a bearer token, and only reaches connections you allow-list. list_databases, list_tables, describe_table, run_query, explain_query, active_sessions, slow_queries and cluster_health work on ClickHouse connections; without a write grant run_query runs with readonly=2.</p></details></div>
+        <div class="cta"><h2>Free. Native. No account.</h2><p style="color:var(--text-muted)">macOS (Intel + Apple Silicon) and Windows x64, about 35 MB. Also available via <code>brew install --cask shubhesh07/db-connect/db-connect</code>.</p>
+            <div class="hero-buttons"><a href="index.html#download" class="btn btn-primary">All download options</a><a href="index.html#comparison" class="btn btn-secondary">How it compares</a></div></div>
+    </div>
+</section>
+<footer>
+    <div class="container">
+        <p>Built by <a href="https://github.com/shubhesh07" target="_blank" rel="noopener">Shubhesh Shukla</a> · <a href="https://github.com/shubhesh07/db-connect" target="_blank" rel="noopener">GitHub</a> · <a href="https://github.com/shubhesh07/db-connect/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a> · <a href="https://github.com/shubhesh07/db-connect/releases" target="_blank" rel="noopener">Releases</a> · Free for personal and commercial use</p>
+        <p style="margin-top: 8px;"><a href="mysql-client.html">MySQL client</a> · <a href="mongodb-client.html">MongoDB client</a> · <a href="elasticsearch-client.html">Elasticsearch client</a> · <a href="clickhouse-client.html">ClickHouse client</a> · <a href="mysql-cpu-case-study.html">MySQL CPU case study</a> · <a href="vs-datagrip.html">DB Connect vs DataGrip</a> · <a href="vs-dbeaver.html">DB Connect vs DBeaver</a> · <a href="vs-tableplus.html">DB Connect vs TablePlus</a></p>
+            <p style="margin-top: 8px;">Engines: <a href="mysql-client.html">MySQL</a> · <a href="postgresql-client.html">PostgreSQL</a> · <a href="redshift-client.html">Redshift</a> · <a href="dynamodb-gui.html">DynamoDB</a> · <a href="redis-gui.html">Redis</a> · <a href="mongodb-client.html">MongoDB</a> · <a href="elasticsearch-client.html">Elasticsearch</a> · <a href="clickhouse-client.html">ClickHouse</a> · <a href="mysql-cpu-case-study.html">MySQL CPU case study</a></p>
+        <p style="margin-top: 8px;">Compare: <a href="vs-datagrip.html">DataGrip</a> · <a href="vs-dbeaver.html">DBeaver</a> · <a href="vs-tableplus.html">TablePlus</a> · <a href="vs-mysql-workbench.html">MySQL Workbench</a> · <a href="vs-sequel-ace.html">Sequel Ace</a> · <a href="vs-pgadmin.html">pgAdmin</a> · <a href="vs-redisinsight.html">RedisInsight</a> · <a href="vs-nosql-workbench.html">NoSQL Workbench</a> · <a href="vs-dynobase.html">Dynobase</a> · <a href="vs-mongodb-compass.html">MongoDB Compass</a> · <a href="vs-studio-3t.html">Studio 3T</a> · <a href="changelog.html">Changelog</a></p>
+</div>
+</footer>
+</body>
+</html>

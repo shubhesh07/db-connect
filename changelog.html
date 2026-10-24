@@ -479,6 +479,23 @@
     <div class="container" style="max-width:860px">
         <h1>Changelog</h1>
         <p class="lead">Every release, newest first. Downloads for each version are on <a href="https://github.com/shubhesh07/db-connect/releases" style="color:var(--accent)">GitHub Releases</a>.</p>
+<h2 id="v3.8.0">v3.8.0<span class="date">2026-10-24</span></h2>
+<p>v3.8.0 adds <b>ClickHouse</b> as the eighth engine: the HTTP interface with per-tab sessions, an explorer that understands MergeTree families, a performance pane built on the system tables, streaming export and import, MCP tools, and grid edits that are checked on the server before they run. <a href="clickhouse-client.html">Full guide</a>.</p>
+<h3>ClickHouse</h3>
+<ul>
+<li><b>Eighth engine.</b> Connect over the HTTP interface (8123, or 8443 with TLS) with username and password, TLS with a custom CA, and SSH tunnels. ClickHouse Cloud is recognised from the host; version, timezone and user show on connect. Read-only profiles are enforced by the server (<code>readonly=2</code> and <code>allow_ddl=0</code> on every request), not only by the app.</li>
+<li><b>Explorer</b>: databases, tables grouped by engine family (MergeTree, Replicated, Distributed, Log, Memory, dictionaries, views and materialized views with their target table), columns with primary, sorting and partition key badges, default kinds and codecs, skip indexes, and a Users &amp; roles folder with a grants viewer. Right-click for Query, DDL, Describe, Parts, Column sizes, Running queries, Export to file and Import file.</li>
+<li><b>Editor</b>: every statement runs in a per-tab session (<code>USE</code>, <code>SET</code> and temporary tables persist), the toolbar LIMIT lands before <code>SETTINGS</code> and <code>FORMAT</code>, Cancel issues <code>KILL QUERY</code>, 64-bit integers and decimals arrive exact, ClickHouse keywords and functions in autocomplete, 30 diagnostics snippets, and Explain with Plan (selected parts and granules per index), Estimate, Pipeline and Syntax.</li>
+<li><b>Grid edits with a dry run.</b> Turn on "Allow grid edits (mutations)" on a connection, then edit cells, delete rows and insert rows in the results grid. ClickHouse has no unique keys, and a mutation reports no row count and cannot be rolled back, so before anything runs DB Connect matches every edited row on the server: it must match exactly one row (identical twins and rows that vanished since the query are refused), the dialog shows the exact statement and how many parts it rewrites, and Apply stays disabled until every change is safe. Values are bound as typed query parameters. Array, Map and Tuple columns cannot be edited from the grid; non-MergeTree tables are refused.</li>
+<li><b>Performance pane</b>: Overview (memory, load, CPU, cache hit rates, merge pool, delayed inserts, parts per partition, replica delay), Running queries with Kill, Slow shapes from <code>system.query_log</code> with "where fired from", Merges &amp; mutations with Kill, Replication, Parts &amp; disks, Errors and Dictionaries. A cluster picker switches the lists to <code>clusterAllReplicas</code>.</li>
+<li><b>Export and import</b>: CSV, JSON Lines or Parquet streamed straight from the server with <code>FORMAT</code>; import CSV, TSV, JSON Lines or Parquet into a table from the native file picker. Watch works on ClickHouse reads.</li>
+<li>Read-only profiles and production confirmation cover <code>INSERT</code>, <code>ALTER … UPDATE</code> and <code>ALTER … DELETE</code>, lightweight <code>UPDATE</code> and <code>DELETE</code>, <code>OPTIMIZE</code>, DDL, partition operations, <code>SYSTEM</code>, <code>KILL</code>, <code>GRANT</code> and <code>REVOKE</code>, and every grid edit.</li>
+<li><b>MCP</b>: <code>list_databases</code>, <code>list_tables</code>, <code>describe_table</code>, <code>run_query</code> (runs with <code>readonly=2</code> without a grant), <code>explain_query</code>, <code>active_sessions</code>, <code>slow_queries</code> and <code>cluster_health</code> work on ClickHouse connections.</li>
+</ul>
+<h3>Other</h3>
+<ul>
+<li>Homebrew: the cask now uses Homebrew 7's <code>postflight_steps</code>, so installs no longer print "Calling postflight is deprecated". If you already saw it, <code>brew update &amp;&amp; brew reinstall --cask db-connect</code> clears it.</li>
+</ul>
 <h2 id="v3.7.1">v3.7.1<span class="date">2026-10-19</span></h2>
 <h3>Fixes</h3>
 <ul>
@@ -909,7 +926,7 @@
 <footer>
     <div class="container">
         <p>Built by <a href="https://github.com/shubhesh07" target="_blank" rel="noopener">Shubhesh Shukla</a> · <a href="https://github.com/shubhesh07/db-connect" target="_blank" rel="noopener">GitHub</a> · <a href="https://github.com/shubhesh07/db-connect/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a> · <a href="https://github.com/shubhesh07/db-connect/releases" target="_blank" rel="noopener">Releases</a> · Free for personal and commercial use</p>
-            <p style="margin-top: 8px;">Engines: <a href="mysql-client.html">MySQL</a> · <a href="postgresql-client.html">PostgreSQL</a> · <a href="redshift-client.html">Redshift</a> · <a href="dynamodb-gui.html">DynamoDB</a> · <a href="redis-gui.html">Redis</a> · <a href="mongodb-client.html">MongoDB</a> · <a href="elasticsearch-client.html">Elasticsearch</a> · <a href="mysql-cpu-case-study.html">MySQL CPU case study</a></p>
+            <p style="margin-top: 8px;">Engines: <a href="mysql-client.html">MySQL</a> · <a href="postgresql-client.html">PostgreSQL</a> · <a href="redshift-client.html">Redshift</a> · <a href="dynamodb-gui.html">DynamoDB</a> · <a href="redis-gui.html">Redis</a> · <a href="mongodb-client.html">MongoDB</a> · <a href="elasticsearch-client.html">Elasticsearch</a> · <a href="clickhouse-client.html">ClickHouse</a> · <a href="mysql-cpu-case-study.html">MySQL CPU case study</a></p>
         <p style="margin-top: 8px;">Compare: <a href="vs-datagrip.html">DataGrip</a> · <a href="vs-dbeaver.html">DBeaver</a> · <a href="vs-tableplus.html">TablePlus</a> · <a href="vs-mysql-workbench.html">MySQL Workbench</a> · <a href="vs-sequel-ace.html">Sequel Ace</a> · <a href="vs-pgadmin.html">pgAdmin</a> · <a href="vs-redisinsight.html">RedisInsight</a> · <a href="vs-nosql-workbench.html">NoSQL Workbench</a> · <a href="vs-dynobase.html">Dynobase</a> · <a href="vs-mongodb-compass.html">MongoDB Compass</a> · <a href="vs-studio-3t.html">Studio 3T</a> · <a href="changelog.html">Changelog</a></p>
 </div>
 </footer>

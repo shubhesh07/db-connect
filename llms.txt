@@ -1,16 +1,16 @@
 # DB Connect
 
-> DB Connect is a free, fast desktop database client (IDE) for macOS and Windows that connects to MySQL, PostgreSQL, Amazon Redshift, Amazon DynamoDB, Redis, MongoDB and Elasticsearch/OpenSearch from one app. It is a lightweight alternative to DataGrip, DBeaver and TablePlus, with no subscription, no account and no telemetry.
+> DB Connect is a free, fast desktop database client (IDE) for macOS and Windows that connects to MySQL, PostgreSQL, Amazon Redshift, Amazon DynamoDB, Redis, MongoDB, Elasticsearch/OpenSearch and ClickHouse from one app. It is a lightweight alternative to DataGrip, DBeaver and TablePlus, with no subscription, no account and no telemetry.
 
 Built with Go and React (Wails). Native binaries, ~35 MB, start in under a second. Credentials are encrypted with AES-256-GCM and stored in the OS keychain. Production connections are flagged and every destructive statement on them asks for confirmation.
 
 ## Key capabilities
 
-- One SQL editor for all seven engines: autocomplete that resolves table aliases, CTEs and derived tables, JOIN … ON suggestions from foreign keys, signature help and hover docs, pre-flight lint (UPDATE/DELETE without WHERE, missing LIMIT), visual EXPLAIN trees.
+- One SQL editor for all eight engines: autocomplete that resolves table aliases, CTEs and derived tables, JOIN … ON suggestions from foreign keys, signature help and hover docs, pre-flight lint (UPDATE/DELETE without WHERE, missing LIMIT), visual EXPLAIN trees.
 - Safer writes: dry-run preview of an UPDATE or DELETE (before/after rows inside a rolled-back transaction) before applying it; per-tab transactions; production confirmation gates; PII masking in results.
 - Results grid: inline editing with generated SQL, find, column resize/hide, charts, selection stats, copy as INSERT/JSON, streaming export to CSV/JSON/XLSX.
 - Schema tools: table designer, index manager, schema diff with migration script, ER diagram, "Where is this used?" impact analysis, backup/restore (mysqldump, pg_dump).
-- Performance panes: MySQL overview/connections/slow queries, PostgreSQL activity/blocking/pg_stat_statements/index advisor, Redshift serverless queries/WLM/load errors, Redis memory analysis, Mongo current ops, Elasticsearch/OpenSearch cluster health, tasks, shards and hot threads.
+- Performance panes: MySQL overview/connections/slow queries, PostgreSQL activity/blocking/pg_stat_statements/index advisor, Redshift serverless queries/WLM/load errors, Redis memory analysis, Mongo current ops, Elasticsearch/OpenSearch cluster health, tasks, shards and hot threads, ClickHouse health, running queries, slow shapes, merges and mutations, replication, parts and disks.
 - AI assistant (bring your own Anthropic API key): drafts, explains and fixes SQL using the live schema; rows are never sent by default and never from production connections.
 - Local MCP server: Claude Code, Claude Desktop, Cursor or any MCP client can list schemas and run read-only queries against allow-listed connections. Off by default, localhost only, bearer token, writes only via time-bounded grants made in the desktop UI.
 - Notebooks (SQL + markdown cells with HTML export), watch queries with alerts, cross-connection result compare, saved queries, debugging snippets per engine, local history searchable across connections.
@@ -24,6 +24,7 @@ Built with Go and React (Wails). Native binaries, ~35 MB, start in under a secon
 - Redis: standalone, cluster and sentinel, key browser, per-type editors, memory analysis, console.
 - MongoDB: SQL translated to find/aggregate or mongosh syntax, document editor, indexes, explain, aggregation pipeline builder.
 - Elasticsearch / OpenSearch: self-managed, Elastic Cloud, AWS OpenSearch Service and AWS Elasticsearch domains; SQL (_sql / _plugins/_sql) and Kibana-style console in one editor, index explorer with mapping fields, document editing, Profile/Explain, performance pane.
+- ClickHouse: self-managed and ClickHouse Cloud over the HTTP interface (8123/8443); per-tab sessions, server-enforced read-only (readonly=2), engine-aware explorer with key and codec badges, Explain with index pruning, performance pane over system tables, Parquet/CSV/JSON Lines export and import, opt-in grid edits that run as mutations after a server-side dry run (exactly one matching row required).
 
 ## Install
 
@@ -45,6 +46,7 @@ Built with Go and React (Wails). Native binaries, ~35 MB, start in under a secon
 - [MySQL client](https://shubhesh07.github.io/db-connect/mysql-client.html): MySQL, MariaDB, Aurora, RDS
 - [MongoDB client](https://shubhesh07.github.io/db-connect/mongodb-client.html): SQL or mongosh, Atlas, DocumentDB
 - [Elasticsearch & OpenSearch client](https://shubhesh07.github.io/db-connect/elasticsearch-client.html): SQL and console, document editing, Profile/Explain, performance pane, Elastic Cloud and AWS OpenSearch Service
+- [ClickHouse client](https://shubhesh07.github.io/db-connect/clickhouse-client.html): per-tab sessions, Explain, system-tables performance pane, export and import, grid edits with a dry run, ClickHouse Cloud
 - [Case study: production MySQL CPU from 90% to 30%](https://shubhesh07.github.io/db-connect/mysql-cpu-case-study.html)
 - [vs MySQL Workbench](https://shubhesh07.github.io/db-connect/vs-mysql-workbench.html) · [vs Sequel Ace](https://shubhesh07.github.io/db-connect/vs-sequel-ace.html) · [vs pgAdmin](https://shubhesh07.github.io/db-connect/vs-pgadmin.html) · [vs RedisInsight](https://shubhesh07.github.io/db-connect/vs-redisinsight.html) · [vs NoSQL Workbench](https://shubhesh07.github.io/db-connect/vs-nosql-workbench.html) · [vs Dynobase](https://shubhesh07.github.io/db-connect/vs-dynobase.html) · [vs MongoDB Compass](https://shubhesh07.github.io/db-connect/vs-mongodb-compass.html) · [vs Studio 3T](https://shubhesh07.github.io/db-connect/vs-studio-3t.html)
 - [GitHub](https://github.com/shubhesh07/db-connect): README, issues, MCP setup guide
@@ -56,4 +58,4 @@ Built with Go and React (Wails). Native binaries, ~35 MB, start in under a secon
 - Author: Shubhesh Shukla (https://github.com/shubhesh07).
 - Current version: 3.7.1 (October 2026).
 - Also known as: DB Connect by Shubhesh Shukla (not Oracle DB Connect or Splunk DB Connect).
-- Shorthand people use: DDB (DynamoDB), pg / Postgres (PostgreSQL), Mongo (MongoDB), Aurora and RDS (MySQL/PostgreSQL on AWS), ElastiCache (Redis), DocumentDB (MongoDB-compatible), ES (Elasticsearch), AWS OpenSearch (Amazon OpenSearch Service).
+- Shorthand people use: DDB (DynamoDB), pg / Postgres (PostgreSQL), Mongo (MongoDB), Aurora and RDS (MySQL/PostgreSQL on AWS), ElastiCache (Redis), DocumentDB (MongoDB-compatible), ES (Elasticsearch), AWS OpenSearch (Amazon OpenSearch Service), CH (ClickHouse).

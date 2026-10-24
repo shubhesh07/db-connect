@@ -2,6 +2,23 @@
 
 All notable changes to DB Connect will be documented in this file.
 
+## [3.8.0] - 2026-10-24
+
+v3.8.0 adds **ClickHouse** as the eighth engine: the HTTP interface with per-tab sessions, an explorer that understands MergeTree families, a performance pane built on the system tables, streaming export and import, MCP tools, and grid edits that are checked on the server before they run. [Full guide](https://shubhesh07.github.io/db-connect/clickhouse-client.html).
+
+#### ClickHouse
+✨ **Eighth engine.** Connect over the HTTP interface (8123, or 8443 with TLS) with username and password, TLS with a custom CA, and SSH tunnels. ClickHouse Cloud is recognised from the host; version, timezone and user show on connect. Read-only profiles are enforced by the server (`readonly=2` and `allow_ddl=0` on every request), not only by the app.
+✨ **Explorer**: databases, tables grouped by engine family (MergeTree, Replicated, Distributed, Log, Memory, dictionaries, views and materialized views with their target table), columns with primary, sorting and partition key badges, default kinds and codecs, skip indexes, and a Users & roles folder with a grants viewer. Right-click for Query, DDL, Describe, Parts, Column sizes, Running queries, Export to file and Import file.
+✨ **Editor**: every statement runs in a per-tab session (`USE`, `SET` and temporary tables persist), the toolbar LIMIT lands before `SETTINGS` and `FORMAT`, Cancel issues `KILL QUERY`, 64-bit integers and decimals arrive exact, ClickHouse keywords and functions in autocomplete, 30 diagnostics snippets, and Explain with Plan (selected parts and granules per index), Estimate, Pipeline and Syntax.
+✨ **Grid edits with a dry run.** Turn on "Allow grid edits (mutations)" on a connection, then edit cells, delete rows and insert rows in the results grid. ClickHouse has no unique keys, and a mutation reports no row count and cannot be rolled back, so before anything runs DB Connect matches every edited row on the server: it must match exactly one row (identical twins and rows that vanished since the query are refused), the dialog shows the exact statement and how many parts it rewrites, and Apply stays disabled until every change is safe. Values are bound as typed query parameters. Array, Map and Tuple columns cannot be edited from the grid; non-MergeTree tables are refused.
+✨ **Performance pane**: Overview (memory, load, CPU, cache hit rates, merge pool, delayed inserts, parts per partition, replica delay), Running queries with Kill, Slow shapes from `system.query_log` with "where fired from", Merges & mutations with Kill, Replication, Parts & disks, Errors and Dictionaries. A cluster picker switches the lists to `clusterAllReplicas`.
+✨ **Export and import**: CSV, JSON Lines or Parquet streamed straight from the server with `FORMAT`; import CSV, TSV, JSON Lines or Parquet into a table from the native file picker. Watch works on ClickHouse reads.
+🛡️ Read-only profiles and production confirmation cover `INSERT`, `ALTER … UPDATE` and `ALTER … DELETE`, lightweight `UPDATE` and `DELETE`, `OPTIMIZE`, DDL, partition operations, `SYSTEM`, `KILL`, `GRANT` and `REVOKE`, and every grid edit.
+✨ **MCP**: `list_databases`, `list_tables`, `describe_table`, `run_query` (runs with `readonly=2` without a grant), `explain_query`, `active_sessions`, `slow_queries` and `cluster_health` work on ClickHouse connections.
+
+#### Other
+🐛 Homebrew: the cask now uses Homebrew 7's `postflight_steps`, so installs no longer print "Calling postflight is deprecated". If you already saw it, `brew update && brew reinstall --cask db-connect` clears it.
+
 ## [3.7.1] - 2026-10-19
 
 🐛 **MCP `run_query` failed for every statement on MySQL and PostgreSQL connections without a write grant**, including `SELECT 1`. Since 3.7.0 such queries run inside a read-only transaction for safety; the statement runner's guard against typed `BEGIN` / `START TRANSACTION` rejected that wrapper before the query ran. The wrapper now executes on the pinned connection the runner already discards afterwards, so reads work again while the read-only transaction still protects the database. Writes without a grant are still refused.

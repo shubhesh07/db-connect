@@ -2,13 +2,13 @@
 
 **One database client for your entire backend stack.**
 
-MySQL + PostgreSQL + Amazon Redshift + DynamoDB + Redis + MongoDB + Elasticsearch/OpenSearch — one fast, free, native desktop IDE instead of seven separate tools and seven separate sets of saved credentials.
+MySQL + PostgreSQL + Amazon Redshift + DynamoDB + Redis + MongoDB + Elasticsearch/OpenSearch + ClickHouse — one fast, free, native desktop IDE instead of eight separate tools and eight separate sets of saved credentials.
 
 ![macOS](https://img.shields.io/badge/macOS-supported-blue) ![Windows](https://img.shields.io/badge/Windows-supported-blue) ![License](https://img.shields.io/badge/license-free-green) ![Downloads](https://img.shields.io/github/downloads/shubhesh07/db-connect/total)
 
 ![DB Connect — PostgreSQL query with results, sidebar grouped by engine](screenshots/hero-sql.png)
 
-**Guides:** [MySQL](https://shubhesh07.github.io/db-connect/mysql-client.html) · [PostgreSQL](https://shubhesh07.github.io/db-connect/postgresql-client.html) · [Redshift](https://shubhesh07.github.io/db-connect/redshift-client.html) · [DynamoDB](https://shubhesh07.github.io/db-connect/dynamodb-gui.html) · [Redis](https://shubhesh07.github.io/db-connect/redis-gui.html) · [MongoDB](https://shubhesh07.github.io/db-connect/mongodb-client.html) · [Elasticsearch / OpenSearch](https://shubhesh07.github.io/db-connect/elasticsearch-client.html) · [Case study: MySQL CPU 90% → 30%](https://shubhesh07.github.io/db-connect/mysql-cpu-case-study.html)
+**Guides:** [MySQL](https://shubhesh07.github.io/db-connect/mysql-client.html) · [PostgreSQL](https://shubhesh07.github.io/db-connect/postgresql-client.html) · [Redshift](https://shubhesh07.github.io/db-connect/redshift-client.html) · [DynamoDB](https://shubhesh07.github.io/db-connect/dynamodb-gui.html) · [Redis](https://shubhesh07.github.io/db-connect/redis-gui.html) · [MongoDB](https://shubhesh07.github.io/db-connect/mongodb-client.html) · [Elasticsearch / OpenSearch](https://shubhesh07.github.io/db-connect/elasticsearch-client.html) · [ClickHouse](https://shubhesh07.github.io/db-connect/clickhouse-client.html) · [Case study: MySQL CPU 90% → 30%](https://shubhesh07.github.io/db-connect/mysql-cpu-case-study.html)
 **Compared with:** [DataGrip](https://shubhesh07.github.io/db-connect/vs-datagrip.html) · [DBeaver](https://shubhesh07.github.io/db-connect/vs-dbeaver.html) · [TablePlus](https://shubhesh07.github.io/db-connect/vs-tableplus.html) · [MySQL Workbench](https://shubhesh07.github.io/db-connect/vs-mysql-workbench.html) · [Sequel Ace](https://shubhesh07.github.io/db-connect/vs-sequel-ace.html) · [pgAdmin](https://shubhesh07.github.io/db-connect/vs-pgadmin.html) · [RedisInsight](https://shubhesh07.github.io/db-connect/vs-redisinsight.html) · [NoSQL Workbench](https://shubhesh07.github.io/db-connect/vs-nosql-workbench.html) · [Dynobase](https://shubhesh07.github.io/db-connect/vs-dynobase.html) · [MongoDB Compass](https://shubhesh07.github.io/db-connect/vs-mongodb-compass.html) · [Studio 3T](https://shubhesh07.github.io/db-connect/vs-studio-3t.html)
 
 ## Download
@@ -23,7 +23,7 @@ Full manual-download links (DMG, portable ZIPs) are in [Manual downloads](#manua
 
 ## Why DB Connect?
 
-- **One tool, not three.** If your stack is MySQL or PostgreSQL for transactional data, Redshift for analytics, DynamoDB for high-throughput key-value access, Redis for caching, MongoDB for documents and Elasticsearch or OpenSearch for search, you know the pain of a GUI client, credential store and query history per engine. DB Connect treats all seven engines as equal, first-class citizens.
+- **One tool, not three.** If your stack is MySQL or PostgreSQL for transactional data, Redshift for analytics, DynamoDB for high-throughput key-value access, Redis for caching, MongoDB for documents, Elasticsearch or OpenSearch for search and ClickHouse for analytics, you know the pain of a GUI client, credential store and query history per engine. DB Connect treats all eight engines as equal, first-class citizens.
 - **Free forever.** No subscription, no trial limits, no feature paywall.
 - **Fast.** Opens in under 2 seconds. ~35 MB installed. Built with Go + Wails — a native app, not Electron, so there's no bundled Chromium sitting in your dock for a database browser.
 - **DynamoDB done properly.** A visual Scan/Query/GetItem builder *and* a PartiQL editor for writing real `SELECT * FROM "table" WHERE ...` statements — most GUI database tools ignore DynamoDB entirely or bolt on a bare-bones table browser.
@@ -63,6 +63,18 @@ New in v3.7.0, the seventh engine. [Full guide](https://shubhesh07.github.io/db-
 - **Performance pane**: cluster health, search and indexing rates and latencies per node and index, heap, CPU and rejections, plus Tasks (with cancel), Shards (with allocation explain), Hot threads, Pending tasks and circuit breakers.
 - **Safety**: read-only profiles and production confirmation apply to every write, including `DELETE`, `PUT`, `_update_by_query`, `_delete_by_query`, task cancel and document edits.
 - **MCP**: `list_tables`, `describe_table`, `run_query` (SQL or console), `explain_query`, `active_sessions` and `cluster_health` work on Elasticsearch connections; writes still need a grant.
+
+## ClickHouse
+
+New in v3.8.0, the eighth engine. [Full guide](https://shubhesh07.github.io/db-connect/clickhouse-client.html).
+
+- **Connect** over the HTTP interface (8123, or 8443 with TLS) with username and password, TLS with a custom CA and an SSH tunnel; ClickHouse Cloud is recognised from the host. Read-only profiles are enforced by the server (`readonly=2`, `allow_ddl=0` on every request).
+- **Explorer**: tables grouped by engine family, primary/sorting/partition key badges, default kinds and codecs, skip indexes, materialized views with their target table, dictionaries, and Users & roles with a grants viewer.
+- **Editor**: per-tab server sessions (`USE`, `SET`, temporary tables persist), exact 64-bit integers and decimals, Cancel via `KILL QUERY`, 30 diagnostics snippets over the system tables, Explain with Plan (parts and granules per index), Estimate, Pipeline and Syntax.
+- **Grid edits with a dry run**: opt in per connection; every edited row is matched on the server first and must match exactly one row (twins and vanished rows are refused), the dialog shows the exact mutation and the parts it rewrites, and values are bound as typed query parameters.
+- **Performance pane**: health overview, running queries with Kill, slow shapes from `system.query_log` with where they were fired from, merges and mutations with Kill, replication, parts and disks, errors, dictionaries; cluster-wide via `clusterAllReplicas`.
+- **Export and import**: CSV, JSON Lines and Parquet streamed with `FORMAT`; import CSV, TSV, JSON Lines or Parquet into a table.
+- **MCP**: `list_databases`, `list_tables`, `describe_table`, `run_query` (read-only without a grant), `explain_query`, `active_sessions`, `slow_queries` and `cluster_health`.
 
 ## How it compares
 
@@ -115,7 +127,7 @@ brew install --cask shubhesh07/db-connect/db-connect
 ```
 
 1. Launch DB Connect
-2. **Add Connection** → choose MySQL, PostgreSQL, Redshift, DynamoDB, Redis, MongoDB, or Elasticsearch/OpenSearch
+2. **Add Connection** → choose MySQL, PostgreSQL, Redshift, DynamoDB, Redis, MongoDB, Elasticsearch/OpenSearch, or ClickHouse
 3. Enter credentials → **Test Connection** → **Save**
 4. Write a query (or, for DynamoDB, use the visual builder or the PartiQL editor) → `Cmd+Enter` to run
 
@@ -186,7 +198,8 @@ Reordered toward the broadest database-client market first:
 4. [x] **Query result diffing (compare EXPLAIN output before/after an index change)** — shipped in v3.1.0: baseline a plan, change an index, re-run, and compare access type, key and rows examined with a per-table verdict
 5. [x] **MongoDB support** — shipped in v3.2.0: SQL (translated to find/aggregate) or mongosh syntax, collection explorer with sampled fields, production/read-only gating, MCP tools
 6. [x] **Elasticsearch / OpenSearch support** — shipped in v3.7.0: SQL and Kibana-style console in one editor, index explorer with mapping fields, document editing, Profile/Explain, performance pane, MCP tools
-7. [ ] Import/export connection profiles
+7. [x] **ClickHouse support** — shipped in v3.8.0: HTTP interface with per-tab sessions, engine-aware explorer, Explain with index pruning, system-tables performance pane, Parquet/CSV/JSON Lines export and import, grid edits behind a server-side dry run, MCP tools
+8. [ ] Import/export connection profiles
 
 ## FAQ
 
@@ -268,4 +281,4 @@ Free for personal and commercial use. Source code is not open source.
 
 ## Keywords
 
-`mysql client` `mysql gui` `mysql ide` `database tool` `sql editor` `dynamodb gui` `dynamodb client` `ddb client` `aws dynamodb tool` `redshift client` `redshift gui` `redshift query tool` `free database client` `database ide` `sql client mac` `sql client windows` `datagrip alternative` `dbeaver alternative` `tableplus alternative` `database management tool` `query editor` `schema browser` `elasticsearch client` `elasticsearch gui` `opensearch client` `opensearch gui` `kibana dev tools alternative`
+`mysql client` `mysql gui` `mysql ide` `database tool` `sql editor` `dynamodb gui` `dynamodb client` `ddb client` `aws dynamodb tool` `redshift client` `redshift gui` `redshift query tool` `free database client` `database ide` `sql client mac` `sql client windows` `datagrip alternative` `dbeaver alternative` `tableplus alternative` `database management tool` `query editor` `schema browser` `elasticsearch client` `elasticsearch gui` `opensearch client` `opensearch gui` `kibana dev tools alternative` `clickhouse client` `clickhouse gui` `clickhouse ide`
